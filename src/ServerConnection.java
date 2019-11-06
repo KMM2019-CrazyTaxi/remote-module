@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -15,7 +12,7 @@ public class ServerConnection {
 
     private Socket connection;
     private BufferedReader in;
-    private OutputStreamWriter out;
+    private DataOutputStream out;
 
     private boolean alive = false;
 
@@ -32,7 +29,7 @@ public class ServerConnection {
 
         this.connection = new Socket(ip, port);
         this.in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        this.out = new OutputStreamWriter(connection.getOutputStream());
+        this.out = new DataOutputStream(connection.getOutputStream());
 
         this.alive = true;
     }
@@ -44,14 +41,7 @@ public class ServerConnection {
      * @throws ConnectionClosedException If the current connection is closed
      */
     public void write(String str) throws IOException, ConnectionClosedException {
-        if (!alive) throw new ConnectionClosedException("Connection not alive.");
-
-        try {
-            out.write(str);
-        } catch (IOException e) {
-            disconnect();
-            throw e;
-        }
+        write(str.getBytes());
     }
 
 
@@ -62,10 +52,20 @@ public class ServerConnection {
      * @throws ConnectionClosedException If the current connection is closed
      */
     public void write(char[] buf) throws IOException, ConnectionClosedException {
+        write(new String(buf));
+    }
+
+    /**
+     * Write to the connected server.
+     * @param bytes Byte[] to write
+     * @throws IOException If the write could not be made
+     * @throws ConnectionClosedException If the current connection is closed
+     */
+    public void write(byte[] bytes) throws IOException, ConnectionClosedException {
         if (!alive) throw new ConnectionClosedException("Connection not alive.");
 
         try {
-            out.write(buf);
+            out.write(bytes);
         } catch (IOException e) {
             disconnect();
             throw e;
@@ -85,6 +85,8 @@ public class ServerConnection {
 
         try {
             for (char c = (char) in.read(); c != '\0'; c = (char) in.read()) {
+                if (c == Character.MAX_VALUE) throw new IOException("Connection died.");
+
                 strBuild.append(c);
             }
         } catch (IOException e) {
@@ -104,7 +106,8 @@ public class ServerConnection {
 
         connection = new Socket(ip, port);
         in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        out = new OutputStreamWriter(connection.getOutputStream());
+        out = new DataOutputStream(connection.getOutputStream());
+
 
         alive = true;
     }
