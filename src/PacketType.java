@@ -1,6 +1,5 @@
 public enum PacketType {
 
-    REQUEST_HEARTBEAT,
     REQUEST_STATUS,
     SEND_MAP,
     SEND_PARAMETERS,
@@ -12,8 +11,8 @@ public enum PacketType {
     REQUEST_START_ROUTE,
     REQUEST_EMERGENCY_STOP,
     REQUEST_CAMERA_IMAGE,
+    REQUEST_HEARTBEAT,
 
-    HEARTBEAT_ACKNOWLEDGEMENT,
     STATUS,
     MAP_ACKNOWLEDGEMENT,
     PARAMETERS_ACKNOWLEDGEMENT,
@@ -25,6 +24,7 @@ public enum PacketType {
     START_ROUTE_ACKNOWLEDGEMENT,
     EMERGENCY_STOP_ACKNOWLEDGEMENT,
     CAMERA_IMAGE,
+    HEARTBEAT_ACKNOWLEDGEMENT,
 
     SERSOR_MODULE_ERROR,
     STEERING_MODULE_ERROR,
@@ -54,5 +54,21 @@ public enum PacketType {
         else {
             return (byte)(ERROR_BASE + ord - (NUMBER_OF_REMOTE_REQUESTS + NUMBER_OF_CENTRAL_RESPONSES));
         }
+    }
+
+    public static PacketType fromByte(byte b) {
+        int ord;
+
+        if ((b & 0xff) < CENTRAL_RESPONS_BASE) {
+            ord = (b & 0xff) - REMOTE_REQUEST_BASE;
+        }
+        else if ((b & 0xff) < ERROR_BASE) {
+            ord = (b & 0xff) - CENTRAL_RESPONS_BASE;
+        }
+        else {
+            ord = (b & 0xff) - ERROR_BASE;
+        }
+
+        return PacketType.values()[b];
     }
 }
