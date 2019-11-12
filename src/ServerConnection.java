@@ -11,7 +11,7 @@ public class ServerConnection {
     private int port;
 
     private Socket connection;
-    private BufferedReader in;
+    private DataInputStream in;
     private DataOutputStream out;
 
     private boolean alive = false;
@@ -28,7 +28,7 @@ public class ServerConnection {
         this.port = port;
 
         this.connection = new Socket(ip, port);
-        this.in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        this.in = new DataInputStream(connection.getInputStream());
         this.out = new DataOutputStream(connection.getOutputStream());
 
         this.alive = true;
@@ -78,22 +78,23 @@ public class ServerConnection {
      * @throws IOException If the read could not be made
      * @throws ConnectionClosedException It the current connection is closed.
      */
-    public String read() throws IOException, ConnectionClosedException {
+    public byte[] read() throws IOException, ConnectionClosedException {
         if (!alive) throw new ConnectionClosedException("Connection not alive.");
 
-        StringBuilder strBuild = new StringBuilder();
+        byte[] buff = new byte[1024];
 
+        int count;
         try {
-            for (char c = (char) in.read(); c != '\0'; c = (char) in.read()) {
-                if (c == Character.MAX_VALUE) throw new IOException("Connection died.");
-
-                strBuild.append(c);
-            }
+            count = in.read(buff);
         } catch (IOException e) {
             disconnect();
             throw e;
         }
-        return strBuild.toString();
+
+        byte[] ret = new byte[count];
+        System.arraycopy(buff, 0, ret, 0, count);
+
+        return ret;
     }
 
     /**
@@ -105,7 +106,7 @@ public class ServerConnection {
         if (alive) return;
 
         connection = new Socket(ip, port);
-        in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        in = new DataInputStream(connection.getInputStream());
         out = new DataOutputStream(connection.getOutputStream());
 
 
