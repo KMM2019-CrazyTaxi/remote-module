@@ -32,9 +32,9 @@ public class CommunicationPacket {
      * @param rawData Packet byte array, consisting of packet head (5 byte) and data
      */
     public CommunicationPacket(byte[] rawData, int offset) {
-        this.type = PacketType.fromByte(rawData[0]);
-        this.id = DataConversionHelper.byteArrayToInt(new byte[]{rawData[1], rawData[2]});
-        int size = DataConversionHelper.byteArrayToInt(new byte[]{rawData[3], rawData[4]});
+        this.type = PacketType.fromByte(rawData[offset]);
+        this.id = DataConversionHelper.byteArrayToInt(rawData, offset + 1, 2);
+        int size = DataConversionHelper.byteArrayToInt(rawData, offset + 3, 2);
 
         this.data = new byte[size];
         System.arraycopy(rawData, 5, this.data, 0, size);
