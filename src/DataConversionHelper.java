@@ -41,7 +41,7 @@ public class DataConversionHelper {
      */
     public static int byteArrayToInt(byte[] val, int offset, int length) {
         int integerVal = 0;
-        for (int i = length - 1; i >= offset; i--) {
+        for (int i = offset + length - 1; i >= offset; i--) {
             integerVal <<= 8;
             integerVal |= val[i] & 0xff;
         }
