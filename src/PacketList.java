@@ -21,12 +21,14 @@ public class PacketList {
      * RequestBuilder constructor
      */
     public PacketList(byte[] rawData) {
+        packets = new ArrayList<>();
+
         int numberOfPackets = DataConversionHelper.byteArrayToInt(new byte[]{rawData[0]});
         int offset = 1;
 
         while(offset < rawData.length) {
             CommunicationPacket pack = new CommunicationPacket(rawData, offset);
-            addPacket(pack);
+            this.addPacket(pack);
 
             offset += CommunicationPacket.HEADER_SIZE + pack.dataSize();
         }
