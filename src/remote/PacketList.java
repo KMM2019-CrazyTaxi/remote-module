@@ -1,4 +1,11 @@
+package remote;
+
+import enums.PacketCommand;
+import exceptions.IncorrectDataException;
+import helpers.DataConversionHelper;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -6,21 +13,33 @@ import java.util.List;
  *
  * @author Henrik Nilsson
  */
-public class PacketList {
+public class PacketList implements Iterable<CommunicationPacket> {
 
     private List<CommunicationPacket> packets;
 
     /**
-     * RequestBuilder constructor
+     * PacketList constructor
      */
     public PacketList() {
         packets = new ArrayList<>();
     }
 
+
     /**
-     * RequestBuilder constructor
+     * PacketList constructor
+     * @param pack Communication packet to be added directly to the list
      */
-    public PacketList(byte[] rawData) {
+    public PacketList(CommunicationPacket pack) {
+        packets = new ArrayList<>(1);
+        packets.add(pack);
+    }
+
+    /**
+     * PacketList constructor
+     * @param rawData Raw server data byte[] to be decoded into packet list
+     * @throws IncorrectDataException Thrown if raw data could not be decoded correctly
+     */
+    public PacketList(byte[] rawData) throws IncorrectDataException {
         packets = new ArrayList<>();
 
         int numberOfPackets = DataConversionHelper.byteArrayToInt(new byte[]{rawData[0]});
@@ -33,6 +52,8 @@ public class PacketList {
             offset += CommunicationPacket.HEADER_SIZE + pack.dataSize();
         }
 
+        if (numberOfPackets != packets.size())
+            throw new IncorrectDataException("Number of given and decoded packages does not match (" + numberOfPackets + " given, " + packets.size() + " decoded).");
     }
 
     /**
@@ -56,7 +77,7 @@ public class PacketList {
      * @return Size in number of bytes
      */
     public int byteSize() {
-        int size = 0;
+        int size = 1;
 
         for (CommunicationPacket packet : packets) {
             size += packet.dataSize() + CommunicationPacket.HEADER_SIZE;
@@ -75,7 +96,7 @@ public class PacketList {
             byteLists.add(packet.toBytes());
         }
 
-        byte[] bytes = new byte[byteSize() + 1];
+        byte[] bytes = new byte[byteSize()];
         bytes[0] = (byte) packets.size();
         int offset = 1;
 
@@ -92,5 +113,23 @@ public class PacketList {
         return "PacketList{" +
                 "packets=" + packets +
                 '}';
+    }
+
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @Override
+    public Iterator<CommunicationPacket> iterator() {
+        return packets.iterator();
+    }
+
+    public boolean contains(PacketCommand type) {
+        for (CommunicationPacket pack : packets) {
+            if (pack.getCommand() == type)
+                return true;
+        }
+        return false;
     }
 }

@@ -1,8 +1,12 @@
+package remote;
+
+import exceptions.ConnectionClosedException;
+
 import java.io.*;
 import java.net.Socket;
 
 /**
- * A ServerConnection handles the low level connection to a server and provides safe read and write functions.
+ * A remote.ServerConnection handles the low level connection to a server and provides safe read and write functions.
  *
  * @author Henrik Nilsson
  */
@@ -17,7 +21,7 @@ public class ServerConnection {
     private boolean alive = false;
 
     /**
-     * ServerConnection constructor
+     * remote.ServerConnection constructor
      * @param ip IP address to connect to
      * @param port Port number to connect to
      * @throws IOException If the server connection could not be made
@@ -89,6 +93,11 @@ public class ServerConnection {
         } catch (IOException e) {
             disconnect();
             throw e;
+        }
+
+        if (count < 0){
+            disconnect();
+            throw new ConnectionClosedException("Connection died while reading");
         }
 
         byte[] ret = new byte[count];

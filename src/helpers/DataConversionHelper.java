@@ -1,3 +1,10 @@
+package helpers;
+
+/**
+ * Static data conversion helper class.
+ *
+ * @author Henrik Nilsson
+ */
 public class DataConversionHelper {
     /**
      * Get byte[] from int of a given length
@@ -31,7 +38,6 @@ public class DataConversionHelper {
         return integerVal;
     }
 
-
     /**
      * Get int from byte[] of split int
      * @param val byte[] of split int
@@ -46,5 +52,40 @@ public class DataConversionHelper {
             integerVal |= val[i] & 0xff;
         }
         return integerVal;
+    }
+
+
+    /**
+     * Get byte[] of split float
+     * @param value float value to split
+     * @return byte[] of split float
+     */
+    public static byte[] floatToByteArray(float value) {
+        int intBits =  Float.floatToIntBits(value);
+        return new byte[] {
+                (byte) (intBits), (byte) (intBits >> 8), (byte) (intBits >> 16), (byte) (intBits >> 24) };
+    }
+
+    /**
+     * Get float from byte[] of split float
+     * @param bytes byte[] of lenght > 4 (only uses first 4 bytes)
+     * @return float of concatinated bytes
+     */
+    public static float byteArrayToFloat(byte[] bytes) {
+        int intBits =
+          bytes[3] << 24 | (bytes[2] & 0xFF) << 16 | (bytes[1] & 0xFF) << 8 | (bytes[0] & 0xFF);
+        return Float.intBitsToFloat(intBits);
+    }
+
+    /**
+     * Get float from byte[] of split float
+     * @param bytes byte[] of lenght > (offset + 4)
+     * @param offset offset to start decoding from
+     * @return float of concatinated bytes
+     */
+    public static float byteArrayToFloat(byte[] bytes, int offset) {
+        int intBits =
+          bytes[offset + 3] << 24 | (bytes[offset + 2] & 0xFF) << 16 | (bytes[offset + 1] & 0xFF) << 8 | (bytes[offset] & 0xFF);
+        return Float.intBitsToFloat(intBits);
     }
 }

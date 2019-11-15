@@ -1,7 +1,9 @@
+package exceptions;
+
 import java.io.IOException;
 
 /**
- * Signals that an illegal action was taken on a closed ServerConnection.
+ * Signals that an illegal action was taken on a closed remote.ServerConnection.
  *
  * @author Henrik Nilsson
  */

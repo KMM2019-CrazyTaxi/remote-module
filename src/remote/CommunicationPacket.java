@@ -1,3 +1,7 @@
+package remote;
+
+import enums.PacketCommand;
+import helpers.DataConversionHelper;
 import java.util.Arrays;
 
 /**
@@ -11,18 +15,18 @@ public class CommunicationPacket {
      */
     public final static int HEADER_SIZE = 5;
 
-    private PacketType type;
+    private PacketCommand command;
     private int id;
     private byte[] data;
 
     /**
      * CommunicationPacket constructor
      * @param id Unique packet id
-     * @param type Packet request/respons type
+     * @param command Packet request/respons command
      * @param data Packet data
      */
-    public CommunicationPacket(PacketType type, int id, byte[] data) {
-        this.type = type;
+    public CommunicationPacket(PacketCommand command, int id, byte[] data) {
+        this.command = command;
         this.id = id;
         this.data = data.clone();
     }
@@ -32,12 +36,14 @@ public class CommunicationPacket {
      * @param rawData Packet byte array, consisting of packet head (5 byte) and data
      */
     public CommunicationPacket(byte[] rawData, int offset) {
-        this.type = PacketType.fromByte(rawData[offset]);
+        //TODO Add packet structure analysis
+
+        this.command = PacketCommand.fromByte(rawData[offset]);
         this.id = DataConversionHelper.byteArrayToInt(rawData, offset + 1, 2);
         int size = DataConversionHelper.byteArrayToInt(rawData, offset + 3, 2);
 
         this.data = new byte[size];
-        System.arraycopy(rawData, 5, this.data, 0, size);
+        System.arraycopy(rawData, offset + 5, this.data, 0, size);
     }
 
 
@@ -53,7 +59,7 @@ public class CommunicationPacket {
         byte[] sizeBytes = DataConversionHelper.intToByteArray(data.length, 2);
 
         // Packet header
-        bytes[0] = type.code();
+        bytes[0] = command.code();
         bytes[1] = idBytes[0];
         bytes[2] = idBytes[1];
         bytes[3] = sizeBytes[0];
@@ -63,6 +69,18 @@ public class CommunicationPacket {
         System.arraycopy(data, 0, bytes, 5, data.length);
 
         return bytes;
+    }
+
+    public PacketCommand getCommand() {
+        return command;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public byte[] getData() {
+        return data;
     }
 
     /**
@@ -76,7 +94,7 @@ public class CommunicationPacket {
     @Override
     public String toString() {
         return "CommunicationPacket{" +
-                "type=" + type +
+                "command=" + command +
                 ", id=" + id +
                 ", data=" + Arrays.toString(data) +
                 '}';
