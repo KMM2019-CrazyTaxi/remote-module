@@ -1,3 +1,23 @@
+.button {
+    -fx-background-color: darkgray;
+    -fx-border-color: darkgray;
+    -fx-border-insets: 0;
+    -fx-border-radius: 0;
+}
+
+.separator {
+    -fx-padding: 5px;
+    -fx-background-color: darkgrey;
+}
+
+.separator:horizontal {
+    -fx-background-size: 100% 80%;
+}
+
+.separator:vertical {
+    -fx-background-size: 80% 100%;
+}
+
 .tab-pane {
     -fx-tab-min-width:90px;
 }
@@ -5,4 +25,24 @@
 .tab {
     -fx-background-insets: null;
     -fx-background-radius: null;
+}
+
+.module {
+    -fx-padding: 10px;
+}
+
+.manualControlButton {
+    -fx-pref-height: 0;
+    -fx-pref-width: 0;
+}
+
+#manualControlEmergiencyStop {
+    -fx-background-color: red;
+    -fx-pref-height: 60px;
+    -fx-pref-width: 60px;
+}
+
+.arrowButton {
+    -fx-background-insets: 0 0 -2 0, 0;
+    -fx-shape: "M 0 -3.5 v 7 l 4 -3.5 z";
 }

@@ -3,6 +3,6 @@
 
 <Tab text="Manual" fx:id="ManualTab" xmlns:fx="http://javafx.com/fxml/1">
     <FlowPane>
-
+        <fx:include source="../modules/ManualControlModule.fxml" />
     </FlowPane>
 </Tab>
