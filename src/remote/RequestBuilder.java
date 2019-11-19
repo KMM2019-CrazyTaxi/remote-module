@@ -2,7 +2,6 @@ package remote;
 
 import enums.ControlMode;
 import enums.PacketCommand;
-import exceptions.MissingIDException;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

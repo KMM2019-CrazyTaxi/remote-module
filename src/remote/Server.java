@@ -147,6 +147,7 @@ public class Server {
                             //handleMapLocationData(packet);
                             break;
                         case CURRENT_LATERAL_DISTANCE:
+                            handleLateralDistanceData(packet);
                             break;
                         case CURRENT_CONTROL_DECISION:
                             break;
@@ -166,6 +167,12 @@ public class Server {
                     break;
             }
         }
+    }
+
+    private void handleLateralDistanceData(CommunicationPacket packet) {
+        car.distanceToMiddle.update(DataConversionHelper.byteArrayToInt(packet.getData(), 0, 2));
+        car.distanceToRight.update(DataConversionHelper.byteArrayToInt(packet.getData(), 2, 2));
+        car.distanceToLeft.update(DataConversionHelper.byteArrayToInt(packet.getData(), 4, 2));
     }
 
     private void handleSensorData(CommunicationPacket packet) {
