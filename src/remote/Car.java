@@ -4,6 +4,8 @@ import enums.ControlMode;
 import enums.PacketCommand;
 
 public class Car {
+    private static Car instance = new Car();
+
     // Sensor data
     // TODO Change to float
     public RemoteData<Integer> accelerationX;
@@ -21,7 +23,9 @@ public class Car {
     public RemoteData<Integer> distanceToMiddle;
     public RemoteData<Integer> distanceToRight;
 
-    public Car(Server server) {
+    public Car() {
+        Server server = Server.getInstance();
+
         accelerationX = new RemoteData<>(PacketCommand.REQUEST_SENSOR_DATA, server);
         accelerationY = new RemoteData<>(PacketCommand.REQUEST_SENSOR_DATA, server);
         accelerationZ = new RemoteData<>(PacketCommand.REQUEST_SENSOR_DATA, server);
@@ -35,5 +39,9 @@ public class Car {
         distanceToLeft = new RemoteData<>(PacketCommand.REQUEST_LATERAL_DISTANCE, server);
         distanceToMiddle = new RemoteData<>(PacketCommand.REQUEST_LATERAL_DISTANCE, server);
         distanceToRight= new RemoteData<>(PacketCommand.REQUEST_LATERAL_DISTANCE, server);
+    }
+
+    public static Car getInstance() {
+        return instance;
     }
 }

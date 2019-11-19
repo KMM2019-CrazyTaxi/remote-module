@@ -16,6 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Server {
+    private static Server instance = null;
+
+    static {
+        try {
+            instance = new Server();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static final String SERVER_IP = "192.168.4.1";
     public static final int SERVER_PORT = 20001;
 
@@ -40,7 +50,7 @@ public class Server {
         errorListeners = new ArrayList<>();
         exceptionListeners = new ArrayList<>();
 
-        this.car = new Car(this);
+        this.car = Car.getInstance();
 
         builderLocked = false;
     }
@@ -211,5 +221,9 @@ public class Server {
         for (ExceptionListener o : exceptionListeners) {
             o.call(e);
         }
+    }
+
+    public static Server getInstance() {
+        return instance;
     }
 }
