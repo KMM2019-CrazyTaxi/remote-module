@@ -1,0 +1,8 @@
+.tab-pane {
+    -fx-tab-min-width:90px;
+}
+
+.tab {
+    -fx-background-insets: null;
+    -fx-background-radius: null;
+}
