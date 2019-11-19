@@ -57,11 +57,7 @@ public class FixedTimePoller implements Runnable {
             }
 
             // Pull
-            try {
-                this.server.pull();
-            } catch (IOException | MissingIDException e) {
-                e.printStackTrace();
-            }
+            this.server.pull();
 
             // Sleep
             // TODO add more robust threading behavoiur

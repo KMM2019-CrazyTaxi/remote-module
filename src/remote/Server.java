@@ -8,6 +8,7 @@ import exceptions.MissingIDException;
 import helpers.DataConversionHelper;
 import remote.listeners.AcknowledgementListener;
 import remote.listeners.ErrorListener;
+import remote.listeners.ExceptionListener;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -24,6 +25,7 @@ public class Server {
 
     private List<AcknowledgementListener> acknowledgementListeners;
     private List<ErrorListener> errorListeners;
+    private List<ExceptionListener> exceptionListeners;
 
     private Car car;
 
@@ -36,6 +38,7 @@ public class Server {
 
         acknowledgementListeners = new ArrayList<>();
         errorListeners = new ArrayList<>();
+        exceptionListeners = new ArrayList<>();
 
         this.car = new Car(this);
 
@@ -50,12 +53,20 @@ public class Server {
         errorListeners.add(o);
     }
 
+    public void addExceptionListener(ExceptionListener o) {
+        exceptionListeners.add(o);
+    }
+
     public void removeAcknowledgementListener(AcknowledgementListener o) {
         acknowledgementListeners.remove(o);
     }
 
     public void removeErrorListener(ErrorListener o) {
         errorListeners.remove(o);
+    }
+
+    public void removeExceptionListener(ExceptionListener o) {
+        exceptionListeners.remove(o);
     }
 
     public Car getCar() {
@@ -73,7 +84,7 @@ public class Server {
         return requestBuilder;
     }
 
-    synchronized public void pull() throws IOException, UnknownHostException, ConnectionClosedException, IncorrectDataException, MissingIDException {
+    synchronized public void pull() {
         // Lock builder and copy it, letting new commands be added to the new builder
         builderLocked = true;
 
@@ -86,12 +97,16 @@ public class Server {
         // Send request
         try {
             serverConnection.write(request.getPackets().toBytes());
-        } catch (ConnectionClosedException e) {
-            serverConnection.connect();
-            serverConnection.write(request.getPackets().toBytes());
+        } catch (IOException e) {
+            notifyExceptionListeners(e);
         }
+
         // Handle respons
-        handlePackets(new PacketList(serverConnection.read()));
+        try {
+            handlePackets(new PacketList(serverConnection.read()));
+        } catch (IOException | MissingIDException e) {
+            notifyExceptionListeners(e);
+        }
     }
 
     private void handlePackets(PacketList packets) throws MissingIDException {
@@ -182,6 +197,12 @@ public class Server {
     private void notifyAcknowledgementListeners(PacketCommand type, int id) {
         for (AcknowledgementListener o : acknowledgementListeners) {
             o.call(type, id);
+        }
+    }
+
+    private void notifyExceptionListeners(Exception e) {
+        for (ExceptionListener o : exceptionListeners) {
+            o.call(e);
         }
     }
 }
