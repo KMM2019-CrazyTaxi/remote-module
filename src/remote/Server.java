@@ -50,6 +50,14 @@ public class Server {
         errorListeners.add(o);
     }
 
+    public void removeAcknowledgementListener(AcknowledgementListener o) {
+        acknowledgementListeners.remove(o);
+    }
+
+    public void removeErrorListener(ErrorListener o) {
+        errorListeners.remove(o);
+    }
+
     public Car getCar() {
         return car;
     }
