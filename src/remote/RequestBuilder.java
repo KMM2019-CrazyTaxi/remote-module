@@ -49,6 +49,7 @@ public class RequestBuilder {
         addRequest(PacketCommand.SET_MODE, new byte[]{mode.code()});
     }
 
+    // TODO Change speed to an SI float parameter and add conversion
     public void addSetMaxSpeedRequest(int speed) {
         if(speed >= 0x7f || speed <= -0x7f)
             throw new IllegalArgumentException("Given speed is out of range (" + speed + ")");
