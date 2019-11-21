@@ -6,22 +6,29 @@ import java.io.*;
 import java.net.Socket;
 
 /**
- * A remote.ServerConnection handles the low level connection to a server and provides safe read and write functions.
+ * A ServerConnection handles the low level connection to a server and provides safe read and write functions.
  *
  * @author Henrik Nilsson
  */
 public class ServerConnection {
-    private String ip;
+    public static final int READ_BUFFER_SIZE = 1024;
+    private String ip = null;
     private int port;
 
-    private Socket connection;
-    private DataInputStream in;
-    private DataOutputStream out;
+    private Socket connection = null;
+    private DataInputStream in = null;
+    private DataOutputStream out = null;
 
     private boolean alive = false;
 
     /**
-     * remote.ServerConnection constructor
+     * ServerConnection constructor
+     */
+    public ServerConnection() {
+    }
+
+    /**
+     * ServerConnection constructor
      * @param ip IP address to connect to
      * @param port Port number to connect to
      * @throws IOException If the server connection could not be made
@@ -85,7 +92,7 @@ public class ServerConnection {
     public byte[] read() throws IOException, ConnectionClosedException {
         if (!alive) throw new ConnectionClosedException("Connection not alive.");
 
-        byte[] buff = new byte[1024];
+        byte[] buff = new byte[READ_BUFFER_SIZE];
 
         int count;
         try {
@@ -118,6 +125,26 @@ public class ServerConnection {
         in = new DataInputStream(connection.getInputStream());
         out = new DataOutputStream(connection.getOutputStream());
 
+        alive = true;
+    }
+
+    /**
+     * Connect to a new IP and Port.
+     * @param ip New IP-adress to connect to
+     * @param port New port number to connect to
+     * @throws IOException If the connection could not be made
+     * @throws java.net.UnknownHostException If the current IP and Port is an unknown host
+     */
+    public void connect(String ip, int port) throws IOException, java.net.UnknownHostException {
+        if (alive)
+            disconnect();
+
+        this.ip = ip;
+        this.port = port;
+
+        connection = new Socket(ip, port);
+        in = new DataInputStream(connection.getInputStream());
+        out = new DataOutputStream(connection.getOutputStream());
 
         alive = true;
     }
@@ -150,6 +177,8 @@ public class ServerConnection {
      * @throws IOException If the current connection could not be disconnected
      */
     public void setIp(String ip) throws IOException {
+        if (this.ip.equals(ip))
+            return;
         disconnect();
         this.ip = ip;
     }
@@ -168,6 +197,8 @@ public class ServerConnection {
      * @throws IOException If the current connection could not be disconnected
      */
     public void setPort(int port) throws IOException {
+        if (this.port == port)
+            return;
         disconnect();
         this.port = port;
     }
