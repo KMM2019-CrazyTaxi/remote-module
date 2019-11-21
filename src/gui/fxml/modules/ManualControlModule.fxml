@@ -2,24 +2,29 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane styleClass="module" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane onKeyPressed="#handleKeyPressed" onKeyReleased="#handleKeyReleased" styleClass="module" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.ManualControlModuleController">
     <left>
         <HBox>
             <GridPane alignment="center">
+                <!--WASD toggle-->
+                <Button fx:id="WASDButton" onMouseClicked="#handleWASDToggleClick" GridPane.columnIndex="0" GridPane.rowIndex="0">WASD</Button>
+
+                <!--Arrows-->
                 <HBox styleClass="arrowButtonContainer, arrowButtonUp" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                    <Button styleClass="button, arrowButton"/>
+                    <Button styleClass="button, arrowButton" onMouseClicked="#handleUpArrowClick"/>
                 </HBox>
                 <VBox styleClass="arrowButtonContainer, arrowButtonLeft"  GridPane.columnIndex="0" GridPane.rowIndex="1">
-                    <Button styleClass="button, arrowButton"/>
+                    <Button styleClass="button, arrowButton" onMouseClicked="#handleLeftArrowClick"/>
                 </VBox>
                 <VBox styleClass="arrowButtonContainer, arrowButtonRight" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                    <Button styleClass="button, arrowButton"/>
+                    <Button styleClass="button, arrowButton" onMouseClicked="#handleRightArrowClick"/>
                 </VBox>
                 <HBox styleClass="arrowButtonContainer, arrowButtonDown" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                    <Button styleClass="button, arrowButton"/>
+                    <Button styleClass="button, arrowButton" onMouseClicked="#handleDownArrowClick"/>
                 </HBox>
 
-                <Button fx:id="manualControlEmergiencyStop" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <!--Emergency stop-->
+                <Button onMouseClicked="#handleEmergencyStopButtonClick" id="manualControlEmergiencyStop" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
             </GridPane>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
@@ -37,7 +42,7 @@
             <VBox>
                 <HBox styleClass="indicatorGroup">
                     <Region HBox.hgrow="ALWAYS"/>
-                    <HBox fx:id="fullAutoIndicator" styleClass="modeIndicator"><Text styleClass="darkText">Full</Text></HBox>
+                    <HBox fx:id="fullAutoIndicator" styleClass="modeIndicator" ><Text styleClass="darkText">Full</Text></HBox>
                     <HBox fx:id="halfAutoIndicator" styleClass="modeIndicator"><Text styleClass="darkText">Half</Text></HBox>
                     <HBox fx:id="manualIndicator" styleClass="modeIndicator"><Text styleClass="darkText">Manual</Text></HBox>
                 </HBox>
@@ -48,7 +53,7 @@
                     <Region HBox.hgrow="ALWAYS"/>
                     <GridPane alignment="center">
                         <HBox GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Text style="-fx-padding: 0 5px 0 0;" >Speed:</Text>
+                            <Text>Speed:</Text>
                             <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
                         </HBox>
                         <HBox GridPane.columnIndex="1" GridPane.rowIndex="0">

@@ -33,7 +33,7 @@
 }
 
 .button {
-    -fx-background-color: -cc-default-color;
+    -fx-background-color: -cc-darker-color;
 }
 
 .lightText {
@@ -153,5 +153,9 @@ TAB
 }
 
 .modeIndicator:selected {
+    -fx-background-color: -cc-accent-color;
+}
+
+#WASDButton:selected {
     -fx-background-color: -cc-accent-color;
 }
