@@ -150,4 +150,22 @@ public class ManualControlModuleController {
 
         Server.getInstance().pull();
     }
+
+    public void handleFullModeButtonClick(MouseEvent mouseEvent) {
+        if (mouseEvent.getButton() != MouseButton.PRIMARY)
+            return;
+        Server.getInstance().getRequestBuilder().addSetModeRequest(ControlMode.FULL_AUTO);
+    }
+
+    public void handlHalfModeButtonClick(MouseEvent mouseEvent) {
+        if (mouseEvent.getButton() != MouseButton.PRIMARY)
+            return;
+        Server.getInstance().getRequestBuilder().addSetModeRequest(ControlMode.SEMI_AUTO);
+    }
+
+    public void handleManualModeButtonClick(MouseEvent mouseEvent) {
+        if (mouseEvent.getButton() != MouseButton.PRIMARY)
+            return;
+        Server.getInstance().getRequestBuilder().addSetModeRequest(ControlMode.MANUAL);
+    }
 }
