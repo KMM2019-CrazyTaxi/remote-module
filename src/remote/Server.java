@@ -2,31 +2,25 @@ package remote;
 
 import enums.ControlMode;
 import enums.PacketCommand;
-import exceptions.ConnectionClosedException;
-import exceptions.IncorrectDataException;
 import exceptions.MissingIDException;
 import helpers.DataConversionHelper;
 import remote.listeners.AcknowledgementListener;
 import remote.listeners.ErrorListener;
 import remote.listeners.ExceptionListener;
-
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Server {
-    private static Server instance = null;
+    private static Server instance = new Server();
 
-    static {
-        try {
-            instance = new Server();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Default host IP adress
+     */
     public static final String SERVER_IP = "192.168.4.1";
+    /**
+     * Default host port number
+     */
     public static final int SERVER_PORT = 20001;
 
     private ServerConnection serverConnection;
@@ -37,12 +31,10 @@ public class Server {
     private List<ErrorListener> errorListeners;
     private List<ExceptionListener> exceptionListeners;
 
-    private Car car;
-
     private volatile boolean builderLocked = true;
 
-    public Server() throws IOException, java.net.UnknownHostException {
-        this.serverConnection = new ServerConnection(SERVER_IP, SERVER_PORT);
+    public Server() {
+        this.serverConnection = new ServerConnection();
         this.requestIDBroker = new RequestIDBroker();
         this.requestBuilder = new RequestBuilder(requestIDBroker);
 
@@ -50,9 +42,27 @@ public class Server {
         errorListeners = new ArrayList<>();
         exceptionListeners = new ArrayList<>();
 
-        this.car = Car.getInstance();
-
         builderLocked = false;
+    }
+
+    /**
+     * Connect to remote
+     * @throws IOException If the connection could not be made
+     * @throws java.net.UnknownHostException If the default host could not be reached
+     */
+    synchronized public void connect() throws IOException, java.net.UnknownHostException {
+        serverConnection.connect(SERVER_IP, SERVER_PORT);
+    }
+
+    /**
+     * Connect to remote
+     * @param ip IP-adress to connect to
+     * @param port Port number to connect to
+     * @throws IOException If the connection could not be made
+     * @throws java.net.UnknownHostException If the given host could not be reached
+     */
+    synchronized public void connect(String ip, int port) throws IOException, java.net.UnknownHostException {
+        serverConnection.connect(ip, port);
     }
 
     public void addAcknowledgementListener(AcknowledgementListener o) {
@@ -77,10 +87,6 @@ public class Server {
 
     public void removeExceptionListener(ExceptionListener o) {
         exceptionListeners.remove(o);
-    }
-
-    public Car getCar() {
-        return car;
     }
 
     synchronized public RequestBuilder getRequestBuilder() {
@@ -180,21 +186,21 @@ public class Server {
     }
 
     private void handleLateralDistanceData(CommunicationPacket packet) {
-        car.distanceToMiddle.update(DataConversionHelper.byteArrayToInt(packet.getData(), 0, 2));
-        car.distanceToRight.update(DataConversionHelper.byteArrayToInt(packet.getData(), 2, 2));
-        car.distanceToLeft.update(DataConversionHelper.byteArrayToInt(packet.getData(), 4, 2));
+        Car.getInstance().distanceToMiddle.update(DataConversionHelper.byteArrayToInt(packet.getData(), 0, 2));
+        Car.getInstance().distanceToRight.update(DataConversionHelper.byteArrayToInt(packet.getData(), 2, 2));
+        Car.getInstance().distanceToLeft.update(DataConversionHelper.byteArrayToInt(packet.getData(), 4, 2));
     }
 
     private void handleSensorData(CommunicationPacket packet) {
-        car.accelerationX.update(DataConversionHelper.byteArrayToInt(packet.getData(), 0, 2));
-        car.accelerationY.update(DataConversionHelper.byteArrayToInt(packet.getData(), 2, 2));
-        car.accelerationZ.update(DataConversionHelper.byteArrayToInt(packet.getData(), 4, 2));
-        car.distance.update(DataConversionHelper.byteArrayToInt(packet.getData(), 6, 1));
-        car.speed.update(DataConversionHelper.byteArrayToInt(packet.getData(), 7, 1));
+        Car.getInstance().accelerationX.update(DataConversionHelper.byteArrayToInt(packet.getData(), 0, 2));
+        Car.getInstance().accelerationY.update(DataConversionHelper.byteArrayToInt(packet.getData(), 2, 2));
+        Car.getInstance().accelerationZ.update(DataConversionHelper.byteArrayToInt(packet.getData(), 4, 2));
+        Car.getInstance().distance.update(DataConversionHelper.byteArrayToInt(packet.getData(), 6, 1));
+        Car.getInstance().speed.update(DataConversionHelper.byteArrayToInt(packet.getData(), 7, 1));
     }
 
     private void handleModeData(CommunicationPacket packet) {
-        car.controlMode.update(ControlMode.fromByte(packet.getData()[0]));
+        Car.getInstance().controlMode.update(ControlMode.fromByte(packet.getData()[0]));
     }
 
     private void handleControlParameterData(CommunicationPacket packet) {
@@ -202,7 +208,7 @@ public class Server {
     }
 
     private void handleTemperatureData(CommunicationPacket packet) {
-        car.temperature.update(DataConversionHelper.byteArrayToFloat(packet.getData()));
+        Car.getInstance().temperature.update(DataConversionHelper.byteArrayToFloat(packet.getData()));
     }
 
     private void notifyErrorListeners(PacketCommand type, Error e) {
