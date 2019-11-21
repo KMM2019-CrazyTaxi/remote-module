@@ -1,26 +1,67 @@
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.control.Button?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
 
-<?import javafx.scene.layout.ColumnConstraints?>
 <BorderPane styleClass="module" xmlns:fx="http://javafx.com/fxml/1">
     <left>
-        <GridPane alignment="center">
-            <padding><Insets top="5" right="5" bottom="5" left="5"/></padding>
-            <columnConstraints><ColumnConstraints halignment="CENTER" /></columnConstraints>
+        <HBox>
+            <GridPane alignment="center">
+                <HBox styleClass="arrowButtonContainer, arrowButtonUp" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <Button styleClass="button, arrowButton"/>
+                </HBox>
+                <VBox styleClass="arrowButtonContainer, arrowButtonLeft"  GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <Button styleClass="button, arrowButton"/>
+                </VBox>
+                <VBox styleClass="arrowButtonContainer, arrowButtonRight" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    <Button styleClass="button, arrowButton"/>
+                </VBox>
+                <HBox styleClass="arrowButtonContainer, arrowButtonDown" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <Button styleClass="button, arrowButton"/>
+                </HBox>
 
-            <Button styleClass="button, arrowButton" style="-fx-rotate: -90deg" GridPane.columnIndex="1" GridPane.rowIndex="0">
-            </Button>
-            <Button styleClass="button, arrowButton" style="-fx-rotate: -180deg" GridPane.columnIndex="0" GridPane.rowIndex="1">
-            </Button>
-            <Button styleClass="button, arrowButton" style="-fx-rotate: 0deg" GridPane.columnIndex="2" GridPane.rowIndex="1">
-            </Button>
-            <Button styleClass="button, arrowButton" style="-fx-rotate: 90deg" GridPane.columnIndex="1" GridPane.rowIndex="2">
-            </Button>
-
-            <Button fx:id="manualControlEmergiencyStop" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            </Button>
-        </GridPane>
+                <Button fx:id="manualControlEmergiencyStop" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            </GridPane>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
     </left>
+    <center>
+        <HBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Separator orientation="VERTICAL"/>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </center>
+    <right>
+        <HBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <VBox>
+                <HBox styleClass="indicatorGroup">
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <HBox fx:id="fullAutoIndicator" styleClass="modeIndicator"><Text styleClass="darkText">Full</Text></HBox>
+                    <HBox fx:id="halfAutoIndicator" styleClass="modeIndicator"><Text styleClass="darkText">Half</Text></HBox>
+                    <HBox fx:id="manualIndicator" styleClass="modeIndicator"><Text styleClass="darkText">Manual</Text></HBox>
+                </HBox>
+
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <HBox styleClass="indicatorGroup">
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <GridPane alignment="center">
+                        <HBox GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Text style="-fx-padding: 0 5px 0 0;" >Speed:</Text>
+                            <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+                        </HBox>
+                        <HBox GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Text fx:id="manualControlModuleSpeed"/>
+                            <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+                            <Text>km/h</Text>
+                        </HBox>
+                    </GridPane>
+                </HBox>
+
+                <Region VBox.vgrow="ALWAYS"/>
+            </VBox>
+        </HBox>
+    </right>
 </BorderPane>

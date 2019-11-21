@@ -1,48 +1,157 @@
+* {
+    -cc-margin: 10px;
+    -cc-padding: 10px;
+
+    -cc-base-color: darkgray;
+    -cc-darker-color: derive(-cc-dark-color, -25%);
+    -cc-dark-color: gray;
+    -cc-light-color: ghostwhite;
+    -cc-background-color: -cc-base-color;
+    -cc-default-color: -cc-light-color;
+    -cc-accent-color: yellowgreen;
+    -cc-focus-color: derive(-cc-accent-color, 25%);
+
+    // Default resets
+    -fx-focus-color: transparent !important;
+    -fx-faint-focus-color: transparent !important;
+    -fx-accent: transparent !important;
+
+    -fx-dark-text-color: -cc-light-color;
+    -fx-mid-text-color: -cc-base-color;
+    -fx-light-text-color: -cc-dark-color;
+    -fx-text-fill: -cc-default-color;
+    -fx-fill: -cc-default-color;
+
+    -fx-border-insets: 0 !important;
+    -fx-border-width: 0 !important;
+    -fx-border-radius: 0 !important;
+}
+
+.root {
+    -fx-background-color: -cc-background-color !important;
+    -fx-text-fill: -cc-default-color !important;
+}
+
 .button {
-    -fx-background-color: darkgray;
-    -fx-border-color: darkgray;
-    -fx-border-insets: 0;
-    -fx-border-radius: 0;
+    -fx-background-color: -cc-default-color;
+}
+
+.lightText {
+    -fx-fill: -cc-light-color;
+}
+
+.darkText {
+    -fx-fill: -cc-darker-color;
 }
 
 .separator {
     -fx-padding: 5px;
-    -fx-background-color: darkgrey;
 }
 
 .separator:horizontal {
-    -fx-background-size: 100% 80%;
+    -fx-max-width: 80%;
 }
 
 .separator:vertical {
-    -fx-background-size: 80% 100%;
+    -fx-max-height: 80%;
 }
 
+/*
+TAB
+*/
+
+.tab-pane *.tab-header-background {
+    -fx-background-color: white;
+    -fx-effect: none;
+    -fx-padding: 0;
+}
+
+// TODO How to floating
+
 .tab-pane {
-    -fx-tab-min-width:90px;
+    -fx-border-width: 0;
+    -fx-tab-min-width:100px;
 }
 
 .tab {
-    -fx-background-insets: null;
-    -fx-background-radius: null;
+    -fx-background-color: -cc-darker-color !important;
+    -fx-font-weight: bold;
+    -fx-padding: 5px 15px 0 15px;
+
+    -fx-border-insets: 0;
+    -fx-border-width: 0;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-background-insets: 5px 0 0 0;
+}
+
+.tab:selected {
+    -fx-background-insets: 0;
+    -fx-padding: 5px 15px 5px 15px;
+    -fx-background-color: -cc-dark-color !important;
+    -fx-effect: innershadow(gaussian, -cc-focus-color, 5, 0, 0, 0) !important;
 }
 
 .module {
-    -fx-padding: 10px;
-}
-
-.manualControlButton {
-    -fx-pref-height: 0;
-    -fx-pref-width: 0;
+    -fx-padding: 15px;
+    -fx-background-insets: 5px;
+    -fx-border-width: 15px;
+    -fx-border-radius: 5px;
+    -fx-border-color: red;//-cc-darker-color;
+    -fx-border-insets: 1px;
 }
 
 #manualControlEmergiencyStop {
+    -fx-pref-height: 90px;
+    -fx-pref-width: 90px;
+
     -fx-background-color: red;
-    -fx-pref-height: 60px;
-    -fx-pref-width: 60px;
+
+    -fx-shape: "M -1.5 -3 L 1.5 -3 L 3 -1.5 L 3 1.5 L 1.5 3 L -1.5 3 L -3 1.5 L -3 -1.5 z";
+}
+
+.arrowButtonContainer {
+    -fx-alignment: center;
+
+    -fx-scale-shape: true;
+    -fx-position-shape: true;
 }
 
 .arrowButton {
-    -fx-background-insets: 0 0 -2 0, 0;
-    -fx-shape: "M 0 -3.5 v 7 l 4 -3.5 z";
+    -fx-pref-height: 40px;
+    -fx-pref-width: 40px;
+
+    -fx-shape: "M 0 0 L 0 -30 L 30 0 L 0 30 z";
+    -fx-scale-x: 0.4;
+}
+
+.arrowButtonUp {
+    -fx-rotate: 270deg;
+}
+.arrowButtonRight {
+    -fx-rotate: 0deg;
+}
+.arrowButtonLeft {
+    -fx-rotate: 180deg;
+}
+.arrowButtonDown {
+    -fx-rotate: 90deg;
+}
+
+.indicatorGroup {
+    -fx-min-width: 80px;
+    -fx-background-insets: 5px;
+    -fx-padding: 5px;
+}
+
+.modeIndicator {
+    -fx-min-width: inherit;
+    -fx-padding: 5px;
+    -fx-background-color: -cc-default-color;
+    -fx-effect: innershadow(gaussian, -cc-dark-color, 2, 0, 0, 0) !important;
+    -fx-alignment: center;
+}
+
+.modeIndicator:selected {
+    -fx-background-color: -cc-accent-color;
 }
