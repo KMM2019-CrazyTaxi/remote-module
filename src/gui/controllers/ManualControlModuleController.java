@@ -115,6 +115,10 @@ public class ManualControlModuleController {
     }
 
     public void handleKeyPressed(KeyEvent keyEvent) {
+        // Ignore key press if not in key input mode
+        if (!WASDState)
+            return;
+
         switch (keyEvent.getText()) {
             case "w":
                 Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(CLICK_SPEED_STEP);
@@ -137,6 +141,10 @@ public class ManualControlModuleController {
     }
 
     public void handleKeyReleased(KeyEvent keyEvent) {
+        // Ignore key press if not in key input mode
+        if (!WASDState)
+            return;
+
         switch (keyEvent.getText()) {
             case "w":
             case "s":
