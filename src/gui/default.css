@@ -45,15 +45,18 @@
 }
 
 .separator {
-    -fx-padding: 5px;
+    -fx-padding: 16px !important;
+    -fx-background-insets: 15px !important;
+    -fx-background-color: -cc-darker-color !important;
+    -fx-effect: dropshadow(gaussian, -cc-darker-color, 5, 0, 0, 0);
 }
 
 .separator:horizontal {
-    -fx-max-width: 80%;
+    -fx-pref-width: 80%;
 }
 
 .separator:vertical {
-    -fx-max-height: 80%;
+    -fx-pref-height: 80%;
 }
 
 /*
