@@ -33,7 +33,7 @@ public class Server {
 
     private volatile boolean builderLocked = true;
 
-    public Server() {
+    private Server() {
         this.serverConnection = new ServerConnection();
         this.requestIDBroker = new RequestIDBroker();
         this.requestBuilder = new RequestBuilder(requestIDBroker);
