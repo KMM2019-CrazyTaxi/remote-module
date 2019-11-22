@@ -150,6 +150,9 @@ public enum PacketCommand {
             ord = (b & 0xff) - ERROR_BASE + NUMBER_OF_REMOTE_REQUESTS + NUMBER_OF_CENTRAL_RESPONSES + 1;
         }
 
+        if (ord > ControlMode.values().length)
+            throw new IllegalArgumentException("Given byte is out of range. (Ordinal: " + ord + ")");
+
         return PacketCommand.values()[ord];
     }
 }
