@@ -1,3 +1,7 @@
+/*
+Base
+*/
+
 * {
     -cc-margin: 10px;
     -cc-padding: 10px;
@@ -43,6 +47,10 @@
 .darkText {
     -fx-fill: -cc-darker-color;
 }
+
+/*
+Separator
+*/
 
 .separator {
     -fx-padding: 16px !important;
@@ -95,6 +103,10 @@ TAB
     -fx-effect: innershadow(gaussian, -cc-focus-color, 5, 0, 0, 0) !important;
 }
 
+/*
+Module
+*/
+
 .module {
     -fx-padding: 15px !important;
     -fx-background-insets: 5px !important;
@@ -104,6 +116,10 @@ TAB
     -fx-border-insets: 1px !important;
 }
 
+/*
+Stop button
+*/
+
 #manualControlEmergiencyStop {
     -fx-pref-height: 100px;
     -fx-pref-width: 100px;
@@ -112,6 +128,10 @@ TAB
 
     -fx-shape: "M -1.5 -3 L 1.5 -3 L 3 -1.5 L 3 1.5 L 1.5 3 L -1.5 3 L -3 1.5 L -3 -1.5 z";
 }
+
+/*
+Arrow buttons
+*/
 
 .arrowButtonContainer {
     -fx-alignment: center;
@@ -146,6 +166,10 @@ TAB
     -fx-background-insets: 5px;
     -fx-padding: 5px;
 }
+
+/*
+Mode indicator
+*/
 
 .modeIndicator {
     -fx-min-width: inherit;
