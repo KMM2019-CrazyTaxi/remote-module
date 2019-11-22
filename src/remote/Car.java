@@ -23,7 +23,7 @@ public class Car {
     public RemoteData<Integer> distanceToMiddle;
     public RemoteData<Integer> distanceToRight;
 
-    public Car() {
+    private Car() {
         Server server = Server.getInstance();
 
         accelerationX = new RemoteData<>(PacketCommand.REQUEST_SENSOR_DATA, server);
