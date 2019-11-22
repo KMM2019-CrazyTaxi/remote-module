@@ -14,10 +14,25 @@ import remote.Server;
 import remote.listeners.DataListener;
 
 public class ManualControlModuleController {
-    public final static int CLICK_SPEED_STEP = 10;
-    public final static int CLICK_TURN_STEP = 10;
+    private final static int CLICK_SPEED_STEP = 10;
+    private final static int CLICK_TURN_STEP = 20;
 
-    private boolean wasdState;
+    private final static int KEY_SPEED_STEP = 10;
+    private final static int KEY_TURN_STEP = 20;
+
+    private static final int MAX_SPEED = 0x7F;
+    private static final int MAX_TURN = 0x7F;
+
+    private volatile boolean wDown;
+    private volatile boolean aDown;
+    private volatile boolean sDown;
+    private volatile boolean dDown;
+    private volatile boolean eDown;
+
+    private volatile int speed;
+    private volatile int turn;
+
+    private volatile boolean wasdState;
 
     @FXML private Text manualControlModuleSpeed;
 
@@ -29,6 +44,14 @@ public class ManualControlModuleController {
 
     public ManualControlModuleController() {
         wasdState = false;
+
+        speed = 0;
+        turn = 0;
+
+        wDown = false;
+        aDown = false;
+        sDown = false;
+        dDown = false;
     }
 
     public void initialize() {
@@ -65,58 +88,60 @@ public class ManualControlModuleController {
         Server.getInstance().pull();
     }
 
-    public void handleUpArrowClick(MouseEvent mouseEvent) {
+    synchronized public void handleUpArrowClick(MouseEvent mouseEvent) {
         // Ignore request if car is in autonomous mode
         if (ControlMode.FULL_AUTO == Car.getInstance().controlMode.get())
             return;
 
-        // TODO Change to desired speed?
-        int currentSpeed = Car.getInstance().speed.get();
-        Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(currentSpeed + CLICK_SPEED_STEP);
+        speed += CLICK_SPEED_STEP;
+
+        Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(speed);
         Server.getInstance().pull();
     }
 
-    public void handleLeftArrowClick(MouseEvent mouseEvent) {
+    synchronized public void handleLeftArrowClick(MouseEvent mouseEvent) {
         // Ignore request if car is in autonomous mode
         if (ControlMode.FULL_AUTO == Car.getInstance().controlMode.get())
             return;
 
-        // TODO Uncomment when turn is implemented in Car-model
-        /*int currentTurn = Car.getInstance().turn.get();
+        turn -= CLICK_TURN_STEP;
 
-        Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(currentTurn + MOUSE_CLICK_SET_TURN);
-        Server.getInstance().pull();*/
-    }
-
-    public void handleRightArrowClick(MouseEvent mouseEvent) {
-        // Ignore request if car is in autonomous mode
-        if (ControlMode.FULL_AUTO == Car.getInstance().controlMode.get())
-            return;
-
-        // TODO Uncomment when turn is implemented in Car-model
-        /*int currentTurn = Car.getInstance().turn.get();
-
-        Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(currentTurn + MOUSE_CLICK_SET_TURN);
-        Server.getInstance().pull();*/
-    }
-
-    public void handleDownArrowClick(MouseEvent mouseEvent) {
-        // Ignore request if car is in autonomous mode
-        if (ControlMode.FULL_AUTO == Car.getInstance().controlMode.get())
-            return;
-
-        // TODO Change to desired speed?
-        int currentSpeed = Car.getInstance().speed.get();
-        Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(currentSpeed - CLICK_SPEED_STEP);
+        Server.getInstance().getRequestBuilder().addTurnRequest(turn);
         Server.getInstance().pull();
     }
 
-    public void handleWASDToggleClick(MouseEvent mouseEvent) {
+    synchronized public void handleRightArrowClick(MouseEvent mouseEvent) {
+        // Ignore request if car is in autonomous mode
+        if (ControlMode.FULL_AUTO == Car.getInstance().controlMode.get())
+            return;
+
+        turn += CLICK_TURN_STEP;
+
+        Server.getInstance().getRequestBuilder().addTurnRequest(turn);
+        Server.getInstance().pull();
+    }
+
+    synchronized public void handleDownArrowClick(MouseEvent mouseEvent) {
+        // Ignore request if car is in autonomous mode
+        if (ControlMode.FULL_AUTO == Car.getInstance().controlMode.get())
+            return;
+
+        speed -= CLICK_SPEED_STEP;
+
+        Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(speed);
+        Server.getInstance().pull();
+    }
+
+    synchronized public void handleWASDToggleClick(MouseEvent mouseEvent) {
         if (mouseEvent.getButton() != MouseButton.PRIMARY)
             return;
 
         wasdState = !wasdState;
         wasdButton.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), wasdState);
+
+        if (wasdState) {
+            new Thread(this::wasdControl).start();
+        }
     }
 
     public void handleKeyPressed(KeyEvent keyEvent) {
@@ -127,22 +152,21 @@ public class ManualControlModuleController {
 
         switch (keyEvent.getText()) {
             case "w":
-                Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(CLICK_SPEED_STEP);
+                wDown = true;
                 break;
             case "a":
-                Server.getInstance().getRequestBuilder().addTurnRequest(-CLICK_TURN_STEP);
+                aDown = true;
                 break;
             case "s":
-                Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(-CLICK_SPEED_STEP);
+                sDown = true;
                 break;
             case "d":
-                Server.getInstance().getRequestBuilder().addTurnRequest(CLICK_TURN_STEP);
+                dDown = true;
                 break;
             case "e":
-                Server.getInstance().getRequestBuilder().addEmergencyStopRequest();
+                eDown = true;
                 break;
         }
-        Server.getInstance().pull();
     }
 
     public void handleKeyReleased(KeyEvent keyEvent) {
@@ -153,16 +177,21 @@ public class ManualControlModuleController {
 
         switch (keyEvent.getText()) {
             case "w":
+                wDown = false;
+                break;
             case "s":
-                Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(0);
+                sDown = false;
                 break;
             case "a":
+                aDown = false;
+                break;
             case "d":
-                Server.getInstance().getRequestBuilder().addTurnRequest(0);
+                dDown = false;
+                break;
+            case "e":
+                eDown = false;
                 break;
         }
-
-        Server.getInstance().pull();
     }
 
     public void handleFullModeButtonClick(MouseEvent mouseEvent) {
@@ -184,5 +213,62 @@ public class ManualControlModuleController {
             return;
         Server.getInstance().getRequestBuilder().addSetModeRequest(ControlMode.MANUAL);
         Server.getInstance().pull();
+    }
+
+    synchronized private void wasdControl() {
+        while(wasdState) {
+            if ((wDown && sDown) || (!wDown && !sDown)) {
+                speed = 0;
+            }
+            else if (wDown) {
+                speed += KEY_SPEED_STEP;
+            }
+            else if (sDown) {
+                speed -= KEY_SPEED_STEP;
+            }
+
+
+            if ((aDown && dDown) || (!aDown && !dDown)) {
+                turn = 0;
+            }
+            else if (aDown) {
+                turn = -(MAX_TURN - 1);
+            }
+            else if (dDown) {
+                turn = MAX_TURN - 1;
+            }
+
+            if (eDown) {
+                turn = 0;
+                speed = 0;
+                Server.getInstance().getRequestBuilder().addEmergencyStopRequest();
+            }
+
+            if (speed > MAX_SPEED)
+                speed = MAX_SPEED - 1;
+
+            if(speed < -MAX_SPEED)
+                speed = -(MAX_SPEED - 1);
+
+            if (turn > MAX_TURN)
+                turn = MAX_TURN - 1;
+
+            if(turn < -MAX_TURN)
+                turn = -(MAX_TURN - 1);
+
+            System.out.println("");
+            System.out.println("Speed: " + speed);
+            System.out.println("Turn:  " + turn);
+
+            Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(speed);
+            Server.getInstance().getRequestBuilder().addTurnRequest(turn);
+            Server.getInstance().pull();
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
