@@ -17,7 +17,7 @@ public class ManualControlModuleController {
     public final static int CLICK_SPEED_STEP = 10;
     public final static int CLICK_TURN_STEP = 10;
 
-    private boolean WASDState;
+    private boolean wasdState;
 
     @FXML private Text manualControlModuleSpeed;
 
@@ -25,10 +25,10 @@ public class ManualControlModuleController {
     @FXML private HBox halfAutoIndicator;
     @FXML private HBox manualIndicator;
 
-    @FXML private Button WASDButton;
+    @FXML private Button wasdButton;
 
     public ManualControlModuleController() {
-        WASDState = false;
+        wasdState = false;
     }
 
     public void initialize() {
@@ -62,6 +62,7 @@ public class ManualControlModuleController {
 
     public void handleEmergencyStopButtonClick(MouseEvent mouseEvent) {
         Server.getInstance().getRequestBuilder().addEmergencyStopRequest();
+        Server.getInstance().pull();
     }
 
     public void handleUpArrowClick(MouseEvent mouseEvent) {
@@ -72,6 +73,7 @@ public class ManualControlModuleController {
         // TODO Change to desired speed?
         int currentSpeed = Car.getInstance().speed.get();
         Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(currentSpeed + CLICK_SPEED_STEP);
+        Server.getInstance().pull();
     }
 
     public void handleLeftArrowClick(MouseEvent mouseEvent) {
@@ -82,7 +84,8 @@ public class ManualControlModuleController {
         // TODO Uncomment when turn is implemented in Car-model
         /*int currentTurn = Car.getInstance().turn.get();
 
-        Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(currentTurn + MOUSE_CLICK_SET_TURN);*/
+        Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(currentTurn + MOUSE_CLICK_SET_TURN);
+        Server.getInstance().pull();*/
     }
 
     public void handleRightArrowClick(MouseEvent mouseEvent) {
@@ -93,7 +96,8 @@ public class ManualControlModuleController {
         // TODO Uncomment when turn is implemented in Car-model
         /*int currentTurn = Car.getInstance().turn.get();
 
-        Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(currentTurn + MOUSE_CLICK_SET_TURN);*/
+        Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(currentTurn + MOUSE_CLICK_SET_TURN);
+        Server.getInstance().pull();*/
     }
 
     public void handleDownArrowClick(MouseEvent mouseEvent) {
@@ -104,19 +108,21 @@ public class ManualControlModuleController {
         // TODO Change to desired speed?
         int currentSpeed = Car.getInstance().speed.get();
         Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(currentSpeed - CLICK_SPEED_STEP);
+        Server.getInstance().pull();
     }
 
     public void handleWASDToggleClick(MouseEvent mouseEvent) {
         if (mouseEvent.getButton() != MouseButton.PRIMARY)
             return;
 
-        WASDState = !WASDState;
-        WASDButton.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), WASDState);
+        wasdState = !wasdState;
+        wasdButton.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), wasdState);
     }
 
     public void handleKeyPressed(KeyEvent keyEvent) {
+        keyEvent.consume();
         // Ignore key press if not in key input mode
-        if (!WASDState)
+        if (!wasdState)
             return;
 
         switch (keyEvent.getText()) {
@@ -136,13 +142,13 @@ public class ManualControlModuleController {
                 Server.getInstance().getRequestBuilder().addEmergencyStopRequest();
                 break;
         }
-
         Server.getInstance().pull();
     }
 
     public void handleKeyReleased(KeyEvent keyEvent) {
+        keyEvent.consume();
         // Ignore key press if not in key input mode
-        if (!WASDState)
+        if (!wasdState)
             return;
 
         switch (keyEvent.getText()) {
@@ -163,17 +169,20 @@ public class ManualControlModuleController {
         if (mouseEvent.getButton() != MouseButton.PRIMARY)
             return;
         Server.getInstance().getRequestBuilder().addSetModeRequest(ControlMode.FULL_AUTO);
+        Server.getInstance().pull();
     }
 
     public void handlHalfModeButtonClick(MouseEvent mouseEvent) {
         if (mouseEvent.getButton() != MouseButton.PRIMARY)
             return;
         Server.getInstance().getRequestBuilder().addSetModeRequest(ControlMode.SEMI_AUTO);
+        Server.getInstance().pull();
     }
 
     public void handleManualModeButtonClick(MouseEvent mouseEvent) {
         if (mouseEvent.getButton() != MouseButton.PRIMARY)
             return;
         Server.getInstance().getRequestBuilder().addSetModeRequest(ControlMode.MANUAL);
+        Server.getInstance().pull();
     }
 }

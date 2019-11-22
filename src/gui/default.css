@@ -156,6 +156,6 @@ TAB
     -fx-background-color: -cc-accent-color;
 }
 
-#WASDButton:selected {
+#wasdButton:selected {
     -fx-background-color: -cc-accent-color;
 }

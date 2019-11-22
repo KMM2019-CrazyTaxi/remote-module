@@ -2,12 +2,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane onKeyPressed="#handleKeyPressed" onKeyReleased="#handleKeyReleased" styleClass="module" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.ManualControlModuleController">
+<BorderPane fx:id="manualControlModule" onKeyPressed="#handleKeyPressed" onKeyReleased="#handleKeyReleased" styleClass="module" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.ManualControlModuleController">
     <left>
         <HBox>
             <GridPane alignment="center">
                 <!--WASD toggle-->
-                <Button fx:id="WASDButton" onMouseClicked="#handleWASDToggleClick" GridPane.columnIndex="0" GridPane.rowIndex="0">WASD</Button>
+                <Button fx:id="wasdButton" onMouseClicked="#handleWASDToggleClick" GridPane.columnIndex="0" GridPane.rowIndex="0">WASD</Button>
 
                 <!--Arrows-->
                 <HBox styleClass="arrowButtonContainer, arrowButtonUp" GridPane.columnIndex="1" GridPane.rowIndex="0">
