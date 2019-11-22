@@ -20,6 +20,7 @@ Base
     -fx-faint-focus-color: transparent !important;
     -fx-accent: transparent !important;
 
+    -fx-text-base-color: -cc-dark-color;
     -fx-dark-text-color: -cc-light-color;
     -fx-mid-text-color: -cc-base-color;
     -fx-light-text-color: -cc-dark-color;
@@ -40,12 +41,22 @@ Base
     -fx-background-color: -cc-darker-color;
 }
 
-.lightText {
-    -fx-fill: -cc-light-color;
+.lightText, .lightText * {
+    -fx-dark-text-color: -cc-light-color !important;
+    -fx-mid-text-color: -cc-light-color !important;
+    -fx-light-text-color: -cc-light-color !important;
+    -fx-text-fill: -cc-light-color !important;
+    -fx-fill: -cc-light-color !important;
+    -fx-text-base-color: -cc-light-color !important;
 }
 
-.darkText {
-    -fx-fill: -cc-darker-color;
+.darkText, .darkText * {
+    -fx-dark-text-color: -cc-darker-color !important;
+    -fx-mid-text-color: -cc-darker-color !important;
+    -fx-light-text-color: -cc-darker-color !important;
+    -fx-text-fill: -cc-darker-color !important;
+    -fx-fill: -cc-darker-color !important;
+    -fx-text-base-color: -cc-darker-color !important;
 }
 
 /*
@@ -65,6 +76,18 @@ Separator
 
 .separator:vertical {
     -fx-pref-height: 80%;
+}
+
+/*
+Menu
+*/
+
+.menu-bar {
+    -fx-background-color: white;
+}
+
+.menu:hover {
+    -fx-effect: innershadow(gaussian, -cc-focus-color, 5, 0, 0, 0) !important;
 }
 
 /*
