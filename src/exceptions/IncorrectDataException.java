@@ -1,17 +1,18 @@
+package exceptions;
+
 import java.io.IOException;
 
 /**
- * Signals that an illegal action was taken on a closed ServerConnection.
+ * IncorrectDataException denoting error in sent or recieved data from and to server.
  *
  * @author Henrik Nilsson
  */
-public class ConnectionClosedException extends IOException {
-
+public class IncorrectDataException extends IOException {
     /**
      * Constructs an {@code IOException} with {@code null}
      * as its error detail message.
      */
-    public ConnectionClosedException() {
+    public IncorrectDataException() {
         super();
     }
 
@@ -21,7 +22,7 @@ public class ConnectionClosedException extends IOException {
      * @param message The detail message (which is saved for later retrieval
      *                by the {@link #getMessage()} method)
      */
-    public ConnectionClosedException(String message) {
+    public IncorrectDataException(String message) {
         super(message);
     }
 
@@ -40,7 +41,7 @@ public class ConnectionClosedException extends IOException {
      *                and indicates that the cause is nonexistent or unknown.)
      * @since 1.6
      */
-    public ConnectionClosedException(String message, Throwable cause) {
+    public IncorrectDataException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -56,7 +57,7 @@ public class ConnectionClosedException extends IOException {
      *              and indicates that the cause is nonexistent or unknown.)
      * @since 1.6
      */
-    public ConnectionClosedException(Throwable cause) {
+    public IncorrectDataException(Throwable cause) {
         super(cause);
     }
 }

@@ -1,3 +1,7 @@
+package remote;
+
+import exceptions.ConnectionClosedException;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -7,14 +11,21 @@ import java.net.Socket;
  * @author Henrik Nilsson
  */
 public class ServerConnection {
-    private String ip;
+    public static final int READ_BUFFER_SIZE = 1024;
+    private String ip = null;
     private int port;
 
-    private Socket connection;
-    private BufferedReader in;
-    private DataOutputStream out;
+    private Socket connection = null;
+    private DataInputStream in = null;
+    private DataOutputStream out = null;
 
     private boolean alive = false;
+
+    /**
+     * ServerConnection constructor
+     */
+    public ServerConnection() {
+    }
 
     /**
      * ServerConnection constructor
@@ -28,7 +39,7 @@ public class ServerConnection {
         this.port = port;
 
         this.connection = new Socket(ip, port);
-        this.in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        this.in = new DataInputStream(connection.getInputStream());
         this.out = new DataOutputStream(connection.getOutputStream());
 
         this.alive = true;
@@ -78,22 +89,28 @@ public class ServerConnection {
      * @throws IOException If the read could not be made
      * @throws ConnectionClosedException It the current connection is closed.
      */
-    public String read() throws IOException, ConnectionClosedException {
+    public byte[] read() throws IOException, ConnectionClosedException {
         if (!alive) throw new ConnectionClosedException("Connection not alive.");
 
-        StringBuilder strBuild = new StringBuilder();
+        byte[] buff = new byte[READ_BUFFER_SIZE];
 
+        int count;
         try {
-            for (char c = (char) in.read(); c != '\0'; c = (char) in.read()) {
-                if (c == Character.MAX_VALUE) throw new IOException("Connection died.");
-
-                strBuild.append(c);
-            }
+            count = in.read(buff);
         } catch (IOException e) {
             disconnect();
             throw e;
         }
-        return strBuild.toString();
+
+        if (count < 0){
+            disconnect();
+            throw new ConnectionClosedException("Connection died while reading");
+        }
+
+        byte[] ret = new byte[count];
+        System.arraycopy(buff, 0, ret, 0, count);
+
+        return ret;
     }
 
     /**
@@ -105,9 +122,29 @@ public class ServerConnection {
         if (alive) return;
 
         connection = new Socket(ip, port);
-        in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        in = new DataInputStream(connection.getInputStream());
         out = new DataOutputStream(connection.getOutputStream());
 
+        alive = true;
+    }
+
+    /**
+     * Connect to a new IP and Port.
+     * @param ip New IP-adress to connect to
+     * @param port New port number to connect to
+     * @throws IOException If the connection could not be made
+     * @throws java.net.UnknownHostException If the current IP and Port is an unknown host
+     */
+    public void connect(String ip, int port) throws IOException, java.net.UnknownHostException {
+        if (alive)
+            disconnect();
+
+        this.ip = ip;
+        this.port = port;
+
+        connection = new Socket(ip, port);
+        in = new DataInputStream(connection.getInputStream());
+        out = new DataOutputStream(connection.getOutputStream());
 
         alive = true;
     }
@@ -140,6 +177,8 @@ public class ServerConnection {
      * @throws IOException If the current connection could not be disconnected
      */
     public void setIp(String ip) throws IOException {
+        if (this.ip.equals(ip))
+            return;
         disconnect();
         this.ip = ip;
     }
@@ -158,6 +197,8 @@ public class ServerConnection {
      * @throws IOException If the current connection could not be disconnected
      */
     public void setPort(int port) throws IOException {
+        if (this.port == port)
+            return;
         disconnect();
         this.port = port;
     }
