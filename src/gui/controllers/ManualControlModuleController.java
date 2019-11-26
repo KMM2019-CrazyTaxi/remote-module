@@ -13,6 +13,8 @@ import remote.Car;
 import remote.Server;
 import remote.listeners.DataListener;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class ManualControlModuleController {
     private final static int CLICK_SPEED_STEP = 10;
     private final static int CLICK_TURN_STEP = 20;
@@ -32,7 +34,7 @@ public class ManualControlModuleController {
     private volatile int speed;
     private volatile int turn;
 
-    private volatile boolean wasdState;
+    private volatile AtomicBoolean wasdState;
 
     @FXML private Text manualControlModuleSpeed;
 
@@ -43,7 +45,7 @@ public class ManualControlModuleController {
     @FXML private Button wasdButton;
 
     public ManualControlModuleController() {
-        wasdState = false;
+        wasdState = new AtomicBoolean(false);
 
         speed = 0;
         turn = 0;
@@ -132,22 +134,22 @@ public class ManualControlModuleController {
         Server.getInstance().pull();
     }
 
-    synchronized public void handleWASDToggleClick(MouseEvent mouseEvent) {
+    public void handleWASDToggleClick(MouseEvent mouseEvent) {
         if (mouseEvent.getButton() != MouseButton.PRIMARY)
             return;
 
-        wasdState = !wasdState;
-        wasdButton.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), wasdState);
+        wasdState.set(!wasdState.get());
+        wasdButton.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), wasdState.get());
 
-        if (wasdState) {
-            new Thread(this::wasdControl).start();
+        if (wasdState.get()) {
+            (new Thread(this::wasdControl)).start();
         }
     }
 
     public void handleKeyPressed(KeyEvent keyEvent) {
         keyEvent.consume();
         // Ignore key press if not in key input mode
-        if (!wasdState)
+        if (!wasdState.get())
             return;
 
         switch (keyEvent.getText()) {
@@ -172,7 +174,7 @@ public class ManualControlModuleController {
     public void handleKeyReleased(KeyEvent keyEvent) {
         keyEvent.consume();
         // Ignore key press if not in key input mode
-        if (!wasdState)
+        if (!wasdState.get())
             return;
 
         switch (keyEvent.getText()) {
@@ -216,7 +218,7 @@ public class ManualControlModuleController {
     }
 
     synchronized private void wasdControl() {
-        while(wasdState) {
+        while(wasdState.get()) {
             if ((wDown && sDown) || (!wDown && !sDown)) {
                 speed = 0;
             }
