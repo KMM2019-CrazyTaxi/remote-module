@@ -7,9 +7,9 @@ Base
     -cc-padding: 10px;
 
     -cc-base-color: darkgray;
-    -cc-darker-color: derive(-cc-dark-color, -35%);
-    -cc-dark-color: gray;
-    -cc-light-color: ghostwhite;
+    -cc-darker-color: derive(-cc-base-color, -55%);
+    -cc-dark-color: derive(-cc-base-color, -25%);
+    -cc-light-color: derive(-cc-base-color, 95%);
     -cc-background-color: -cc-base-color;
     -cc-default-color: -cc-light-color;
     -cc-accent-color: yellowgreen;
@@ -96,16 +96,17 @@ Menu
 
 .menu-bar {
     -fx-background-color: white;
+    -fx-padding: 0 10px 0 10px !important;
 }
 
 .menu {
     -fx-padding: 15px 10px 15px 10px;
     -fx-background-insets: 10px 0px 10px 0px;
+    -fx-background-color: -cc-light-color;
 }
 
 .menu:hover {
-    -fx-background-color: -cc-light-color;
-    -fx-effect: dropshadow(gaussian, -cc-light-color, 15, 0, 0, 0) !important;
+    -fx-effect: dropshadow(gaussian, -cc-accent-color, 5, 0, 0, 0) !important;
 }
 
 .menu.alive {
@@ -116,10 +117,14 @@ Menu
 TAB
 */
 
+.tab-pane {
+    -fx-padding: 0 !important;
+}
+
 .tab-pane *.tab-header-background {
     -fx-background-color: white;
     -fx-effect: none;
-    -fx-padding: 0;
+    -fx-padding: 0 !important;
 }
 
 // TODO How to floating
