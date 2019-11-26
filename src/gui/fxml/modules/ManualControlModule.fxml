@@ -53,14 +53,14 @@
                     <Region HBox.hgrow="ALWAYS"/>
                     <GridPane alignment="center">
                         <HBox GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Text>Speed:</Text>
+                            <Text styleClass="mediumText">Speed:</Text>
                             <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
                         </HBox>
                         <HBox GridPane.columnIndex="1" GridPane.rowIndex="0">
                             <Region HBox.hgrow="ALWAYS"/>
-                            <Text fx:id="manualControlModuleSpeed"/>
+                            <Text styleClass="mediumText" fx:id="manualControlModuleSpeed"/>
                             <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
-                            <Text>km/h</Text>
+                            <Text styleClass="mediumText">km/h</Text>
                         </HBox>
                     </GridPane>
                 </HBox>

@@ -59,6 +59,18 @@ Base
     -fx-text-base-color: -cc-darker-color !important;
 }
 
+.largeText {
+    -fx-font-size: 35px;
+}
+
+.mediumText {
+    -fx-font-size: 25px;
+}
+
+.smallText {
+    -fx-font-size: 12px;
+}
+
 /*
 Separator
 */
