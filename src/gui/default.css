@@ -110,7 +110,7 @@ Menu
 }
 
 .menu.alive {
-    -fx-effect: innershadow(one-pass-box, -cc-focus-color, 5, 0, 0, 0) !important;
+    -fx-background-color: -cc-accent-color;
 }
 
 /*
