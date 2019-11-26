@@ -7,7 +7,7 @@ Base
     -cc-padding: 10px;
 
     -cc-base-color: darkgray;
-    -cc-darker-color: derive(-cc-dark-color, -25%);
+    -cc-darker-color: derive(-cc-dark-color, -35%);
     -cc-dark-color: gray;
     -cc-light-color: ghostwhite;
     -cc-background-color: -cc-base-color;
@@ -98,8 +98,18 @@ Menu
     -fx-background-color: white;
 }
 
+.menu {
+    -fx-padding: 15px 10px 15px 10px;
+    -fx-background-insets: 10px 0px 10px 0px;
+}
+
 .menu:hover {
-    -fx-effect: innershadow(gaussian, -cc-focus-color, 5, 0, 0, 0) !important;
+    -fx-background-color: -cc-light-color;
+    -fx-effect: dropshadow(gaussian, -cc-light-color, 15, 0, 0, 0) !important;
+}
+
+.menu.alive {
+    -fx-effect: innershadow(one-pass-box, -cc-focus-color, 5, 0, 0, 0) !important;
 }
 
 /*
