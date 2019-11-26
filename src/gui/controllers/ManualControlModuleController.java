@@ -1,6 +1,5 @@
 package gui.controllers;
 
-import enums.ControlMode;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,12 +8,19 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+
+import enums.ControlMode;
 import remote.Car;
 import remote.Server;
 import remote.listeners.DataListener;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Manual Control-module Controller class. This is the main controller class for the Manual Control-module.
+ *
+ * @author Henrik Nilsson
+ */
 public class ManualControlModuleController {
     private final static int CLICK_SPEED_STEP = 10;
     private final static int CLICK_TURN_STEP = 20;
@@ -44,6 +50,9 @@ public class ManualControlModuleController {
 
     @FXML private Button wasdButton;
 
+    /**
+     * ManualControlModuleController constructor.
+     */
     public ManualControlModuleController() {
         wasdState = new AtomicBoolean(false);
 
@@ -56,6 +65,10 @@ public class ManualControlModuleController {
         dDown = false;
     }
 
+    /**
+     * Initialize method called by JavaFX thread when JavaFX-objects are constructed and ready.
+     * This method sets up all listeners.
+     */
     public void initialize() {
         // Create and add remote data listeners
         DataListener<Integer> speedListener = (Integer speed) -> {
@@ -85,11 +98,19 @@ public class ManualControlModuleController {
         Car.getInstance().controlMode.subscribe(modeListener);
     }
 
+    /**
+     * Handle click in the Emergiency Stop-button. Request emergiency stop and pull the server.
+     * @param mouseEvent Triggering event
+     */
     public void handleEmergencyStopButtonClick(MouseEvent mouseEvent) {
         Server.getInstance().getRequestBuilder().addEmergencyStopRequest();
         Server.getInstance().pull();
     }
 
+    /**
+     * Handle click in the Arrow Up-button. Increase the speed and pull the server.
+     * @param mouseEvent Triggering event
+     */
     synchronized public void handleUpArrowClick(MouseEvent mouseEvent) {
         // Ignore request if car is in autonomous mode
         if (ControlMode.FULL_AUTO == Car.getInstance().controlMode.get())
@@ -101,6 +122,10 @@ public class ManualControlModuleController {
         Server.getInstance().pull();
     }
 
+    /**
+     * Handle click in the Arrow Left-button. Turn to the left and pull the server.
+     * @param mouseEvent Triggering event
+     */
     synchronized public void handleLeftArrowClick(MouseEvent mouseEvent) {
         // Ignore request if car is in autonomous mode
         if (ControlMode.FULL_AUTO == Car.getInstance().controlMode.get())
@@ -112,6 +137,10 @@ public class ManualControlModuleController {
         Server.getInstance().pull();
     }
 
+    /**
+     * Handle click in the Arrow Right-button. Turn to the right and pull the server.
+     * @param mouseEvent Triggering event
+     */
     synchronized public void handleRightArrowClick(MouseEvent mouseEvent) {
         // Ignore request if car is in autonomous mode
         if (ControlMode.FULL_AUTO == Car.getInstance().controlMode.get())
@@ -123,6 +152,10 @@ public class ManualControlModuleController {
         Server.getInstance().pull();
     }
 
+    /**
+     * Handle click in the Arrow Down-button. Decrease the speed and pull the server.
+     * @param mouseEvent Triggering event
+     */
     synchronized public void handleDownArrowClick(MouseEvent mouseEvent) {
         // Ignore request if car is in autonomous mode
         if (ControlMode.FULL_AUTO == Car.getInstance().controlMode.get())
@@ -134,6 +167,10 @@ public class ManualControlModuleController {
         Server.getInstance().pull();
     }
 
+    /**
+     * Handle click in the WASD-button. This toggles the WASD input state.
+     * @param mouseEvent Triggering event
+     */
     public void handleWASDToggleClick(MouseEvent mouseEvent) {
         if (mouseEvent.getButton() != MouseButton.PRIMARY)
             return;
@@ -146,6 +183,11 @@ public class ManualControlModuleController {
         }
     }
 
+    /**
+     * Handle key pressed key event to track WASD (and E) buttons. This event sets the key state of the corresponding key.
+     * Input is ignored if the WASD state is not true (tracking)
+     * @param keyEvent Triggering event
+     */
     public void handleKeyPressed(KeyEvent keyEvent) {
         keyEvent.consume();
         // Ignore key press if not in key input mode
@@ -171,6 +213,11 @@ public class ManualControlModuleController {
         }
     }
 
+    /**
+     * Handle key released key event to track WASD (and E) buttons. This event sets the key state of the corresponding key.
+     * Input is ignored if the WASD state is not true (tracking)
+     * @param keyEvent Triggering event
+     */
     public void handleKeyReleased(KeyEvent keyEvent) {
         keyEvent.consume();
         // Ignore key press if not in key input mode
@@ -196,6 +243,10 @@ public class ManualControlModuleController {
         }
     }
 
+    /**
+     * Handle click in the Full Auto Mode-button. Add Full Mode request and pulls the server.
+     * @param mouseEvent Triggering event
+     */
     public void handleFullModeButtonClick(MouseEvent mouseEvent) {
         if (mouseEvent.getButton() != MouseButton.PRIMARY)
             return;
@@ -203,6 +254,10 @@ public class ManualControlModuleController {
         Server.getInstance().pull();
     }
 
+    /**
+     * Handle click in the Half Auto Mode-button. Add Half Mode request and pulls the server.
+     * @param mouseEvent Triggering event
+     */
     public void handlHalfModeButtonClick(MouseEvent mouseEvent) {
         if (mouseEvent.getButton() != MouseButton.PRIMARY)
             return;
@@ -210,6 +265,10 @@ public class ManualControlModuleController {
         Server.getInstance().pull();
     }
 
+    /**
+     * Handle click in the Manual Mode-button. Add Manual Mode request and pulls the server.
+     * @param mouseEvent Triggering event
+     */
     public void handleManualModeButtonClick(MouseEvent mouseEvent) {
         if (mouseEvent.getButton() != MouseButton.PRIMARY)
             return;
@@ -217,6 +276,10 @@ public class ManualControlModuleController {
         Server.getInstance().pull();
     }
 
+    /**
+     * WASD Control method. This mehtod is meant to be run on a separate thread to continually controll the car when the
+     * WASD state is true (tracking). Pulls the server every 100ms with updated speed and turn values.
+     */
     synchronized private void wasdControl() {
         while(wasdState.get()) {
             if ((wDown && sDown) || (!wDown && !sDown)) {
