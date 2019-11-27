@@ -1,8 +1,10 @@
 package remote;
 
 import enums.ControlMode;
+import enums.PIDControlerType;
 import enums.PacketCommand;
 import remote.datatypes.CommunicationPacket;
+import remote.datatypes.PIDParams;
 import remote.datatypes.PacketList;
 
 import java.text.SimpleDateFormat;
@@ -92,6 +94,16 @@ public class RequestBuilder {
         System.arraycopy(date.getBytes(), 0, dataStr, 0, date.length());
 
         addRequest(PacketCommand.SEND_CURRENT_DATETIME, dataStr);
+    }
+
+    public void addSendControlParametersRequest(PIDControlerType controller, PIDParams params) {
+        byte[] paramBytes = params.toBytes();
+        byte[] data = new byte[paramBytes.length + 1];
+
+        data[0] = controller.code();
+        System.arraycopy(paramBytes, 0, data, 1, paramBytes.length);
+
+        addRequest(PacketCommand.SEND_PARAMETERS, data);
     }
 
     public PacketList getPackets() {
