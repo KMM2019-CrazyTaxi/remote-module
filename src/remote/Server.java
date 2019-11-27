@@ -1,14 +1,11 @@
 package remote;
 
 import enums.ControlMode;
-import enums.PacketCommand;
 import exceptions.MissingIDException;
 import helpers.DataConversionHelper;
 import remote.datatypes.CommunicationPacket;
-import remote.datatypes.Error;
 import remote.datatypes.PacketList;
-import remote.listeners.AcknowledgementListener;
-import remote.listeners.ErrorListener;
+import remote.listeners.ResponsListener;
 import remote.listeners.ExceptionListener;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,8 +27,7 @@ public class Server {
     private RequestIDBroker requestIDBroker;
     private RequestBuilder requestBuilder;
 
-    private List<AcknowledgementListener> acknowledgementListeners;
-    private List<ErrorListener> errorListeners;
+    private List<ResponsListener> responsListeners;
     private List<ExceptionListener> exceptionListeners;
 
     private volatile boolean builderLocked = true;
@@ -41,8 +37,7 @@ public class Server {
         this.requestIDBroker = new RequestIDBroker();
         this.requestBuilder = new RequestBuilder(requestIDBroker);
 
-        acknowledgementListeners = new ArrayList<>();
-        errorListeners = new ArrayList<>();
+        responsListeners = new ArrayList<>();
         exceptionListeners = new ArrayList<>();
 
         builderLocked = false;
@@ -68,24 +63,16 @@ public class Server {
         serverConnection.connect(ip, port);
     }
 
-    public void addAcknowledgementListener(AcknowledgementListener o) {
-        acknowledgementListeners.add(o);
-    }
-
-    public void addErrorListener(ErrorListener o) {
-        errorListeners.add(o);
+    public void addResponsListener(ResponsListener o) {
+        responsListeners.add(o);
     }
 
     public void addExceptionListener(ExceptionListener o) {
         exceptionListeners.add(o);
     }
 
-    public void removeAcknowledgementListener(AcknowledgementListener o) {
-        acknowledgementListeners.remove(o);
-    }
-
-    public void removeErrorListener(ErrorListener o) {
-        errorListeners.remove(o);
+    public void removeResponsListener(ResponsListener o) {
+        responsListeners.remove(o);
     }
 
     public void removeExceptionListener(ExceptionListener o) {
@@ -140,14 +127,6 @@ public class Server {
                 case REQUEST:
                     throw new IllegalStateException("Got unexpected request as respons: " + packet.getCommand());
 
-                case ACKNOWLEDGEMENT:
-                    notifyAcknowledgementListeners(packet.getCommand(), packet.getId());
-                    break;
-
-                case ERROR:
-                    notifyErrorListeners(packet.getCommand(), new Error(packet));
-                    break;
-
                 case DATA:
                     switch (packet.getCommand()) {
                         case CURRENT_SENSOR_DATA:
@@ -185,6 +164,8 @@ public class Server {
                     }
                     break;
             }
+
+            notifyResponsListeners(packet);
         }
     }
 
@@ -214,15 +195,9 @@ public class Server {
         Car.getInstance().temperature.update(DataConversionHelper.byteArrayToFloat(packet.getData()));
     }
 
-    private void notifyErrorListeners(PacketCommand type, Error e) {
-        for (ErrorListener o : errorListeners) {
-            o.call(e);
-        }
-    }
-
-    private void notifyAcknowledgementListeners(PacketCommand type, int id) {
-        for (AcknowledgementListener o : acknowledgementListeners) {
-            o.call(type, id);
+    private void notifyResponsListeners(CommunicationPacket packet) {
+        for (ResponsListener o : responsListeners) {
+            o.call(packet);
         }
     }
 
