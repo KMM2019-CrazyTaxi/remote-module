@@ -60,11 +60,11 @@ Base
 }
 
 .largeText {
-    -fx-font-size: 35px;
+    -fx-font-size: 32px;
 }
 
 .mediumText {
-    -fx-font-size: 25px;
+    -fx-font-size: 22px;
 }
 
 .smallText {
@@ -164,6 +164,28 @@ Module
     -fx-border-radius: 5px !important;
     -fx-border-color: -cc-darker-color !important;
     -fx-border-insets: 1px !important;
+
+    -fx-background-color: none !important;
+}
+
+/*
+Control parameter module
+*/
+
+#controlParameterModule {
+    -fx-pref-width: 20%;
+}
+
+.controlParam {
+    -fx-text-fill: -cc-dark-color;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-pref-column-count: 7; //x.xxxxx
+}
+
+.controlParam:readonly {
+    -fx-text-fill: -cc-default-color;
+    -fx-background-color: none;
 }
 
 /*

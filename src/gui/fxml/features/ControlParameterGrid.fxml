@@ -1,0 +1,95 @@
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.text.Text?>
+
+<?import javafx.scene.control.Button?>
+<GridPane fx:id="controlGrid" alignment="center" hgap="10" vgap="10" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.ControlParameterController">
+
+    <HBox GridPane.columnIndex="0" GridPane.rowIndex="0">
+        <Text styleClass="mediumText">KP:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+    </HBox>
+    <HBox GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <TextField editable="false" styleClass="mediumText, controlParam" fx:id="controlParameterKP"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox GridPane.columnIndex="0" GridPane.rowIndex="1">
+        <Text styleClass="mediumText">KI:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+    </HBox>
+    <HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <TextField editable="false" styleClass="mediumText, controlParam" fx:id="controlParameterKI"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox GridPane.columnIndex="0" GridPane.rowIndex="2">
+        <Text styleClass="mediumText">KD:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+    </HBox>
+    <HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <TextField editable="false" styleClass="mediumText, controlParam" fx:id="controlParameterKD"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox GridPane.columnIndex="0" GridPane.rowIndex="3">
+        <Text styleClass="mediumText">Alpha:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+    </HBox>
+    <HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <TextField editable="false" styleClass="mediumText, controlParam" fx:id="controlParameterAlpha"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox GridPane.columnIndex="0" GridPane.rowIndex="4">
+        <Text styleClass="mediumText">Beta:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+    </HBox>
+    <HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <TextField editable="false" styleClass="mediumText, controlParam" fx:id="controlParameterBeta"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox GridPane.columnIndex="2" GridPane.rowIndex="0">
+        <Text styleClass="mediumText">Angle threshold:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+    </HBox>
+    <HBox GridPane.columnIndex="3" GridPane.rowIndex="0">
+        <TextField editable="false" styleClass="mediumText, controlParam" fx:id="controlParameterAngle"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox GridPane.columnIndex="2" GridPane.rowIndex="1">
+        <Text styleClass="mediumText">Speed threshold:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+    </HBox>
+    <HBox GridPane.columnIndex="3" GridPane.rowIndex="1">
+        <TextField editable="false" styleClass="mediumText, controlParam" fx:id="controlParameterSpeed"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox GridPane.columnIndex="2" GridPane.rowIndex="2">
+        <Text styleClass="mediumText">Min value:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+    </HBox>
+    <HBox GridPane.columnIndex="3" GridPane.rowIndex="2">
+        <TextField editable="false" styleClass="mediumText, controlParam" fx:id="controlParameterMin"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox GridPane.columnIndex="2" GridPane.rowIndex="3">
+        <Text styleClass="mediumText">Slope:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+    </HBox>
+    <HBox GridPane.columnIndex="3" GridPane.rowIndex="3">
+        <TextField editable="false" styleClass="mediumText, controlParam" fx:id="controlParameterSlope"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox GridPane.columnIndex="3" GridPane.rowIndex="4">
+        <Button onMouseClicked="#handleUpdateClicked">Update</Button>
+    </HBox>
+
+</GridPane>
