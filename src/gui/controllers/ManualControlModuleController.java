@@ -118,6 +118,9 @@ public class ManualControlModuleController {
 
         speed += CLICK_SPEED_STEP;
 
+        if (speed > MAX_SPEED)
+            speed = MAX_SPEED - 1;
+
         Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(speed);
         Server.getInstance().pull();
     }
@@ -132,6 +135,9 @@ public class ManualControlModuleController {
             return;
 
         turn -= CLICK_TURN_STEP;
+
+        if (turn < -MAX_TURN)
+            turn = -MAX_TURN + 1;
 
         Server.getInstance().getRequestBuilder().addTurnRequest(turn);
         Server.getInstance().pull();
@@ -148,6 +154,9 @@ public class ManualControlModuleController {
 
         turn += CLICK_TURN_STEP;
 
+        if (turn > MAX_TURN)
+            turn = MAX_TURN - 1;
+
         Server.getInstance().getRequestBuilder().addTurnRequest(turn);
         Server.getInstance().pull();
     }
@@ -162,6 +171,9 @@ public class ManualControlModuleController {
             return;
 
         speed -= CLICK_SPEED_STEP;
+
+        if (speed < -MAX_SPEED)
+            speed = -MAX_SPEED + 1;
 
         Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(speed);
         Server.getInstance().pull();
