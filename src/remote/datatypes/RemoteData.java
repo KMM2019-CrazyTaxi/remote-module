@@ -1,6 +1,7 @@
-package remote;
+package remote.datatypes;
 
 import enums.PacketCommand;
+import remote.Server;
 import remote.listeners.DataListener;
 
 import java.util.ArrayList;

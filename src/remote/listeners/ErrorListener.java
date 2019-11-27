@@ -1,6 +1,6 @@
 package remote.listeners;
 
-import remote.Error;
+import remote.datatypes.Error;
 
 public interface ErrorListener {
     public void call(Error e);

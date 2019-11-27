@@ -2,6 +2,8 @@ package remote;
 
 import enums.ControlMode;
 import enums.PacketCommand;
+import remote.datatypes.CommunicationPacket;
+import remote.datatypes.PacketList;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

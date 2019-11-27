@@ -2,6 +2,7 @@ package remote;
 
 import enums.ControlMode;
 import enums.PacketCommand;
+import remote.datatypes.RemoteData;
 
 public class Car {
     private static Car instance = new Car();
@@ -22,6 +23,8 @@ public class Car {
     public RemoteData<Integer> distanceToLeft;
     public RemoteData<Integer> distanceToMiddle;
     public RemoteData<Integer> distanceToRight;
+
+
 
     private Car() {
         Server server = Server.getInstance();

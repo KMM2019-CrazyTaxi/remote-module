@@ -1,8 +1,7 @@
 package remote;
 
-import exceptions.MissingIDException;
+import remote.datatypes.RemoteData;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
