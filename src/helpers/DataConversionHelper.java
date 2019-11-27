@@ -88,4 +88,60 @@ public class DataConversionHelper {
           bytes[offset + 3] << 24 | (bytes[offset + 2] & 0xFF) << 16 | (bytes[offset + 1] & 0xFF) << 8 | (bytes[offset] & 0xFF);
         return Float.intBitsToFloat(intBits);
     }
+
+    /**
+     * Get byte[] of split double
+     * @param value double value to split
+     * @return byte[] of split double
+     */
+    public static byte[] doubleToByteArray(double value) {
+        long longBits =  Double.doubleToLongBits(value);
+        return new byte[] {
+                (byte) (longBits),
+                (byte) (longBits >> 8),
+                (byte) (longBits >> 16),
+                (byte) (longBits >> 24),
+                (byte) (longBits >> 32),
+                (byte) (longBits >> 40),
+                (byte) (longBits >> 48),
+                (byte) (longBits >> 56)
+        };
+    }
+
+    /**
+     * Get double from byte[] of split double
+     * @param bytes byte[] of lenght > 8 (only uses first 8 bytes)
+     * @return double of concatinated bytes
+     */
+    public static double byteArrayToDouble(byte[] bytes) {
+        long longBits =
+          (bytes[7] & 0xFFL) << 56 |
+          (bytes[6] & 0xFFL) << 48 |
+          (bytes[5] & 0xFFL) << 40 |
+          (bytes[4] & 0xFFL) << 32 |
+          (bytes[3] & 0xFFL) << 24 |
+          (bytes[2] & 0xFFL) << 16 |
+          (bytes[1] & 0xFFL) << 8 |
+          (bytes[0] & 0xFFL);
+        return Double.longBitsToDouble(longBits);
+    }
+
+    /**
+     * Get double from byte[] of split double
+     * @param bytes byte[] of lenght > (offset + 8)
+     * @param offset offset to start decoding from
+     * @return double of concatinated bytes
+     */
+    public static double byteArrayToDouble(byte[] bytes, int offset) {
+        long longBits =
+          (bytes[offset + 7] & 0xFFL) << 56 |
+          (bytes[offset + 6] & 0xFFL) << 48 |
+          (bytes[offset + 5] & 0xFFL) << 40 |
+          (bytes[offset + 4] & 0xFFL) << 32 |
+          (bytes[offset + 3] & 0xFFL) << 24 |
+          (bytes[offset + 2] & 0xFFL) << 16 |
+          (bytes[offset + 1] & 0xFFL) << 8 |
+          (bytes[offset + 0] & 0xFFL);
+        return Double.longBitsToDouble(longBits);
+    }
 }
