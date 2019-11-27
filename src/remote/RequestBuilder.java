@@ -33,7 +33,8 @@ public class RequestBuilder {
         packets.addPacket(pack);
     }
 
-    public void addRequest(CommunicationPacket pack) {
+    public void addRequest(CommunicationPacket referencePack) {
+        CommunicationPacket pack = new CommunicationPacket(referencePack, requestIDBroker.getID());
         packets.addPacket(pack);
     }
 

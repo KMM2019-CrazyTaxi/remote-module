@@ -64,8 +64,7 @@ public class RemoteData<T> implements DataListener<T> {
      * @return New data value
      */
     synchronized public T fetch() {
-        CommunicationPacket req = new CommunicationPacket(request, Server.getInstance().getID());
-        Server.getInstance().getRequestBuilder().addRequest(req);
+        Server.getInstance().getRequestBuilder().addRequest(request);
 
         oldData = true;
         while(oldData) {
@@ -84,8 +83,7 @@ public class RemoteData<T> implements DataListener<T> {
      * Add a poll request for this remote data in the request queue
      */
     synchronized public void poll() {
-        CommunicationPacket req = new CommunicationPacket(request, Server.getInstance().getID());
-        Server.getInstance().getRequestBuilder().addRequest(req);
+        Server.getInstance().getRequestBuilder().addRequest(request);
     }
 
     /**
