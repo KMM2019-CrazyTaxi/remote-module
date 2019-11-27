@@ -132,4 +132,12 @@ public class PacketList implements Iterable<CommunicationPacket> {
         }
         return false;
     }
+
+    public CommunicationPacket get(PacketCommand type) {
+        for (CommunicationPacket pack : packets) {
+            if (pack.getCommand() == type)
+                return pack;
+        }
+        return null;
+    }
 }

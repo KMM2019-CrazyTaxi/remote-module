@@ -24,91 +24,79 @@ public class RequestBuilder {
         this.requestIDBroker = requestIDBroker;
     }
 
-    public void addRequest(PacketCommand type, byte[] data) {
+    public int addRequest(PacketCommand type, byte[] data) {
         // Packet of the same data less type already exists
         if (data.length == 0 && packets.contains(type))
-            return;
+            return packets.get(type).getId();
 
-        CommunicationPacket pack = new CommunicationPacket(type, requestIDBroker.getID(), data);
+        int id = requestIDBroker.getID();
+        CommunicationPacket pack = new CommunicationPacket(type, id, data);
         packets.addPacket(pack);
+        return id;
     }
 
-    public void addRequest(CommunicationPacket referencePack) {
-        CommunicationPacket pack = new CommunicationPacket(referencePack, requestIDBroker.getID());
+    public int addRequest(CommunicationPacket referencePack) {
+        int id = requestIDBroker.getID();
+        CommunicationPacket pack = new CommunicationPacket(referencePack, id);
         packets.addPacket(pack);
+        return id;
     }
 
-    public void addDatalessRequest(PacketCommand type) {
-        addRequest(type, new byte[0]);
+    public int addDatalessRequest(PacketCommand type) {
+        return addRequest(type, new byte[0]);
     }
 
-    public void addStatusRequest() {
-        //addDatalessRequest(PacketCommand.REQUEST_STATUS);
-    }
-
-//    public void addSendMapRequest(Map map) {
-//        addRequest(Enums.PacketType.SEND_MAP, map.toBytes());
-//    }
-
-//    public void addSendParametersRequest(ControlParameters param) {
-//        addRequest(Enums.PacketType.SEND_PARAMETERS, param.toBytes());
-//    }
-
-    public void addSetModeRequest(ControlMode mode) {
-        addRequest(PacketCommand.SET_MODE, new byte[]{mode.code()});
+    public int addSetModeRequest(ControlMode mode) {
+        return addRequest(PacketCommand.SET_MODE, new byte[]{mode.code()});
     }
 
     // TODO Change speed to an SI float parameter and add conversion
-    public void addSetMaxSpeedRequest(int speed) {
+    public int addSetMaxSpeedRequest(int speed) {
         if(speed >= 0x7f || speed <= -0x7f)
             throw new IllegalArgumentException("Given speed is out of range (" + speed + ")");
 
-        addRequest(PacketCommand.SEND_MAX_SPEED, new byte[]{(byte) speed});
+        return addRequest(PacketCommand.SEND_MAX_SPEED, new byte[]{(byte) speed});
     }
 
-    public void addTurnRequest(int turn) {
+    public int addTurnRequest(int turn) {
         if(turn >= 0x7f || turn <= -0x7f)
             throw new IllegalArgumentException("Given turn is out of range (" + turn + ")");
 
-        addRequest(PacketCommand.REQUEST_TURN, new byte[]{(byte) turn});
+        return addRequest(PacketCommand.REQUEST_TURN, new byte[]{(byte) turn});
     }
 
-//    public void addSendRoute(Route route) {
-//        addRequest(Enums.PacketType.SEND_NEW_ROUTE, route.toBytes());
-//    }
-
-    public void addStartRouteRequest() {
-        addDatalessRequest(PacketCommand.REQUEST_START_ROUTE);
+    public int addStartRouteRequest() {
+        return addDatalessRequest(PacketCommand.REQUEST_START_ROUTE);
     }
 
-    public void addEmergencyStopRequest() {
-        addDatalessRequest(PacketCommand.REQUEST_EMERGENCY_STOP);
+    public int addEmergencyStopRequest() {
+        return addDatalessRequest(PacketCommand.REQUEST_EMERGENCY_STOP);
     }
 
-    public void addCameraImageRequest() {
-        addDatalessRequest(PacketCommand.REQUEST_CAMERA_IMAGE);
+    public int addCameraImageRequest() {
+        return addDatalessRequest(PacketCommand.REQUEST_CAMERA_IMAGE);
     }
 
-    public void addHeartbeatRequest() {
-        addDatalessRequest(PacketCommand.REQUEST_HEARTBEAT);
+    public int addHeartbeatRequest() {
+        return addDatalessRequest(PacketCommand.REQUEST_HEARTBEAT);
     }
 
-    public void addSendDatetimeRequest() {
+    public int addSendDatetimeRequest() {
         String date = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
         byte[] dataStr = new byte[date.length() + 1];
         System.arraycopy(date.getBytes(), 0, dataStr, 0, date.length());
 
-        addRequest(PacketCommand.SEND_CURRENT_DATETIME, dataStr);
+        return addRequest(PacketCommand.SEND_CURRENT_DATETIME, dataStr);
     }
 
-    public void addSendControlParametersRequest(PIDControlerType controller, PIDParams params) {
+    public int addSendControlParametersRequest(PIDControlerType controller, PIDParams params) {
         byte[] paramBytes = params.toBytes();
         byte[] data = new byte[paramBytes.length + 1];
 
         data[0] = controller.code();
         System.arraycopy(paramBytes, 0, data, 1, paramBytes.length);
 
-        addRequest(PacketCommand.SEND_PARAMETERS, data);
+        return addRequest(PacketCommand.SEND_PARAMETERS, data);
     }
 
     public PacketList getPackets() {
