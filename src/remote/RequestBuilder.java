@@ -33,6 +33,10 @@ public class RequestBuilder {
         packets.addPacket(pack);
     }
 
+    public void addRequest(CommunicationPacket pack) {
+        packets.addPacket(pack);
+    }
+
     public void addDatalessRequest(PacketCommand type) {
         addRequest(type, new byte[0]);
     }

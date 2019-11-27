@@ -14,8 +14,7 @@ import java.util.List;
  */
 public class RemoteData<T> implements DataListener<T> {
     private T data = null;
-    private PacketCommand requestCommand;
-    private Server server;
+    private CommunicationPacket request;
 
     private List<DataListener<T>> listeners;
 
@@ -24,24 +23,20 @@ public class RemoteData<T> implements DataListener<T> {
     /**
      * RemoteData constructor
      * @param data Initial data value
-     * @param requestCommand Request to update this remote data
-     * @param server Connecting server
+     * @param request Request to update this remote data
      */
-    public RemoteData(T data, PacketCommand requestCommand, Server server) {
+    public RemoteData(T data, CommunicationPacket request) {
         this.data = data;
-        this.requestCommand = requestCommand;
-        this.server = server;
+        this.request = request;
         listeners = new ArrayList<>();
     }
 
     /**
      * RemoteData constructor
-     * @param requestCommand Request to update this remote data
-     * @param server Connecting server
+     * @param request Request to update this remote data
      */
-    public RemoteData(PacketCommand requestCommand, Server server) {
-        this.requestCommand = requestCommand;
-        this.server = server;
+    public RemoteData(CommunicationPacket request) {
+        this.request = request;
         listeners = new ArrayList<>();
     }
 
@@ -69,7 +64,8 @@ public class RemoteData<T> implements DataListener<T> {
      * @return New data value
      */
     synchronized public T fetch() {
-        server.getRequestBuilder().addDatalessRequest(requestCommand);
+        CommunicationPacket req = new CommunicationPacket(request, Server.getInstance().getID());
+        Server.getInstance().getRequestBuilder().addRequest(req);
 
         oldData = true;
         while(oldData) {
@@ -88,7 +84,8 @@ public class RemoteData<T> implements DataListener<T> {
      * Add a poll request for this remote data in the request queue
      */
     synchronized public void poll() {
-        server.getRequestBuilder().addDatalessRequest(requestCommand);
+        CommunicationPacket req = new CommunicationPacket(request, Server.getInstance().getID());
+        Server.getInstance().getRequestBuilder().addRequest(req);
     }
 
     /**

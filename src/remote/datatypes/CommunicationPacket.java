@@ -20,6 +20,27 @@ public class CommunicationPacket {
     private byte[] data;
 
     /**
+     * CommunicationPacket constructor. This constructor is meant to construct default CommandPackets used for copying.
+     * @param command Packet request/respons command
+     */
+    public CommunicationPacket(PacketCommand command) {
+        this.command = command;
+        this.id = 0;
+        this.data = new byte[]{};
+    }
+
+    /**
+     * CommunicationPacket constructor. This constructor is meant to construct default CommandPackets used for copying.
+     * @param command Packet request/respons command
+     * @param data Packet data
+     */
+    public CommunicationPacket(PacketCommand command, byte[] data) {
+        this.command = command;
+        this.id = 0;
+        this.data = data.clone();
+    }
+
+    /**
      * CommunicationPacket constructor
      * @param id Unique packet id
      * @param command Packet request/respons command
@@ -44,6 +65,12 @@ public class CommunicationPacket {
 
         this.data = new byte[size];
         System.arraycopy(rawData, offset + 5, this.data, 0, size);
+    }
+
+    public CommunicationPacket(CommunicationPacket request, int id) {
+        this.command = request.command;
+        this.id = id;
+        this.data = request.data.clone();
     }
 
 

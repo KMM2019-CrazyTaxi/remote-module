@@ -48,6 +48,10 @@ public class Server {
         builderLocked = false;
     }
 
+    public int getID() {
+        return requestIDBroker.getID();
+    }
+
     /**
      * Connect to remote
      * @throws IOException If the connection could not be made

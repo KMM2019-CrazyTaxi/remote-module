@@ -1,7 +1,10 @@
 package remote;
 
 import enums.ControlMode;
+import enums.PIDControlerType;
 import enums.PacketCommand;
+import remote.datatypes.CommunicationPacket;
+import remote.datatypes.PIDParams;
 import remote.datatypes.RemoteData;
 
 public class Car {
@@ -24,24 +27,44 @@ public class Car {
     public RemoteData<Integer> distanceToMiddle;
     public RemoteData<Integer> distanceToRight;
 
-
+    public RemoteData<PIDParams> turningParams;
+    public RemoteData<PIDParams> parkingParams;
+    public RemoteData<PIDParams> stoppingParams;
+    public RemoteData<PIDParams> lineAngleParams;
+    public RemoteData<PIDParams> lineSpeedParams;
 
     private Car() {
-        Server server = Server.getInstance();
 
-        accelerationX = new RemoteData<>(PacketCommand.REQUEST_SENSOR_DATA, server);
-        accelerationY = new RemoteData<>(PacketCommand.REQUEST_SENSOR_DATA, server);
-        accelerationZ = new RemoteData<>(PacketCommand.REQUEST_SENSOR_DATA, server);
-        distance = new RemoteData<>(PacketCommand.REQUEST_SENSOR_DATA, server);
-        speed = new RemoteData<>(PacketCommand.REQUEST_SENSOR_DATA, server);
+        CommunicationPacket sensorData = new CommunicationPacket(PacketCommand.REQUEST_SENSOR_DATA);
+        accelerationX = new RemoteData<>(sensorData);
+        accelerationY = new RemoteData<>(sensorData);
+        accelerationZ = new RemoteData<>(sensorData);
+        distance = new RemoteData<>(sensorData);
+        speed = new RemoteData<>(sensorData);
 
-        controlMode = new RemoteData<>(PacketCommand.REQUEST_MODE, server);
+        controlMode = new RemoteData<>(new CommunicationPacket(PacketCommand.REQUEST_MODE));
 
-        temperature = new RemoteData<>(PacketCommand.REQUEST_TEMPERATURE, server);
+        temperature = new RemoteData<>(new CommunicationPacket(PacketCommand.REQUEST_TEMPERATURE));
 
-        distanceToLeft = new RemoteData<>(PacketCommand.REQUEST_LATERAL_DISTANCE, server);
-        distanceToMiddle = new RemoteData<>(PacketCommand.REQUEST_LATERAL_DISTANCE, server);
-        distanceToRight= new RemoteData<>(PacketCommand.REQUEST_LATERAL_DISTANCE, server);
+        CommunicationPacket lateralDist = new CommunicationPacket(PacketCommand.REQUEST_LATERAL_DISTANCE);
+        distanceToLeft = new RemoteData<>(lateralDist);
+        distanceToMiddle = new RemoteData<>(lateralDist);
+        distanceToRight= new RemoteData<>(lateralDist);
+
+        CommunicationPacket turningParam = new CommunicationPacket(PacketCommand.REQUEST_CONTROL_PARAMETERS, new byte[]{1});
+        turningParams = new RemoteData<>(turningParam);
+
+        CommunicationPacket parkingParam = new CommunicationPacket(PacketCommand.REQUEST_CONTROL_PARAMETERS, new byte[]{2});
+        parkingParams = new RemoteData<>(parkingParam);
+
+        CommunicationPacket stoppingParam = new CommunicationPacket(PacketCommand.REQUEST_CONTROL_PARAMETERS, new byte[]{3});
+        stoppingParams = new RemoteData<>(stoppingParam);
+
+        CommunicationPacket lineAngleParam = new CommunicationPacket(PacketCommand.REQUEST_CONTROL_PARAMETERS, new byte[]{4});
+        lineAngleParams = new RemoteData<>(lineAngleParam);
+
+        CommunicationPacket lineSpeedParam = new CommunicationPacket(PacketCommand.REQUEST_CONTROL_PARAMETERS, new byte[]{5});
+        lineSpeedParams = new RemoteData<>(lineSpeedParam);
     }
 
     public static Car getInstance() {
