@@ -15,6 +15,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
+/**
+ * Control Parameter-feature Controller class. This is the main controller class for the Control Parameter-module.
+ *
+ * @author Henrik Nilsson
+ */
 public class ControlParameterFeatureController {
 
     @FXML private GridPane controlGrid;
@@ -36,6 +41,10 @@ public class ControlParameterFeatureController {
         editing = new AtomicBoolean(false);
     }
 
+    /**
+     * Initialize method called by JavaFX thread when JavaFX-objects are constructed and ready.
+     * This sets up all input formatters for parameter inputs.
+     */
     public void initialize() {
         Pattern validEditingState = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
 
@@ -88,6 +97,10 @@ public class ControlParameterFeatureController {
     }
 
 
+    /**
+     * Handle Update button click event. Toggle input lock and pull the server when updating.
+     * @param mouseEvent Triggering event
+     */
     public void handleUpdateClicked(MouseEvent mouseEvent) {
         if (editing.get()) {
             PIDParams newParams = getPIDParamsFromInput();
@@ -105,6 +118,10 @@ public class ControlParameterFeatureController {
         }
     }
 
+    /**
+     * Get the PIDParams from the input fields.
+     * @return New PID Controller params from the current text inputs
+     */
     private PIDParams getPIDParamsFromInput() {
         double kp = (Double) controlParameterKP.getTextFormatter().getValue();
         double ki = (Double) controlParameterKI.getTextFormatter().getValue();
@@ -120,6 +137,10 @@ public class ControlParameterFeatureController {
         return new PIDParams(kp, ki, kd, alpha, beta, angle, speed, min, slope);
     }
 
+    /**
+     * Get the subsystem represented by this feature by looking at the parent ID.
+     * @return Which subsystem type this feature represents
+     */
     private PIDControlerType getParamSubsystem() {
         String parentName = controlGrid.getParent().getParent().getId();
 
@@ -139,6 +160,9 @@ public class ControlParameterFeatureController {
         return subSystem;
     }
 
+    /**
+     * Lock parameter inputs.
+     */
     private void lockInputs() {
         controlParameterKP.setEditable(false);
         controlParameterKI.setEditable(false);
@@ -152,6 +176,9 @@ public class ControlParameterFeatureController {
         controlParameterSlope.setEditable(false);
     }
 
+    /**
+     * Unlock parameter inputs.
+     */
     private void unlockInputs() {
         controlParameterKP.setEditable(true);
         controlParameterKI.setEditable(true);
