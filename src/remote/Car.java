@@ -1,11 +1,11 @@
 package remote;
 
 import enums.ControlMode;
-import enums.PIDControlerType;
 import enums.PacketCommand;
 import remote.datatypes.CommunicationPacket;
 import remote.datatypes.PIDParams;
 import remote.datatypes.RemoteData;
+import remote.listeners.DataListener;
 
 public class Car {
     private static Car instance = new Car();
@@ -21,10 +21,9 @@ public class Car {
     public RemoteData<Float> temperature;
 
     // Camera processing
-    // TODO change to float
-    public RemoteData<Integer> distanceToLeft;
-    public RemoteData<Integer> distanceToMiddle;
-    public RemoteData<Integer> distanceToRight;
+    public RemoteData<Double> distanceToLeft;
+    public RemoteData<Double> distanceToRight;
+    public RemoteData<Double> distanceToStop;
 
     // Control
     public RemoteData<PIDParams> turningParams;
@@ -40,6 +39,9 @@ public class Car {
     // Decision output
     public RemoteData<ControlMode> controlMode;
 
+    // Calculated data
+    public RemoteData<Double> distanceToMiddle;
+
     private Car() {
 
         CommunicationPacket sensorData = new CommunicationPacket(PacketCommand.REQUEST_SENSOR_DATA);
@@ -53,10 +55,12 @@ public class Car {
 
         temperature = new RemoteData<>(new CommunicationPacket(PacketCommand.REQUEST_TEMPERATURE));
 
-        CommunicationPacket lateralDist = new CommunicationPacket(PacketCommand.REQUEST_LATERAL_DISTANCE);
-        distanceToLeft = new RemoteData<>(lateralDist);
-        distanceToMiddle = new RemoteData<>(lateralDist);
-        distanceToRight= new RemoteData<>(lateralDist);
+        CommunicationPacket irRequest = new CommunicationPacket(PacketCommand.REQUEST_IR_DATA);
+        distanceToLeft = new RemoteData<>(irRequest);
+        distanceToRight = new RemoteData<>(irRequest);
+        distanceToStop = new RemoteData<>(irRequest);
+
+        distanceToMiddle = new RemoteData<>(new CommunicationPacket(PacketCommand.REQUEST_LATERAL_DISTANCE));
 
         CommunicationPacket turningParam = new CommunicationPacket(PacketCommand.REQUEST_CONTROL_PARAMETERS, new byte[]{1});
         turningParams = new RemoteData<>(turningParam);

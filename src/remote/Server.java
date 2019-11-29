@@ -160,6 +160,9 @@ public class Server {
                             break;
                         case CAMERA_IMAGE:
                             break;
+                        case CURRENT_IR_DATA:
+                            handleImageRecognitionData(packet);
+                            break;
                         default:
                             System.out.println("ILLEGAL ARG!");
                             throw new IllegalStateException("You either forgot to add new Data command in 'handlePackets' or 'getType': (" + packet.getCommand() + ")");
@@ -171,15 +174,19 @@ public class Server {
         }
     }
 
+    private void handleImageRecognitionData(CommunicationPacket packet) {
+        Car.getInstance().distanceToLeft.update(DataConversionHelper.byteArrayToDouble(packet.getData(), 0));
+        Car.getInstance().distanceToRight.update(DataConversionHelper.byteArrayToDouble(packet.getData(), 8));
+        Car.getInstance().distanceToStop.update(DataConversionHelper.byteArrayToDouble(packet.getData(), 16));
+    }
+
     private void handleControlDecision(CommunicationPacket packet) {
         Car.getInstance().targetSpeed.update(DataConversionHelper.byteArrayToSignedInt(packet.getData(), 0, 1));
         Car.getInstance().targetTurn.update(DataConversionHelper.byteArrayToSignedInt(packet.getData(), 1, 1));
     }
 
     private void handleLateralDistanceData(CommunicationPacket packet) {
-        Car.getInstance().distanceToMiddle.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 0, 2));
-        Car.getInstance().distanceToRight.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 2, 2));
-        Car.getInstance().distanceToLeft.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 4, 2));
+        Car.getInstance().distanceToMiddle.update(DataConversionHelper.byteArrayToDouble(packet.getData(), 0));
     }
 
     private void handleSensorData(CommunicationPacket packet) {

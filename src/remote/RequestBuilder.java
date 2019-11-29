@@ -81,6 +81,10 @@ public class RequestBuilder {
         return addDatalessRequest(PacketCommand.REQUEST_HEARTBEAT);
     }
 
+    public int addImageRecognitionRequest() {
+        return addDatalessRequest(PacketCommand.REQUEST_IR_DATA);
+    }
+
     public int addSendDatetimeRequest() {
         String date = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
         byte[] dataStr = new byte[date.length() + 1];
