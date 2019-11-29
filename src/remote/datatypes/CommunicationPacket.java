@@ -60,8 +60,8 @@ public class CommunicationPacket {
         //TODO Add packet structure analysis
 
         this.command = PacketCommand.fromByte(rawData[offset]);
-        this.id = DataConversionHelper.byteArrayToInt(rawData, offset + 1, 2);
-        int size = DataConversionHelper.byteArrayToInt(rawData, offset + 3, 2);
+        this.id = DataConversionHelper.byteArrayToUnsignedInt(rawData, offset + 1, 2);
+        int size = DataConversionHelper.byteArrayToUnsignedInt(rawData, offset + 3, 2);
 
         this.data = new byte[size];
         System.arraycopy(rawData, offset + 5, this.data, 0, size);

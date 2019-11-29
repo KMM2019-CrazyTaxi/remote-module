@@ -42,7 +42,7 @@ public class PacketList implements Iterable<CommunicationPacket> {
     public PacketList(byte[] rawData) throws IncorrectDataException {
         packets = new ArrayList<>();
 
-        int numberOfPackets = DataConversionHelper.byteArrayToInt(new byte[]{rawData[0]});
+        int numberOfPackets = DataConversionHelper.byteArrayToUnsignedInt(new byte[]{rawData[0]});
         int offset = 1;
 
         while(offset < rawData.length) {

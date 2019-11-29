@@ -148,6 +148,7 @@ public class Server {
                             handleLateralDistanceData(packet);
                             break;
                         case CURRENT_CONTROL_DECISION:
+                            handleControlDecision(packet);
                             break;
                         case CURRENT_STOP_LINE_FOUND:
                             break;
@@ -169,18 +170,23 @@ public class Server {
         }
     }
 
+    private void handleControlDecision(CommunicationPacket packet) {
+        Car.getInstance().targetSpeed.update(DataConversionHelper.byteArrayToSignedInt(packet.getData(), 0, 1));
+        Car.getInstance().targetTurn.update(DataConversionHelper.byteArrayToSignedInt(packet.getData(), 1, 1));
+    }
+
     private void handleLateralDistanceData(CommunicationPacket packet) {
-        Car.getInstance().distanceToMiddle.update(DataConversionHelper.byteArrayToInt(packet.getData(), 0, 2));
-        Car.getInstance().distanceToRight.update(DataConversionHelper.byteArrayToInt(packet.getData(), 2, 2));
-        Car.getInstance().distanceToLeft.update(DataConversionHelper.byteArrayToInt(packet.getData(), 4, 2));
+        Car.getInstance().distanceToMiddle.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 0, 2));
+        Car.getInstance().distanceToRight.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 2, 2));
+        Car.getInstance().distanceToLeft.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 4, 2));
     }
 
     private void handleSensorData(CommunicationPacket packet) {
-        Car.getInstance().accelerationX.update(DataConversionHelper.byteArrayToInt(packet.getData(), 0, 2));
-        Car.getInstance().accelerationY.update(DataConversionHelper.byteArrayToInt(packet.getData(), 2, 2));
-        Car.getInstance().accelerationZ.update(DataConversionHelper.byteArrayToInt(packet.getData(), 4, 2));
-        Car.getInstance().distance.update(DataConversionHelper.byteArrayToInt(packet.getData(), 6, 1));
-        Car.getInstance().speed.update(DataConversionHelper.byteArrayToInt(packet.getData(), 7, 1));
+        Car.getInstance().accelerationX.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 0, 2));
+        Car.getInstance().accelerationY.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 2, 2));
+        Car.getInstance().accelerationZ.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 4, 2));
+        Car.getInstance().distance.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 6, 1));
+        Car.getInstance().speed.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 7, 1));
     }
 
     private void handleModeData(CommunicationPacket packet) {

@@ -18,20 +18,27 @@ public class Car {
     public RemoteData<Integer> distance;
     public RemoteData<Integer> speed;
 
-    public RemoteData<ControlMode> controlMode;
-
     public RemoteData<Float> temperature;
 
+    // Camera processing
     // TODO change to float
     public RemoteData<Integer> distanceToLeft;
     public RemoteData<Integer> distanceToMiddle;
     public RemoteData<Integer> distanceToRight;
 
+    // Control
     public RemoteData<PIDParams> turningParams;
     public RemoteData<PIDParams> parkingParams;
     public RemoteData<PIDParams> stoppingParams;
     public RemoteData<PIDParams> lineAngleParams;
     public RemoteData<PIDParams> lineSpeedParams;
+
+    // Control output
+    public RemoteData<Integer> targetSpeed;
+    public RemoteData<Integer> targetTurn;
+
+    // Decision output
+    public RemoteData<ControlMode> controlMode;
 
     private Car() {
 
@@ -65,6 +72,10 @@ public class Car {
 
         CommunicationPacket lineSpeedParam = new CommunicationPacket(PacketCommand.REQUEST_CONTROL_PARAMETERS, new byte[]{5});
         lineSpeedParams = new RemoteData<>(lineSpeedParam);
+
+        CommunicationPacket targetControl = new CommunicationPacket(PacketCommand.CURRENT_CONTROL_DECISION);
+        targetSpeed = new RemoteData<>(targetControl);
+        targetTurn = new RemoteData<>(targetControl);
     }
 
     public static Car getInstance() {

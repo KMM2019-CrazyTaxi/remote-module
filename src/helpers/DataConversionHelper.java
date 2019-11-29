@@ -29,7 +29,7 @@ public class DataConversionHelper {
      * @param val byte[] of split int (only uses first 4 bytes)
      * @return int of concatinated bytes
      */
-    public static int byteArrayToInt(byte[] val) {
+    public static int byteArrayToUnsignedInt(byte[] val) {
         int integerVal = 0;
         for (int i = val.length - 1; i >= 0; i--) {
             integerVal <<= 8;
@@ -45,11 +45,51 @@ public class DataConversionHelper {
      * @param length Length to decode (only uses first 4 bytes)
      * @return int of concatinated bytes
      */
-    public static int byteArrayToInt(byte[] val, int offset, int length) {
+    public static int byteArrayToUnsignedInt(byte[] val, int offset, int length) {
         int integerVal = 0;
         for (int i = offset + length - 1; i >= offset; i--) {
             integerVal <<= 8;
             integerVal |= val[i] & 0xff;
+        }
+        return integerVal;
+    }
+
+    /**
+     * Get int from byte[] of split int
+     * @param val byte[] of split int (only uses first 4 bytes)
+     * @return int of concatinated bytes
+     */
+    public static int byteArrayToSignedInt(byte[] val) {
+        int integerVal = 0;
+        for (int i = val.length - 1; i >= 0; i--) {
+            integerVal <<= 8;
+            if (i == val.length - 1) {
+                integerVal |= val[i];
+            }
+            else {
+                integerVal |= (val[i] & 0xff);
+            }
+        }
+        return integerVal;
+    }
+
+    /**
+     * Get int from byte[] of split int
+     * @param val byte[] of split int
+     * @param offset Offset in bytes of where to start decoding
+     * @param length Length to decode (only uses first 4 bytes)
+     * @return int of concatinated bytes
+     */
+    public static int byteArrayToSignedInt(byte[] val, int offset, int length) {
+        int integerVal = 0;
+        for (int i = offset + length - 1; i >= offset; i--) {
+            integerVal <<= 8;
+            if (i == val.length - 1) {
+                integerVal |= val[i];
+            }
+            else {
+                integerVal |= (val[i] & 0xff);
+            }
         }
         return integerVal;
     }
