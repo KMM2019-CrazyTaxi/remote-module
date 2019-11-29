@@ -10,6 +10,8 @@ public enum ControlMode {
     }
 
     public static ControlMode fromByte(byte b) {
+        if ((b & 0xff) > ControlMode.values().length)
+            throw new IllegalArgumentException("Given byte is out of range. (" + b + ")");
         return ControlMode.values()[b];
     }
 }

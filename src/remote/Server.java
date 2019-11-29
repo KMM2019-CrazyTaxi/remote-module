@@ -1,11 +1,12 @@
 package remote;
 
 import enums.ControlMode;
-import enums.PacketCommand;
 import exceptions.MissingIDException;
 import helpers.DataConversionHelper;
-import remote.listeners.AcknowledgementListener;
-import remote.listeners.ErrorListener;
+import remote.datatypes.CommunicationPacket;
+import remote.datatypes.PIDParams;
+import remote.datatypes.PacketList;
+import remote.listeners.ResponsListener;
 import remote.listeners.ExceptionListener;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,19 +28,17 @@ public class Server {
     private RequestIDBroker requestIDBroker;
     private RequestBuilder requestBuilder;
 
-    private List<AcknowledgementListener> acknowledgementListeners;
-    private List<ErrorListener> errorListeners;
+    private List<ResponsListener> responsListeners;
     private List<ExceptionListener> exceptionListeners;
 
     private volatile boolean builderLocked = true;
 
-    public Server() {
+    private Server() {
         this.serverConnection = new ServerConnection();
         this.requestIDBroker = new RequestIDBroker();
         this.requestBuilder = new RequestBuilder(requestIDBroker);
 
-        acknowledgementListeners = new ArrayList<>();
-        errorListeners = new ArrayList<>();
+        responsListeners = new ArrayList<>();
         exceptionListeners = new ArrayList<>();
 
         builderLocked = false;
@@ -65,24 +64,16 @@ public class Server {
         serverConnection.connect(ip, port);
     }
 
-    public void addAcknowledgementListener(AcknowledgementListener o) {
-        acknowledgementListeners.add(o);
-    }
-
-    public void addErrorListener(ErrorListener o) {
-        errorListeners.add(o);
+    public void addResponsListener(ResponsListener o) {
+        responsListeners.add(o);
     }
 
     public void addExceptionListener(ExceptionListener o) {
         exceptionListeners.add(o);
     }
 
-    public void removeAcknowledgementListener(AcknowledgementListener o) {
-        acknowledgementListeners.remove(o);
-    }
-
-    public void removeErrorListener(ErrorListener o) {
-        errorListeners.remove(o);
+    public void removeResponsListener(ResponsListener o) {
+        responsListeners.remove(o);
     }
 
     public void removeExceptionListener(ExceptionListener o) {
@@ -137,14 +128,6 @@ public class Server {
                 case REQUEST:
                     throw new IllegalStateException("Got unexpected request as respons: " + packet.getCommand());
 
-                case ACKNOWLEDGEMENT:
-                    notifyAcknowledgementListeners(packet.getCommand(), packet.getId());
-                    break;
-
-                case ERROR:
-                    notifyErrorListeners(packet.getCommand(), new Error(packet));
-                    break;
-
                 case DATA:
                     switch (packet.getCommand()) {
                         case CURRENT_SENSOR_DATA:
@@ -166,6 +149,7 @@ public class Server {
                             handleLateralDistanceData(packet);
                             break;
                         case CURRENT_CONTROL_DECISION:
+                            handleControlDecision(packet);
                             break;
                         case CURRENT_STOP_LINE_FOUND:
                             break;
@@ -176,27 +160,41 @@ public class Server {
                             break;
                         case CAMERA_IMAGE:
                             break;
+                        case CURRENT_IR_DATA:
+                            handleImageRecognitionData(packet);
+                            break;
                         default:
                             System.out.println("ILLEGAL ARG!");
                             throw new IllegalStateException("You either forgot to add new Data command in 'handlePackets' or 'getType': (" + packet.getCommand() + ")");
                     }
                     break;
             }
+
+            notifyResponsListeners(packet);
         }
     }
 
+    private void handleImageRecognitionData(CommunicationPacket packet) {
+        Car.getInstance().distanceToLeft.update(DataConversionHelper.byteArrayToDouble(packet.getData(), 0));
+        Car.getInstance().distanceToRight.update(DataConversionHelper.byteArrayToDouble(packet.getData(), 8));
+        Car.getInstance().distanceToStop.update(DataConversionHelper.byteArrayToDouble(packet.getData(), 16));
+    }
+
+    private void handleControlDecision(CommunicationPacket packet) {
+        Car.getInstance().targetSpeed.update(DataConversionHelper.byteArrayToSignedInt(packet.getData(), 0, 1));
+        Car.getInstance().targetTurn.update(DataConversionHelper.byteArrayToSignedInt(packet.getData(), 1, 1));
+    }
+
     private void handleLateralDistanceData(CommunicationPacket packet) {
-        Car.getInstance().distanceToMiddle.update(DataConversionHelper.byteArrayToInt(packet.getData(), 0, 2));
-        Car.getInstance().distanceToRight.update(DataConversionHelper.byteArrayToInt(packet.getData(), 2, 2));
-        Car.getInstance().distanceToLeft.update(DataConversionHelper.byteArrayToInt(packet.getData(), 4, 2));
+        Car.getInstance().distanceToMiddle.update(DataConversionHelper.byteArrayToDouble(packet.getData(), 0));
     }
 
     private void handleSensorData(CommunicationPacket packet) {
-        Car.getInstance().accelerationX.update(DataConversionHelper.byteArrayToInt(packet.getData(), 0, 2));
-        Car.getInstance().accelerationY.update(DataConversionHelper.byteArrayToInt(packet.getData(), 2, 2));
-        Car.getInstance().accelerationZ.update(DataConversionHelper.byteArrayToInt(packet.getData(), 4, 2));
-        Car.getInstance().distance.update(DataConversionHelper.byteArrayToInt(packet.getData(), 6, 1));
-        Car.getInstance().speed.update(DataConversionHelper.byteArrayToInt(packet.getData(), 7, 1));
+        Car.getInstance().accelerationX.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 0, 2));
+        Car.getInstance().accelerationY.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 2, 2));
+        Car.getInstance().accelerationZ.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 4, 2));
+        Car.getInstance().distance.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 6, 1));
+        Car.getInstance().speed.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 7, 1));
     }
 
     private void handleModeData(CommunicationPacket packet) {
@@ -204,22 +202,58 @@ public class Server {
     }
 
     private void handleControlParameterData(CommunicationPacket packet) {
-        //TODO Decode control parameters
+        int offset = 1;
+
+        double kp = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+        double ki = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+        double kd = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+        double alpha = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+        double beta = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+
+        double angleThreshold = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+        double speedThreshold = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+        double minValue = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+        double slope = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+
+        PIDParams newParams = new PIDParams(kp, ki, kd, alpha, beta, angleThreshold, speedThreshold, minValue, slope);
+
+        switch (DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 0, 1)) {
+            case 1:
+                Car.getInstance().turningParams.update(newParams);
+                break;
+            case 2:
+                Car.getInstance().parkingParams.update(newParams);
+                break;
+            case 3:
+                Car.getInstance().stoppingParams.update(newParams);
+                break;
+            case 4:
+                Car.getInstance().lineAngleParams.update(newParams);
+                break;
+            case 5:
+                Car.getInstance().lineSpeedParams.update(newParams);
+                break;
+
+            default:
+                notifyExceptionListeners(new IllegalStateException("Unexpected value: " + DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 0, 1)));
+        }
     }
 
     private void handleTemperatureData(CommunicationPacket packet) {
         Car.getInstance().temperature.update(DataConversionHelper.byteArrayToFloat(packet.getData()));
     }
 
-    private void notifyErrorListeners(PacketCommand type, Error e) {
-        for (ErrorListener o : errorListeners) {
-            o.call(e);
-        }
-    }
-
-    private void notifyAcknowledgementListeners(PacketCommand type, int id) {
-        for (AcknowledgementListener o : acknowledgementListeners) {
-            o.call(type, id);
+    private void notifyResponsListeners(CommunicationPacket packet) {
+        for (ResponsListener o : responsListeners) {
+            o.call(packet);
         }
     }
 
