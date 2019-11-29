@@ -4,6 +4,7 @@ import enums.ControlMode;
 import exceptions.MissingIDException;
 import helpers.DataConversionHelper;
 import remote.datatypes.CommunicationPacket;
+import remote.datatypes.PIDParams;
 import remote.datatypes.PacketList;
 import remote.listeners.ResponsListener;
 import remote.listeners.ExceptionListener;
@@ -194,7 +195,49 @@ public class Server {
     }
 
     private void handleControlParameterData(CommunicationPacket packet) {
-        //TODO Decode control parameters
+        int offset = 1;
+
+        double kp = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+        double ki = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+        double kd = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+        double alpha = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+        double beta = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+
+        double angleThreshold = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+        double speedThreshold = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+        double minValue = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+        offset += 8;
+        double slope = DataConversionHelper.byteArrayToDouble(packet.getData(), offset);
+
+        PIDParams newParams = new PIDParams(kp, ki, kd, alpha, beta, angleThreshold, speedThreshold, minValue, slope);
+
+        switch (DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 0, 1)) {
+            case 1:
+                Car.getInstance().turningParams.update(newParams);
+                break;
+            case 2:
+                Car.getInstance().parkingParams.update(newParams);
+                break;
+            case 3:
+                Car.getInstance().stoppingParams.update(newParams);
+                break;
+            case 4:
+                Car.getInstance().lineAngleParams.update(newParams);
+                break;
+            case 5:
+                Car.getInstance().lineSpeedParams.update(newParams);
+                break;
+
+            default:
+                notifyExceptionListeners(new IllegalStateException("Unexpected value: " + DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 0, 1)));
+        }
     }
 
     private void handleTemperatureData(CommunicationPacket packet) {
