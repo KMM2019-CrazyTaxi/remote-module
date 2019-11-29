@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <Stage title="CC panel" xmlns:fx="http://javafx.com/fxml/1">
     <scene>
-        <Scene>
+        <Scene width="800">
             <stylesheets>
                 <URL value="@../default.css" />
             </stylesheets>
