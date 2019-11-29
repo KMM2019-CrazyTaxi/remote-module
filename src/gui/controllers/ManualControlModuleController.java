@@ -201,10 +201,11 @@ public class ManualControlModuleController {
      * @param keyEvent Triggering event
      */
     public void handleKeyPressed(KeyEvent keyEvent) {
-        keyEvent.consume();
         // Ignore key press if not in key input mode
         if (!wasdState.get())
             return;
+
+        keyEvent.consume();
 
         switch (keyEvent.getText()) {
             case "w":
@@ -231,10 +232,11 @@ public class ManualControlModuleController {
      * @param keyEvent Triggering event
      */
     public void handleKeyReleased(KeyEvent keyEvent) {
-        keyEvent.consume();
         // Ignore key press if not in key input mode
         if (!wasdState.get())
             return;
+
+        keyEvent.consume();
 
         switch (keyEvent.getText()) {
             case "w":
