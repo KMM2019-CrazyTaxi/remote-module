@@ -91,6 +91,14 @@ Separator
 }
 
 /*
+Scene
+*/
+.scene {
+    -fx-pref-width: 800px;
+    -fx-pref-height: 800px;
+}
+
+/*
 Menu
 */
 
@@ -154,6 +162,41 @@ TAB
 }
 
 /*
+Scroll pane
+*/
+
+.scroll-pane > * {
+    -fx-padding: 0 !important;
+}
+
+.scroll-bar {
+    -fx-padding: 0 !important;
+}
+
+.scroll-bar .track {
+    -fx-background-color: -cc-background-color;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: -cc-dark-color;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 20px;
+    -fx-background-insets: 0 5px 5px 5px;
+}
+
+.scroll-bar .increment-button ,
+.scroll-bar .decrement-button {
+    -fx-padding: 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow{
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+
+/*
 Module
 */
 
@@ -173,7 +216,14 @@ Control parameter module
 */
 
 #controlParameterModule {
-    -fx-pref-width: 20%;
+    -fx-max-width: 800px;
+    -fx-vbar-policy: never;
+    -fx-fit-to-height: true;
+}
+
+#controlParameterScrollContainer {
+    -fx-background-color: -cc-background-color;
+    -fx-padding: 0 0 20 0;
 }
 
 .controlParam {

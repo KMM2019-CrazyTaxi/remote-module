@@ -3,8 +3,8 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.text.Text?>
-
 <?import javafx.scene.control.Button?>
+
 <GridPane fx:id="controlGrid" alignment="center" hgap="10" vgap="10" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.ControlParameterController">
 
     <HBox GridPane.columnIndex="0" GridPane.rowIndex="0">

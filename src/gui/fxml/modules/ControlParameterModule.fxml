@@ -5,8 +5,8 @@
 <?import javafx.scene.Group?>
 
 <?import javafx.scene.control.Separator?>
-<ScrollPane styleClass="module" fx:id="ControlParameterModule" xmlns:fx="http://javafx.com/fxml/1">
-    <HBox style="-fx-background-color: -cc-background-color;">
+<ScrollPane styleClass="module" fx:id="controlParameterModule" xmlns:fx="http://javafx.com/fxml/1">
+    <HBox id="controlParameterScrollContainer">
         <Group fx:id="TurningControlParameters">
             <VBox>
                 <Text styleClass="largeText">Turning:</Text>
