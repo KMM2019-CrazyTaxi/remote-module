@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
-public class ControlParameterController {
+public class ControlParameterFeatureController {
 
     @FXML private GridPane controlGrid;
 
@@ -32,7 +32,7 @@ public class ControlParameterController {
 
     private AtomicBoolean editing;
 
-    public ControlParameterController() {
+    public ControlParameterFeatureController() {
         editing = new AtomicBoolean(false);
     }
 
