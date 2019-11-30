@@ -1,4 +1,4 @@
-package remote;
+package remote.datatypes;
 
 import enums.PacketCommand;
 import exceptions.IncorrectDataException;
@@ -42,7 +42,7 @@ public class PacketList implements Iterable<CommunicationPacket> {
     public PacketList(byte[] rawData) throws IncorrectDataException {
         packets = new ArrayList<>();
 
-        int numberOfPackets = DataConversionHelper.byteArrayToInt(new byte[]{rawData[0]});
+        int numberOfPackets = DataConversionHelper.byteArrayToUnsignedInt(new byte[]{rawData[0]});
         int offset = 1;
 
         while(offset < rawData.length) {
@@ -131,5 +131,13 @@ public class PacketList implements Iterable<CommunicationPacket> {
                 return true;
         }
         return false;
+    }
+
+    public CommunicationPacket get(PacketCommand type) {
+        for (CommunicationPacket pack : packets) {
+            if (pack.getCommand() == type)
+                return pack;
+        }
+        return null;
     }
 }
