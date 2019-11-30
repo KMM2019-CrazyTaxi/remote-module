@@ -10,7 +10,7 @@
         <Group fx:id="TurningControlParameters">
             <VBox>
                 <Text styleClass="largeText">Turning:</Text>
-                <fx:include source="../features/ControlParameterGrid.fxml"/>
+                <fx:include source="../features/ControlParameterGridFeature.fxml"/>
             </VBox>
         </Group>
 
@@ -19,7 +19,7 @@
         <Group fx:id="ParkingControlParameters">
             <VBox>
                 <Text styleClass="largeText">Parking:</Text>
-                <fx:include source="../features/ControlParameterGrid.fxml"/>
+                <fx:include source="../features/ControlParameterGridFeature.fxml"/>
             </VBox>
         </Group>
 
@@ -28,7 +28,7 @@
         <Group fx:id="StoppingControlParameters">
             <VBox>
                 <Text styleClass="largeText">Stopping:</Text>
-                <fx:include source="../features/ControlParameterGrid.fxml"/>
+                <fx:include source="../features/ControlParameterGridFeature.fxml"/>
             </VBox>
         </Group>
 
@@ -37,7 +37,7 @@
         <Group fx:id="LineAngleControlParameters">
             <VBox>
                 <Text styleClass="largeText">Line angle:</Text>
-                <fx:include source="../features/ControlParameterGrid.fxml"/>
+                <fx:include source="../features/ControlParameterGridFeature.fxml"/>
             </VBox>
         </Group>
 
@@ -46,7 +46,7 @@
         <Group fx:id="LineSpeedControlParameters">
             <VBox>
                 <Text styleClass="largeText">Line speed:</Text>
-                <fx:include source="../features/ControlParameterGrid.fxml"/>
+                <fx:include source="../features/ControlParameterGridFeature.fxml"/>
             </VBox>
         </Group>
     </HBox>
