@@ -114,6 +114,13 @@ Menu
 }
 
 /*
+Context menu
+*/
+.context-menu {
+    -fx-background-color: -cc-darker-color;
+}
+
+/*
 TAB
 */
 
