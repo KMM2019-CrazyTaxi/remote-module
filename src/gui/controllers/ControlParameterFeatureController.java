@@ -8,8 +8,10 @@ import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
+import remote.Car;
 import remote.Server;
 import remote.datatypes.PIDParams;
+import remote.listeners.DataListener;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.UnaryOperator;
@@ -20,7 +22,7 @@ import java.util.regex.Pattern;
  *
  * @author Henrik Nilsson
  */
-public class ControlParameterFeatureController {
+public class ControlParameterFeatureController implements DataListener<PIDParams> {
 
     @FXML private GridPane controlGrid;
 
@@ -39,6 +41,7 @@ public class ControlParameterFeatureController {
 
     public ControlParameterFeatureController() {
         editing = new AtomicBoolean(false);
+        Car.getInstance().addLateBind(this::subscribe);
     }
 
     /**
@@ -46,6 +49,7 @@ public class ControlParameterFeatureController {
      * This sets up all input formatters for parameter inputs.
      */
     public void initialize() {
+        // Add formatters and converters
         Pattern validEditingState = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
 
         UnaryOperator<Change> filter = c -> {
@@ -95,7 +99,6 @@ public class ControlParameterFeatureController {
         controlParameterMin.setTextFormatter(minFormatter);
         controlParameterSlope.setTextFormatter(slopeFormatter);
     }
-
 
     /**
      * Handle Update button click event. Toggle input lock and pull the server when updating.
@@ -190,5 +193,42 @@ public class ControlParameterFeatureController {
         controlParameterSpeed.setEditable(true);
         controlParameterMin.setEditable(true);
         controlParameterSlope.setEditable(true);
+    }
+
+    /**
+     * Subscribe to changes of parameter data.
+     */
+    public void subscribe() {
+        switch (getParamSubsystem()) {
+            case TURNING:
+                Car.getInstance().turningParams.subscribe(this);
+                break;
+            case PARKING:
+                Car.getInstance().parkingParams.subscribe(this);
+                break;
+            case STOPPING:
+                Car.getInstance().stoppingParams.subscribe(this);
+                break;
+            case LINE_ANGLE:
+                Car.getInstance().lineAngleParams.subscribe(this);
+                break;
+            case LINE_SPEED:
+                Car.getInstance().lineSpeedParams.subscribe(this);
+                break;
+        }
+    }
+
+    @Override
+    public void update(PIDParams data) {
+        controlParameterKP.setText(String.valueOf(data.kp));
+        controlParameterKI.setText(String.valueOf(data.ki));
+        controlParameterKD.setText(String.valueOf(data.kd));
+        controlParameterAlpha.setText(String.valueOf(data.alpha));
+        controlParameterBeta.setText(String.valueOf(data.beta));
+
+        controlParameterAngle.setText(String.valueOf(data.angleThreshold));
+        controlParameterSpeed.setText(String.valueOf(data.speedThreshold));
+        controlParameterMin.setText(String.valueOf(data.minValue));
+        controlParameterSlope.setText(String.valueOf(data.slope));
     }
 }
