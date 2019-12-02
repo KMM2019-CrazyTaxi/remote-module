@@ -77,7 +77,7 @@ public class Car {
         CommunicationPacket lineSpeedParam = new CommunicationPacket(PacketCommand.REQUEST_CONTROL_PARAMETERS, new byte[]{5});
         lineSpeedParams = new RemoteData<>(lineSpeedParam);
 
-        CommunicationPacket targetControl = new CommunicationPacket(PacketCommand.CURRENT_CONTROL_DECISION);
+        CommunicationPacket targetControl = new CommunicationPacket(PacketCommand.REQUEST_CONTROL_DECISION);
         targetSpeed = new RemoteData<>(targetControl);
         targetTurn = new RemoteData<>(targetControl);
     }
