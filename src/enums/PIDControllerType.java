@@ -1,6 +1,6 @@
 package enums;
 
-public enum PIDControlerType {
+public enum PIDControllerType {
     TURNING,
     PARKING,
     STOPPING,
@@ -11,9 +11,9 @@ public enum PIDControlerType {
         return (byte) (this.ordinal() + 1);
     }
 
-    public static PIDControlerType fromByte(byte b) {
-        if ((b & 0xff) > PIDControlerType.values().length)
+    public static PIDControllerType fromByte(byte b) {
+        if ((b & 0xff) > PIDControllerType.values().length)
             throw new IllegalArgumentException("Given byte is out of range. (" + b + ")");
-        return PIDControlerType.values()[b];
+        return PIDControllerType.values()[b];
     }
 }
