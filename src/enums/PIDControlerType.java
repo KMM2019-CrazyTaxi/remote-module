@@ -8,7 +8,7 @@ public enum PIDControlerType {
     LINE_SPEED;
 
     public byte code() {
-        return (byte) this.ordinal();
+        return (byte) (this.ordinal() + 1);
     }
 
     public static PIDControlerType fromByte(byte b) {
