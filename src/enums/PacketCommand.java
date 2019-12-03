@@ -53,8 +53,8 @@ public enum PacketCommand {
     REMOTE_MODULE_COMMUNICATION_ERROR,
     CENTRAL_MODULE_ERROR;
 
-    public static final int NUMBER_OF_REMOTE_REQUESTS = 21;
-    public static final int NUMBER_OF_CENTRAL_RESPONSES = 21;
+    public static final int NUMBER_OF_REMOTE_REQUESTS = 22;
+    public static final int NUMBER_OF_CENTRAL_RESPONSES = 22;
     public static final int NUMBER_OF_ERRORS = 4;
 
     public static final int REMOTE_REQUEST_BASE = 0x00;
@@ -148,13 +148,13 @@ public enum PacketCommand {
             ord = (b & 0xff);
         }
         else if ((b & 0xff) < ERROR_BASE) {
-            ord = (b & 0xff) - CENTRAL_RESPONS_BASE + NUMBER_OF_REMOTE_REQUESTS + 1;
+            ord = (b & 0xff) - CENTRAL_RESPONS_BASE + NUMBER_OF_REMOTE_REQUESTS;
         }
         else {
-            ord = (b & 0xff) - ERROR_BASE + NUMBER_OF_REMOTE_REQUESTS + NUMBER_OF_CENTRAL_RESPONSES + 1;
+            ord = (b & 0xff) - ERROR_BASE + NUMBER_OF_REMOTE_REQUESTS + NUMBER_OF_CENTRAL_RESPONSES;
         }
 
-        if (ord > PacketCommand.values().length)
+        if (ord >= PacketCommand.values().length)
             throw new IllegalArgumentException("Given byte is out of range. (Ordinal: " + ord + ")");
 
         return PacketCommand.values()[ord];
