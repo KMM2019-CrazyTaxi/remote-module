@@ -1,0 +1,72 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane fx:id="manualControlModule" onKeyPressed="#handleKeyPressed" onKeyReleased="#handleKeyReleased" styleClass="module" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.ManualControlModuleController">
+    <left>
+        <HBox>
+            <GridPane alignment="center">
+                <!--WASD toggle-->
+                <Button fx:id="wasdButton" onMouseClicked="#handleWASDToggleClick" GridPane.columnIndex="0" GridPane.rowIndex="0">WASD</Button>
+
+                <!--Arrows-->
+                <HBox styleClass="arrowButtonContainer, arrowButtonUp" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <Button styleClass="button, arrowButton" onMouseClicked="#handleUpArrowClick"/>
+                </HBox>
+                <VBox styleClass="arrowButtonContainer, arrowButtonLeft"  GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <Button styleClass="button, arrowButton" onMouseClicked="#handleLeftArrowClick"/>
+                </VBox>
+                <VBox styleClass="arrowButtonContainer, arrowButtonRight" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    <Button styleClass="button, arrowButton" onMouseClicked="#handleRightArrowClick"/>
+                </VBox>
+                <HBox styleClass="arrowButtonContainer, arrowButtonDown" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <Button styleClass="button, arrowButton" onMouseClicked="#handleDownArrowClick"/>
+                </HBox>
+
+                <!--Emergency stop-->
+                <Button onMouseClicked="#handleEmergencyStopButtonClick" id="manualControlEmergiencyStop" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            </GridPane>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </left>
+    <center>
+        <HBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Separator orientation="VERTICAL"/>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </center>
+    <right>
+        <HBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <VBox>
+                <HBox styleClass="indicatorGroup">
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <HBox fx:id="fullAutoIndicator" onMouseClicked="#handleFullModeButtonClick" styleClass="modeIndicator" ><Text styleClass="darkText">Full</Text></HBox>
+                    <HBox fx:id="halfAutoIndicator" onMouseClicked="#handlHalfModeButtonClick" styleClass="modeIndicator"><Text styleClass="darkText">Half</Text></HBox>
+                    <HBox fx:id="manualIndicator" onMouseClicked="#handleManualModeButtonClick" styleClass="modeIndicator"><Text styleClass="darkText">Manual</Text></HBox>
+                </HBox>
+
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <HBox styleClass="indicatorGroup">
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <GridPane alignment="center">
+                        <HBox GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Text styleClass="mediumText">Speed:</Text>
+                            <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+                        </HBox>
+                        <HBox GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Text styleClass="mediumText" fx:id="manualControlModuleSpeed"/>
+                            <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+                            <Text styleClass="mediumText">km/h</Text>
+                        </HBox>
+                    </GridPane>
+                </HBox>
+
+                <Region VBox.vgrow="ALWAYS"/>
+            </VBox>
+        </HBox>
+    </right>
+</BorderPane>
