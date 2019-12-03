@@ -2,6 +2,10 @@ package remote;
 
 import enums.ControlMode;
 import enums.PacketCommand;
+import remote.datatypes.CommunicationPacket;
+import remote.datatypes.PIDParams;
+import remote.datatypes.RemoteData;
+import remote.listeners.DataListener;
 
 public class Car {
     private static Car instance = new Car();
@@ -14,31 +18,68 @@ public class Car {
     public RemoteData<Integer> distance;
     public RemoteData<Integer> speed;
 
-    public RemoteData<ControlMode> controlMode;
-
     public RemoteData<Float> temperature;
 
-    // TODO change to float
-    public RemoteData<Integer> distanceToLeft;
-    public RemoteData<Integer> distanceToMiddle;
-    public RemoteData<Integer> distanceToRight;
+    // Camera processing
+    public RemoteData<Double> distanceToLeft;
+    public RemoteData<Double> distanceToRight;
+    public RemoteData<Double> distanceToStop;
+
+    // Control
+    public RemoteData<PIDParams> turningParams;
+    public RemoteData<PIDParams> parkingParams;
+    public RemoteData<PIDParams> stoppingParams;
+    public RemoteData<PIDParams> lineAngleParams;
+    public RemoteData<PIDParams> lineSpeedParams;
+
+    // Control output
+    public RemoteData<Integer> targetSpeed;
+    public RemoteData<Integer> targetTurn;
+
+    // Decision output
+    public RemoteData<ControlMode> controlMode;
+
+    // Calculated data
+    public RemoteData<Double> distanceToMiddle;
 
     private Car() {
-        Server server = Server.getInstance();
 
-        accelerationX = new RemoteData<>(PacketCommand.REQUEST_SENSOR_DATA, server);
-        accelerationY = new RemoteData<>(PacketCommand.REQUEST_SENSOR_DATA, server);
-        accelerationZ = new RemoteData<>(PacketCommand.REQUEST_SENSOR_DATA, server);
-        distance = new RemoteData<>(PacketCommand.REQUEST_SENSOR_DATA, server);
-        speed = new RemoteData<>(PacketCommand.REQUEST_SENSOR_DATA, server);
+        CommunicationPacket sensorData = new CommunicationPacket(PacketCommand.REQUEST_SENSOR_DATA);
+        accelerationX = new RemoteData<>(sensorData);
+        accelerationY = new RemoteData<>(sensorData);
+        accelerationZ = new RemoteData<>(sensorData);
+        distance = new RemoteData<>(sensorData);
+        speed = new RemoteData<>(sensorData);
 
-        controlMode = new RemoteData<>(PacketCommand.REQUEST_MODE, server);
+        controlMode = new RemoteData<>(new CommunicationPacket(PacketCommand.REQUEST_MODE));
 
-        temperature = new RemoteData<>(PacketCommand.REQUEST_TEMPERATURE, server);
+        temperature = new RemoteData<>(new CommunicationPacket(PacketCommand.REQUEST_TEMPERATURE));
 
-        distanceToLeft = new RemoteData<>(PacketCommand.REQUEST_LATERAL_DISTANCE, server);
-        distanceToMiddle = new RemoteData<>(PacketCommand.REQUEST_LATERAL_DISTANCE, server);
-        distanceToRight= new RemoteData<>(PacketCommand.REQUEST_LATERAL_DISTANCE, server);
+        CommunicationPacket irRequest = new CommunicationPacket(PacketCommand.REQUEST_IR_DATA);
+        distanceToLeft = new RemoteData<>(irRequest);
+        distanceToRight = new RemoteData<>(irRequest);
+        distanceToStop = new RemoteData<>(irRequest);
+
+        distanceToMiddle = new RemoteData<>(new CommunicationPacket(PacketCommand.REQUEST_LATERAL_DISTANCE));
+
+        CommunicationPacket turningParam = new CommunicationPacket(PacketCommand.REQUEST_CONTROL_PARAMETERS, new byte[]{1});
+        turningParams = new RemoteData<>(turningParam);
+
+        CommunicationPacket parkingParam = new CommunicationPacket(PacketCommand.REQUEST_CONTROL_PARAMETERS, new byte[]{2});
+        parkingParams = new RemoteData<>(parkingParam);
+
+        CommunicationPacket stoppingParam = new CommunicationPacket(PacketCommand.REQUEST_CONTROL_PARAMETERS, new byte[]{3});
+        stoppingParams = new RemoteData<>(stoppingParam);
+
+        CommunicationPacket lineAngleParam = new CommunicationPacket(PacketCommand.REQUEST_CONTROL_PARAMETERS, new byte[]{4});
+        lineAngleParams = new RemoteData<>(lineAngleParam);
+
+        CommunicationPacket lineSpeedParam = new CommunicationPacket(PacketCommand.REQUEST_CONTROL_PARAMETERS, new byte[]{5});
+        lineSpeedParams = new RemoteData<>(lineSpeedParam);
+
+        CommunicationPacket targetControl = new CommunicationPacket(PacketCommand.REQUEST_CONTROL_DECISION);
+        targetSpeed = new RemoteData<>(targetControl);
+        targetTurn = new RemoteData<>(targetControl);
     }
 
     public static Car getInstance() {

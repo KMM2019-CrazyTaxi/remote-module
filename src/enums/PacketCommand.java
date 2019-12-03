@@ -23,6 +23,7 @@ public enum PacketCommand {
     REQUEST_EMERGENCY_STOP,
     REQUEST_CAMERA_IMAGE,
     REQUEST_HEARTBEAT,
+    REQUEST_IR_DATA,
 
     CURRENT_SENSOR_DATA,
     CURRENT_MODE,
@@ -45,14 +46,15 @@ public enum PacketCommand {
     START_ROUTE_ACKNOWLEDGEMENT,
     EMERGENCY_STOP_ACKNOWLEDGEMENT,
     HEARTBEAT_ACKNOWLEDGEMENT,
+    CURRENT_IR_DATA,
 
     SERSOR_MODULE_ERROR,
     CONTROL_MODULE_ERROR,
     REMOTE_MODULE_COMMUNICATION_ERROR,
     CENTRAL_MODULE_ERROR;
 
-    public static final int NUMBER_OF_REMOTE_REQUESTS = 20;
-    public static final int NUMBER_OF_CENTRAL_RESPONSES = 20;
+    public static final int NUMBER_OF_REMOTE_REQUESTS = 22;
+    public static final int NUMBER_OF_CENTRAL_RESPONSES = 22;
     public static final int NUMBER_OF_ERRORS = 4;
 
     public static final int REMOTE_REQUEST_BASE = 0x00;
@@ -99,6 +101,7 @@ public enum PacketCommand {
             case REQUEST_EMERGENCY_STOP:
             case REQUEST_CAMERA_IMAGE:
             case REQUEST_HEARTBEAT:
+            case REQUEST_IR_DATA:
                 return PacketType.REQUEST;
 
             case CURRENT_CONTROL_DECISION:
@@ -112,6 +115,7 @@ public enum PacketCommand {
             case CURRENT_MAP_LOCATION:
             case CURRENT_LATERAL_DISTANCE:
             case CAMERA_IMAGE:
+            case CURRENT_IR_DATA:
                 return PacketType.DATA;
 
             case DATETIME_ACKNOWLEDGEMENT:
@@ -144,13 +148,13 @@ public enum PacketCommand {
             ord = (b & 0xff);
         }
         else if ((b & 0xff) < ERROR_BASE) {
-            ord = (b & 0xff) - CENTRAL_RESPONS_BASE + NUMBER_OF_REMOTE_REQUESTS + 1;
+            ord = (b & 0xff) - CENTRAL_RESPONS_BASE + NUMBER_OF_REMOTE_REQUESTS;
         }
         else {
-            ord = (b & 0xff) - ERROR_BASE + NUMBER_OF_REMOTE_REQUESTS + NUMBER_OF_CENTRAL_RESPONSES + 1;
+            ord = (b & 0xff) - ERROR_BASE + NUMBER_OF_REMOTE_REQUESTS + NUMBER_OF_CENTRAL_RESPONSES;
         }
 
-        if (ord > ControlMode.values().length)
+        if (ord >= PacketCommand.values().length)
             throw new IllegalArgumentException("Given byte is out of range. (Ordinal: " + ord + ")");
 
         return PacketCommand.values()[ord];

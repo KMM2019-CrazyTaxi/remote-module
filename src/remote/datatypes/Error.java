@@ -1,4 +1,4 @@
-package remote;
+package remote.datatypes;
 
 import enums.ErrorType;
 

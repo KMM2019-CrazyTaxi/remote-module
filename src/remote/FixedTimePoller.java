@@ -1,8 +1,7 @@
 package remote;
 
-import exceptions.MissingIDException;
+import remote.datatypes.RemoteData;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class FixedTimePoller implements Runnable {
         dataPollers.add(o);
     }
 
-    synchronized public void stop() {
+    public void stop() {
         running = false;
     }
 
