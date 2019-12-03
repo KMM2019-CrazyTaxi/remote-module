@@ -4,4 +4,5 @@
     <fx:include fx:id="OverviewTab" source="tabs/OverviewTab.fxml"/>
     <fx:include fx:id="ManualTab" source="tabs/ManualTab.fxml"/>
     <fx:include fx:id="RouteTab" source="tabs/RouteTab.fxml"/>
+    <fx:include fx:id="TrimmingTab" source="tabs/TrimmingTab.fxml"/>
 </TabPane>

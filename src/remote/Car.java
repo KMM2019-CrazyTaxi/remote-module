@@ -7,8 +7,12 @@ import remote.datatypes.PIDParams;
 import remote.datatypes.RemoteData;
 import remote.listeners.DataListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Car {
     private static Car instance = new Car();
+    private List<LateBind> lateBinders;
 
     // Sensor data
     // TODO Change to float
@@ -43,6 +47,7 @@ public class Car {
     public RemoteData<Double> distanceToMiddle;
 
     private Car() {
+        lateBinders = new ArrayList<>();
 
         CommunicationPacket sensorData = new CommunicationPacket(PacketCommand.REQUEST_SENSOR_DATA);
         accelerationX = new RemoteData<>(sensorData);
@@ -84,5 +89,19 @@ public class Car {
 
     public static Car getInstance() {
         return instance;
+    }
+
+    public interface LateBind {
+        public void call();
+    }
+
+    public void addLateBind(LateBind method) {
+        lateBinders.add(method);
+    }
+
+    public void lateBindSubscribers() {
+        for (LateBind m : lateBinders) {
+            m.call();
+        }
     }
 }
