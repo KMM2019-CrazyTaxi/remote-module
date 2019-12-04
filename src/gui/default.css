@@ -338,3 +338,8 @@ Map view feature
     -fx-stroke-width: 20px;
     -fx-stroke-line-cap: round;
 }
+
+#newRouteButton:selected {
+    -fx-background-color: -cc-accent-color;
+}
+
