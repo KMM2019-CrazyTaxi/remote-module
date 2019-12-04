@@ -33,4 +33,12 @@ public class Position {
         this.x /= k;
         this.y /= k;
     }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }
