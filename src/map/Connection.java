@@ -12,9 +12,9 @@ public class Connection {
     private int distance;
     private boolean stopable;
 
-    private Pair<Double, Double> midPoint;
+    private Position midPoint;
 
-    public Connection(Node connectingNode, Direction direction, int distance, boolean stopable, Pair<Double, Double> midPoint) {
+    public Connection(Node connectingNode, Direction direction, int distance, boolean stopable, Position midPoint) {
         this.connectingNode = connectingNode;
         this.direction = direction;
         this.distance = distance;
@@ -42,14 +42,14 @@ public class Connection {
         return stopable;
     }
 
-    public Pair<Double, Double> getMidPoint() {
+    public Position getMidPoint() {
         return midPoint;
     }
 
-    public byte[] toBytes() {
+    public byte[] toBytes(Map map) {
         byte[] bytes = new byte[this.byteSize()];
 
-        bytes[0] = DataConversionHelper.intToByteArray(connectingNode.getIndex(), 1)[0];
+        bytes[0] = DataConversionHelper.intToByteArray(connectingNode.getIndex(map), 1)[0];
         bytes[1] = DataConversionHelper.intToByteArray(distance, 2)[0];
         bytes[2] = DataConversionHelper.intToByteArray(distance, 2)[1];
         bytes[3] = (byte) (stopable ? 1 : 0);

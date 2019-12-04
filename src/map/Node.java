@@ -10,14 +10,14 @@ import java.util.List;
 public class Node {
     private List<Connection> neighbors;
 
-    private Pair<Double, Double> position;
+    private Position position;
 
-    public Node(Pair<Double, Double> position) {
+    public Node(Position position) {
         this.position = position;
         neighbors = new ArrayList<>();
     }
 
-    public Node(Pair<Double, Double> position, List<Connection> neighbors) {
+    public Node(Position position, List<Connection> neighbors) {
         this.neighbors = neighbors;
         this.position = position;
     }
@@ -44,7 +44,7 @@ public class Node {
         return 1 + 5 * neighbors.size();
     }
 
-    public Pair<Double, Double> getPosition() {
+    public Position getPosition() {
         return position;
     }
 
@@ -56,7 +56,7 @@ public class Node {
         int offset = 1;
         for (Connection c : neighbors) {
             int connectionSize = c.byteSize();
-            System.arraycopy(c.toBytes(), 0, bytes, offset, connectionSize);
+            System.arraycopy(c.toBytes(map), 0, bytes, offset, connectionSize);
             offset += connectionSize;
         }
 
