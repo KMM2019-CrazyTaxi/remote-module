@@ -35,9 +35,6 @@ public class MapViewFeatureController implements DataListener<Map> {
         Position mapCenterMass = calculateCenterMass(map);
         double scaleFactor = calculateScaleFactor(map, width, height, mapCenterMass);
 
-        System.out.println(mapCenterMass);
-        System.out.println(scaleFactor);
-
         for (Node n : map.getNodes()) {
             // Add node dot
             Position startPos = repositionPoint(n.getPosition(), width, height, mapCenterMass, scaleFactor);
