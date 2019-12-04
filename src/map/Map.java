@@ -56,4 +56,10 @@ public class Map {
 
         return bytes;
     }
+
+    public Node getNode(int index) {
+        if (index > nodes.size())
+            throw new IllegalArgumentException("Given index is out of range (" + index + ").");
+        return nodes.get(index);
+    }
 }
