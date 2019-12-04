@@ -47,6 +47,10 @@ public class Node {
         return 1 + 5 * neighbors.size();
     }
 
+    public Pair<Double, Double> getPosition() {
+        return position;
+    }
+
     public byte[] toBytes() {
         byte[] bytes = new byte[this.byteSize()];
 
