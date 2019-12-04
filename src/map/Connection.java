@@ -1,6 +1,7 @@
 package map;
 
 import helpers.DataConversionHelper;
+import javafx.util.Pair;
 
 public class Connection {
     // Byte size as per definition in connection protocol
@@ -11,17 +12,39 @@ public class Connection {
     private int distance;
     private boolean stopable;
 
-    public Connection(Node connectingNode, Direction direction, int distance, boolean stopable) {
+    private Pair<Double, Double> midPoint;
+
+    public Connection(Node connectingNode, Direction direction, int distance, boolean stopable, Pair<Double, Double> midPoint) {
         this.connectingNode = connectingNode;
         this.direction = direction;
         this.distance = distance;
         this.stopable = stopable;
+        this.midPoint = midPoint;
     }
 
     public int byteSize() {
         return BYTE_SIZE;
     }
 
+    public Node getConnectingNode() {
+        return connectingNode;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public boolean isStopable() {
+        return stopable;
+    }
+
+    public Pair<Double, Double> getMidPoint() {
+        return midPoint;
+    }
 
     public byte[] toBytes() {
         byte[] bytes = new byte[this.byteSize()];

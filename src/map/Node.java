@@ -1,6 +1,7 @@
 package map;
 
 import helpers.DataConversionHelper;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,22 +11,28 @@ public class Node {
     private List<Connection> neighbors;
 
     private int index;
+    private Pair<Double, Double> position;
 
-    private int xPos;
-    private int yPos;
-
-    public Node(int index) {
+    public Node(int index, Pair<Double, Double> position) {
         this.index = index;
+        this.position = position;
         neighbors = new ArrayList<>();
     }
 
-    public Node(int index, List<Connection> neighbors) {
+    public Node(int index, Pair<Double, Double> position, List<Connection> neighbors) {
         this.index = index;
         this.neighbors = neighbors;
+        this.position = position;
     }
 
     public void addNeighbor(Connection neighbor) {
         neighbors.add(neighbor);
+    }
+
+    public void addAllNeighbors(List<Connection> neighbors) {
+        for (Connection c : neighbors) {
+            addNeighbor(c);
+        }
     }
 
     public List<Connection> getNeighbors() {
