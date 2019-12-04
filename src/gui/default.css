@@ -116,7 +116,7 @@ Menu
 /*
 Context menu
 */
-.context-menu {
+.tab-content-area .context-menu {
     -fx-background-color: -cc-darker-color;
 }
 
