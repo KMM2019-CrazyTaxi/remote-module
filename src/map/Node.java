@@ -10,17 +10,14 @@ import java.util.List;
 public class Node {
     private List<Connection> neighbors;
 
-    private int index;
     private Pair<Double, Double> position;
 
-    public Node(int index, Pair<Double, Double> position) {
-        this.index = index;
+    public Node(Pair<Double, Double> position) {
         this.position = position;
         neighbors = new ArrayList<>();
     }
 
-    public Node(int index, Pair<Double, Double> position, List<Connection> neighbors) {
-        this.index = index;
+    public Node(Pair<Double, Double> position, List<Connection> neighbors) {
         this.neighbors = neighbors;
         this.position = position;
     }
@@ -39,8 +36,8 @@ public class Node {
         return Collections.unmodifiableList(neighbors);
     }
 
-    public int getIndex() {
-        return index;
+    public int getIndex(Map map) {
+        return map.getIndex(this);
     }
 
     public int byteSize() {
@@ -51,10 +48,10 @@ public class Node {
         return position;
     }
 
-    public byte[] toBytes() {
+    public byte[] toBytes(Map map) {
         byte[] bytes = new byte[this.byteSize()];
 
-        bytes[0] = DataConversionHelper.intToByteArray(index, 1)[0];
+        bytes[0] = DataConversionHelper.intToByteArray(getIndex(map), 1)[0];
 
         int offset = 1;
         for (Connection c : neighbors) {
