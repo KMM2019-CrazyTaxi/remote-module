@@ -1,7 +1,5 @@
 package map;
 
-import enums.PIDControlerType;
-
 public enum Direction {
     STRAIGHT,
     LEFT,
