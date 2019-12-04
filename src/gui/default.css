@@ -5,7 +5,6 @@ Base
 * {
     -cc-margin: 10px;
     -cc-padding: 10px;
-
     -cc-base-color: darkgray;
     -cc-darker-color: derive(-cc-base-color, -55%);
     -cc-dark-color: derive(-cc-base-color, -25%);
@@ -14,19 +13,16 @@ Base
     -cc-default-color: -cc-light-color;
     -cc-accent-color: yellowgreen;
     -cc-focus-color: derive(-cc-accent-color, 25%);
-
     // Default resets
     -fx-focus-color: transparent !important;
     -fx-faint-focus-color: transparent !important;
     -fx-accent: transparent !important;
-
     -fx-text-base-color: -cc-dark-color;
     -fx-dark-text-color: -cc-light-color;
     -fx-mid-text-color: -cc-base-color;
     -fx-light-text-color: -cc-dark-color;
     -fx-text-fill: -cc-default-color;
     -fx-fill: -cc-default-color;
-
     -fx-border-insets: 0 !important;
     -fx-border-width: 0 !important;
     -fx-border-radius: 0 !important;
@@ -93,6 +89,7 @@ Separator
 /*
 Scene
 */
+
 .scene {
     -fx-pref-width: 800px;
     -fx-pref-height: 800px;
@@ -121,6 +118,14 @@ Menu
     -fx-background-color: -cc-accent-color;
 }
 
+/*	
+Context menu	
+*/	
+
+.tab-content-area .context-menu {	
+    -fx-background-color: -cc-darker-color;
+}
+
 /*
 TAB
 */
@@ -146,7 +151,6 @@ TAB
     -fx-background-color: -cc-darker-color !important;
     -fx-font-weight: bold;
     -fx-padding: 5px 15px 0 15px;
-
     -fx-border-insets: 0;
     -fx-border-width: 0;
     -fx-border-radius: 0;
@@ -244,9 +248,7 @@ Stop button
 #manualControlEmergiencyStop {
     -fx-pref-height: 100px;
     -fx-pref-width: 100px;
-
     -fx-background-color: red;
-
     -fx-shape: "M -1.5 -3 L 1.5 -3 L 3 -1.5 L 3 1.5 L 1.5 3 L -1.5 3 L -3 1.5 L -3 -1.5 z";
 }
 
@@ -256,7 +258,6 @@ Arrow buttons
 
 .arrowButtonContainer {
     -fx-alignment: center;
-
     -fx-scale-shape: true;
     -fx-position-shape: true;
 }
@@ -264,7 +265,6 @@ Arrow buttons
 .arrowButton {
     -fx-pref-height: 60px;
     -fx-pref-width: 60px;
-
     -fx-shape: "M 0 0 L 0 -30 L 30 0 L 0 30 z";
     -fx-scale-x: 0.4;
 }
@@ -272,12 +272,15 @@ Arrow buttons
 .arrowButtonUp {
     -fx-rotate: 270deg;
 }
+
 .arrowButtonRight {
     -fx-rotate: 0deg;
 }
+
 .arrowButtonLeft {
     -fx-rotate: 180deg;
 }
+
 .arrowButtonDown {
     -fx-rotate: 90deg;
 }
