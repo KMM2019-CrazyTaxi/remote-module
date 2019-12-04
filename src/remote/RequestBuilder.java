@@ -3,9 +3,11 @@ package remote;
 import enums.ControlMode;
 import enums.PIDControllerType;
 import enums.PacketCommand;
+import map.Map;
 import remote.datatypes.CommunicationPacket;
 import remote.datatypes.PIDParams;
 import remote.datatypes.PacketList;
+import remote.listeners.ResponsListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -101,6 +103,23 @@ public class RequestBuilder {
         System.arraycopy(paramBytes, 0, data, 1, paramBytes.length);
 
         return addRequest(PacketCommand.SEND_PARAMETERS, data);
+    }
+
+    public int addSendMapRequest(Map map) {
+        int id = addRequest(PacketCommand.SEND_MAP, map.toBytes());
+
+        ResponsListener mapAckListener = new ResponsListener() {
+            public void call(CommunicationPacket type) {
+                if (id == type.getId()) {
+                    Car.getInstance().map.update(map);
+                    Server.getInstance().removeResponsListener(this);
+                }
+            }
+        };
+
+        Server.getInstance().addResponsListener(mapAckListener);
+
+        return id;
     }
 
     public PacketList getPackets() {
