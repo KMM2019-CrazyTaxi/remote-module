@@ -22,7 +22,7 @@ public class FixedTimePoller implements Runnable {
         dataPollers.add(o);
     }
 
-    synchronized public void stop() {
+    public void stop() {
         running = false;
     }
 

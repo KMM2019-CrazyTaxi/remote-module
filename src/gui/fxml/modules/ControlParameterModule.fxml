@@ -1,0 +1,53 @@
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.Group?>
+
+<?import javafx.scene.control.Separator?>
+<ScrollPane styleClass="module" fx:id="controlParameterModule" xmlns:fx="http://javafx.com/fxml/1">
+    <HBox id="controlParameterScrollContainer">
+        <Group fx:id="TurningControlParameters">
+            <VBox>
+                <Text styleClass="largeText">Turning:</Text>
+                <fx:include source="../features/ControlParameterGridFeature.fxml"/>
+            </VBox>
+        </Group>
+
+        <Separator orientation="VERTICAL"/>
+
+        <Group fx:id="ParkingControlParameters">
+            <VBox>
+                <Text styleClass="largeText">Parking:</Text>
+                <fx:include source="../features/ControlParameterGridFeature.fxml"/>
+            </VBox>
+        </Group>
+
+        <Separator orientation="VERTICAL"/>
+
+        <Group fx:id="StoppingControlParameters">
+            <VBox>
+                <Text styleClass="largeText">Stopping:</Text>
+                <fx:include source="../features/ControlParameterGridFeature.fxml"/>
+            </VBox>
+        </Group>
+
+        <Separator orientation="VERTICAL"/>
+
+        <Group fx:id="LineAngleControlParameters">
+            <VBox>
+                <Text styleClass="largeText">Line angle:</Text>
+                <fx:include source="../features/ControlParameterGridFeature.fxml"/>
+            </VBox>
+        </Group>
+
+        <Separator orientation="VERTICAL"/>
+
+        <Group fx:id="LineSpeedControlParameters">
+            <VBox>
+                <Text styleClass="largeText">Line speed:</Text>
+                <fx:include source="../features/ControlParameterGridFeature.fxml"/>
+            </VBox>
+        </Group>
+    </HBox>
+</ScrollPane>

@@ -1,7 +1,7 @@
 package remote;
 
 import enums.ControlMode;
-import enums.PIDControlerType;
+import enums.PIDControllerType;
 import enums.PacketCommand;
 import remote.datatypes.CommunicationPacket;
 import remote.datatypes.PIDParams;
@@ -93,7 +93,7 @@ public class RequestBuilder {
         return addRequest(PacketCommand.SEND_CURRENT_DATETIME, dataStr);
     }
 
-    public int addSendControlParametersRequest(PIDControlerType controller, PIDParams params) {
+    public int addSendControlParametersRequest(PIDControllerType controller, PIDParams params) {
         byte[] paramBytes = params.toBytes();
         byte[] data = new byte[paramBytes.length + 1];
 
