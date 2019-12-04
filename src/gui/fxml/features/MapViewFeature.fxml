@@ -1,0 +1,8 @@
+<?import javafx.scene.layout.Pane?>
+
+<?import javafx.scene.Group?>
+<Pane fx:id="mapViewFeature" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.MapViewFeatureController">
+    <Group fx:id="mapViewBottomLayer" />
+    <Group fx:id="mapViewMiddleLayer" />
+    <Group fx:id="mapViewTopLayer" />
+</Pane>
