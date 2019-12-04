@@ -1,6 +1,6 @@
 package gui.controllers;
 
-import enums.PIDControlerType;
+import enums.PIDControllerType;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -107,7 +107,7 @@ public class ControlParameterFeatureController implements DataListener<PIDParams
     public void handleUpdateClicked(MouseEvent mouseEvent) {
         if (editing.get()) {
             PIDParams newParams = getPIDParamsFromInput();
-            PIDControlerType subSystem = getParamSubsystem();
+            PIDControllerType subSystem = getParamSubsystem();
 
             lockInputs();
             editing.set(false);
@@ -144,21 +144,21 @@ public class ControlParameterFeatureController implements DataListener<PIDParams
      * Get the subsystem represented by this feature by looking at the parent ID.
      * @return Which subsystem type this feature represents
      */
-    private PIDControlerType getParamSubsystem() {
+    private PIDControllerType getParamSubsystem() {
         String parentName = controlGrid.getParent().getParent().getId();
 
-        PIDControlerType subSystem = null;
+        PIDControllerType subSystem = null;
 
         if (parentName.startsWith("Turning"))
-            subSystem = PIDControlerType.TURNING;
+            subSystem = PIDControllerType.TURNING;
         else if (parentName.startsWith("Parking"))
-            subSystem = PIDControlerType.PARKING;
+            subSystem = PIDControllerType.PARKING;
         else if (parentName.startsWith("Stopping"))
-            subSystem = PIDControlerType.STOPPING;
+            subSystem = PIDControllerType.STOPPING;
         else if (parentName.startsWith("LineAngle"))
-            subSystem = PIDControlerType.LINE_ANGLE;
+            subSystem = PIDControllerType.LINE_ANGLE;
         else if (parentName.startsWith("LineSpeed"))
-            subSystem = PIDControlerType.LINE_SPEED;
+            subSystem = PIDControllerType.LINE_SPEED;
 
         return subSystem;
     }
