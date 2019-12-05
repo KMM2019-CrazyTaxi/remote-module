@@ -58,7 +58,7 @@ public class MapRouteModuleController implements DataListener<Map> {
 
     private void activateButton() {
         newRouteButton.setText(ACTIVE_BUTTON_TEXT);
-        newRouteButton.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
+        newRouteButton.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
     }
 
     private void sendNewRoute() {
