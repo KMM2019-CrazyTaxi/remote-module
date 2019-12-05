@@ -3,16 +3,18 @@ package remote;
 import enums.ControlMode;
 import enums.PIDControllerType;
 import enums.PacketCommand;
+
 import helpers.DataConversionHelper;
+
 import map.Map;
 import map.Node;
+
 import remote.datatypes.CommunicationPacket;
 import remote.datatypes.PIDParams;
 import remote.datatypes.PacketList;
 import remote.listeners.ResponsListener;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -116,7 +118,9 @@ public class RequestBuilder {
             public void call(CommunicationPacket type) {
                 if (id == type.getId()) {
                     Car.getInstance().map.update(map);
-                    Server.getInstance().removeResponsListener(this);
+                    Server.getInstance().invokeAfterResponsListener(() -> {
+                        Server.getInstance().removeResponsListener(this);
+                    });
                 }
             }
         };

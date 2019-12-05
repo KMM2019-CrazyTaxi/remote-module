@@ -31,6 +31,8 @@ public class Server {
     private List<ResponsListener> responsListeners;
     private List<ExceptionListener> exceptionListeners;
 
+    private List<Runnable> laterResponsListeners;
+
     private volatile boolean builderLocked = true;
 
     private Server() {
@@ -40,6 +42,8 @@ public class Server {
 
         responsListeners = new ArrayList<>();
         exceptionListeners = new ArrayList<>();
+
+        laterResponsListeners = new ArrayList<>();
 
         builderLocked = false;
     }
@@ -64,20 +68,24 @@ public class Server {
         serverConnection.connect(ip, port);
     }
 
-    public void addResponsListener(ResponsListener o) {
+    synchronized public void addResponsListener(ResponsListener o) {
         responsListeners.add(o);
     }
 
-    public void addExceptionListener(ExceptionListener o) {
+    synchronized public void addExceptionListener(ExceptionListener o) {
         exceptionListeners.add(o);
     }
 
-    public void removeResponsListener(ResponsListener o) {
+    synchronized public void removeResponsListener(ResponsListener o) {
         responsListeners.remove(o);
     }
 
-    public void removeExceptionListener(ExceptionListener o) {
+    synchronized public void removeExceptionListener(ExceptionListener o) {
         exceptionListeners.remove(o);
+    }
+
+    synchronized public void invokeAfterResponsListener(Runnable o) {
+        laterResponsListeners.add(o);
     }
 
     synchronized public RequestBuilder getRequestBuilder() {
@@ -255,6 +263,10 @@ public class Server {
         for (ResponsListener o : responsListeners) {
             o.call(packet);
         }
+        for (Runnable o : laterResponsListeners) {
+            o.run();
+        }
+        laterResponsListeners = new ArrayList<>();
     }
 
     private void notifyExceptionListeners(Exception e) {
