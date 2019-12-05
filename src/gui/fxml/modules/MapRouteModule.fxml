@@ -3,13 +3,14 @@
 <?import javafx.scene.layout.Region?>
 
 <?import javafx.scene.control.Button?>
-<VBox fx:id="mapRouteModule" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.MapRouteModuleController">
+<?import javafx.scene.control.Separator?>
+<VBox fx:id="mapRouteModule" styleClass="module" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.MapRouteModuleController">
     <HBox>
         <Region HBox.hgrow="ALWAYS"/>
         <fx:include fx:id="mapViewFeature" source="../features/MapViewFeature.fxml" />
         <Region HBox.hgrow="ALWAYS"/>
     </HBox>
-
+    <Separator />
     <HBox>
         <Region HBox.hgrow="ALWAYS"/>
         <Button fx:id="newRouteButton" onMouseClicked="#handleNewRouteClick" />
