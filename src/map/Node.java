@@ -51,7 +51,7 @@ public class Node {
     public byte[] toBytes(Map map) {
         byte[] bytes = new byte[this.byteSize()];
 
-        bytes[0] = DataConversionHelper.intToByteArray(getIndex(map), 1)[0];
+        bytes[0] = DataConversionHelper.intToByteArray(neighbors.size(), 1)[0];
 
         int offset = 1;
         for (Connection c : neighbors) {
