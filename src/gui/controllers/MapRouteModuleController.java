@@ -63,6 +63,7 @@ public class MapRouteModuleController implements DataListener<Map> {
 
     private void sendNewRoute() {
         Server.getInstance().getRequestBuilder().addSendRouteRequest(currentRoute);
+        Server.getInstance().pull();
     }
 
     private void handleNodeClick(MouseEvent mouseEvent) {
