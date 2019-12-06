@@ -2,11 +2,13 @@ package remote;
 
 import enums.ControlMode;
 import enums.PacketCommand;
+import javafx.scene.image.Image;
 import remote.datatypes.CommunicationPacket;
 import remote.datatypes.PIDParams;
 import remote.datatypes.RemoteData;
 import remote.listeners.DataListener;
 
+import javax.imageio.ImageIO;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +47,9 @@ public class Car {
 
     // Calculated data
     public RemoteData<Double> distanceToMiddle;
+
+    // Camera output
+    public RemoteData<Image> cameraImage;
 
     private Car() {
         lateBinders = new ArrayList<>();
@@ -86,6 +91,8 @@ public class Car {
 
         targetSpeed = new RemoteData<>(targetControl);
         targetTurn = new RemoteData<>(targetControl);
+
+        cameraImage = new RemoteData<>(new CommunicationPacket(PacketCommand.REQUEST_CAMERA_IMAGE));
     }
 
     public static Car getInstance() {
