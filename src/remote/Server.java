@@ -190,9 +190,9 @@ public class Server {
     }
 
     private void handleSensorData(CommunicationPacket packet) {
-        Car.getInstance().accelerationX.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 0, 2));
-        Car.getInstance().accelerationY.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 2, 2));
-        Car.getInstance().accelerationZ.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 4, 2));
+        Car.getInstance().accelerationX.update(DataConversionHelper.byteArrayToSignedInt(packet.getData(), 0, 2));
+        Car.getInstance().accelerationY.update(DataConversionHelper.byteArrayToSignedInt(packet.getData(), 2, 2));
+        Car.getInstance().accelerationZ.update(DataConversionHelper.byteArrayToSignedInt(packet.getData(), 4, 2));
         Car.getInstance().distance.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 6, 1));
         Car.getInstance().speed.update(DataConversionHelper.byteArrayToUnsignedInt(packet.getData(), 7, 1));
     }
