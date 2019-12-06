@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane fx:id="sensorDataGridFeature" hgap="10" vgap="10" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.SensorDataFeatureController">
+
+    <HBox GridPane.columnIndex="0" GridPane.rowIndex="0">
+        <Text styleClass="mediumText">Acceleration X:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+    <HBox GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <Region HBox.hgrow="ALWAYS"/>
+        <Text styleClass="mediumText" fx:id="sensorDataAccelerationX"/>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+        <Text styleClass="mediumText">UNIT</Text>
+    </HBox>
+
+    <HBox GridPane.columnIndex="0" GridPane.rowIndex="1">
+        <Text styleClass="mediumText">Acceleration Y:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+    <HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <Region HBox.hgrow="ALWAYS"/>
+        <Text styleClass="mediumText" fx:id="sensorDataAccelerationY"/>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+        <Text styleClass="mediumText">UNIT</Text>
+    </HBox>
+
+    <HBox GridPane.columnIndex="0" GridPane.rowIndex="2">
+        <Text styleClass="mediumText">Acceleration Z:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+    <HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <Region HBox.hgrow="ALWAYS"/>
+        <Text styleClass="mediumText" fx:id="sensorDataAccelerationZ"/>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+        <Text styleClass="mediumText">UNIT</Text>
+    </HBox>
+
+    <HBox GridPane.columnIndex="2" GridPane.rowIndex="0">
+        <Text styleClass="mediumText">Speed:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+    <HBox GridPane.columnIndex="3" GridPane.rowIndex="0">
+        <Region HBox.hgrow="ALWAYS"/>
+        <Text styleClass="mediumText" fx:id="sensorDataSpeed"/>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+        <Text styleClass="mediumText">UNIT</Text>
+    </HBox>
+
+    <HBox GridPane.columnIndex="2" GridPane.rowIndex="1">
+        <Text styleClass="mediumText">Distance:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+    <HBox GridPane.columnIndex="3" GridPane.rowIndex="1">
+        <Region HBox.hgrow="ALWAYS"/>
+        <Text styleClass="mediumText" fx:id="sensorDataDistance"/>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+        <Text styleClass="mediumText">UNIT</Text>
+    </HBox>
+</GridPane>
