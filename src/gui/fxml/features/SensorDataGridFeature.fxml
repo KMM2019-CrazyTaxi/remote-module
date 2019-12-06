@@ -14,7 +14,7 @@
         <Region HBox.hgrow="ALWAYS"/>
         <Text styleClass="mediumText" fx:id="sensorDataAccelerationX"/>
         <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
-        <Text styleClass="mediumText">UNIT</Text>
+        <Text styleClass="mediumText">mg</Text>
     </HBox>
 
     <HBox GridPane.columnIndex="0" GridPane.rowIndex="1">
@@ -26,7 +26,7 @@
         <Region HBox.hgrow="ALWAYS"/>
         <Text styleClass="mediumText" fx:id="sensorDataAccelerationY"/>
         <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
-        <Text styleClass="mediumText">UNIT</Text>
+        <Text styleClass="mediumText">mg</Text>
     </HBox>
 
     <HBox GridPane.columnIndex="0" GridPane.rowIndex="2">
@@ -38,7 +38,7 @@
         <Region HBox.hgrow="ALWAYS"/>
         <Text styleClass="mediumText" fx:id="sensorDataAccelerationZ"/>
         <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
-        <Text styleClass="mediumText">UNIT</Text>
+        <Text styleClass="mediumText">mg</Text>
     </HBox>
 
     <HBox GridPane.columnIndex="2" GridPane.rowIndex="0">
@@ -50,7 +50,7 @@
         <Region HBox.hgrow="ALWAYS"/>
         <Text styleClass="mediumText" fx:id="sensorDataSpeed"/>
         <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
-        <Text styleClass="mediumText">UNIT</Text>
+        <Text styleClass="mediumText">dm/s</Text>
     </HBox>
 
     <HBox GridPane.columnIndex="2" GridPane.rowIndex="1">
@@ -62,6 +62,6 @@
         <Region HBox.hgrow="ALWAYS"/>
         <Text styleClass="mediumText" fx:id="sensorDataDistance"/>
         <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
-        <Text styleClass="mediumText">UNIT</Text>
+        <Text styleClass="mediumText">mm</Text>
     </HBox>
 </GridPane>
