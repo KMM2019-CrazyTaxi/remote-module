@@ -3,11 +3,16 @@ package remote;
 import enums.ControlMode;
 import exceptions.MissingIDException;
 import helpers.DataConversionHelper;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 import remote.datatypes.CommunicationPacket;
 import remote.datatypes.PIDParams;
 import remote.datatypes.PacketList;
 import remote.listeners.ResponsListener;
 import remote.listeners.ExceptionListener;
+
+import javax.imageio.ImageIO;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -159,6 +164,7 @@ public class Server {
                             handleTemperatureData(packet);
                             break;
                         case CAMERA_IMAGE:
+                            handleCameraImageData(packet);
                             break;
                         case CURRENT_IR_DATA:
                             handleImageRecognitionData(packet);
@@ -172,6 +178,10 @@ public class Server {
 
             notifyResponsListeners(packet);
         }
+    }
+
+    private void handleCameraImageData(CommunicationPacket packet) {
+        Car.getInstance().cameraImage.update(new Image(new ByteArrayInputStream(packet.getData())));
     }
 
     private void handleImageRecognitionData(CommunicationPacket packet) {
