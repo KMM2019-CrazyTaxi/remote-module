@@ -12,6 +12,11 @@ import map.Position;
 import remote.Car;
 import remote.listeners.DataListener;
 
+/**
+ * Map View-feature controller. This is the main controller class for the Map View-feature.
+ *
+ * @author Henrik Nilsson
+ */
 public class MapViewFeatureController implements DataListener<Map> {
     private static final double NODE_DOT_SIZE = 10;
 
@@ -20,14 +25,25 @@ public class MapViewFeatureController implements DataListener<Map> {
     @FXML private Group mapViewMiddleLayer;
     @FXML private Group mapViewBottomLayer;
 
+    /**
+     * Map View Feature Controller constructor.
+     */
     public MapViewFeatureController() {
         Car.getInstance().map.subscribe(this);
     }
 
+    /**
+     * Update the shown map.
+     * @param data New Map data.
+     */
     public void update(Map data) {
         redraw(data);
     }
 
+    /**
+     * Draw the given Map to the view.
+     * @param map Map data
+     */
     private void redraw(Map map) {
         double width = mapViewFeature.getWidth();
         double height = mapViewFeature.getHeight();
@@ -56,6 +72,15 @@ public class MapViewFeatureController implements DataListener<Map> {
         }
     }
 
+    /**
+     * Reposition the given point to correspond to the viewport.
+     * @param p Base position
+     * @param width Width of view
+     * @param height Height of view
+     * @param offset Center mass offset from (0,0)
+     * @param scale Scale factor
+     * @return New repositioned position
+     */
     private static Position repositionPoint(Position p, double width, double height, Position offset, double scale) {
         Position newPos = new Position(p);
 
@@ -66,10 +91,25 @@ public class MapViewFeatureController implements DataListener<Map> {
         return newPos;
     }
 
+    /**
+     * Calculate a scale factor to fit the given Map to the view.
+     * @param map Map data
+     * @param width View width
+     * @param height View height
+     * @param mid Map center mass
+     * @return Rescale factor to fit the view
+     */
     private static double calculateScaleFactor(Map map, double width, double height, Position mid) {
         return Math.min(calculateScaleFactorX(map, width, mid.x), calculateScaleFactorY(map, height, mid.y));
     }
 
+    /**
+     * Calculate a scale factor to fit the width of given Map to the view.
+     * @param map Map data
+     * @param width View width
+     * @param mid Map center mass
+     * @return Rescale factor to fit the width of view
+     */
     private static double calculateScaleFactorX(Map map, double width, double mid) {
         double min = mid;
         double max = mid;
@@ -98,6 +138,13 @@ public class MapViewFeatureController implements DataListener<Map> {
         return width / (2 * (max - min));
     }
 
+    /**
+     * Calculate a scale factor to fit the height of given Map to the view.
+     * @param map Map data
+     * @param height View height
+     * @param mid Map center mass
+     * @return Rescale factor to fit the width of view
+     */
     private static double calculateScaleFactorY(Map map, double height, double mid) {
         double min = mid;
         double max = mid;
@@ -126,6 +173,11 @@ public class MapViewFeatureController implements DataListener<Map> {
         return height / (2 * (max - min));
     }
 
+    /**
+     * Calculate the center mass of the given map. This takes into account the node and center point positions.
+     * @param map Map data
+     * @return Position of map center mass
+     */
     private static Position calculateCenterMass(Map map) {
         Position offset = new Position();
         int numberOfPositions = 0;
