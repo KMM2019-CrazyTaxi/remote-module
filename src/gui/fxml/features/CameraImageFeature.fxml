@@ -1,0 +1,4 @@
+<?import javafx.scene.image.ImageView?>
+
+<ImageView fx:id="cameraImageFeature" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="gui.controllers.CameraImageFeatureController"/>
