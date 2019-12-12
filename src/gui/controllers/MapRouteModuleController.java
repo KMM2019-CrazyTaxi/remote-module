@@ -101,7 +101,8 @@ public class MapRouteModuleController implements DataListener<Map> {
             mouseEvent.consume();
 
             Circle fxNode = (Circle) mouseEvent.getSource();
-            Node node = Car.getInstance().map.get().getNode(Integer.parseInt(String.valueOf(fxNode.getId().charAt(10))));
+            int id = Integer.parseInt(fxNode.getId().split(":")[1]);
+            Node node = Car.getInstance().map.get().getNode(id);
 
             // Check so that new node is not the same as the last node
             Map map = Car.getInstance().map.get();
