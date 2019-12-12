@@ -2,6 +2,7 @@ package remote;
 
 import enums.ControlMode;
 import enums.PacketCommand;
+import map.Map;
 import remote.datatypes.CommunicationPacket;
 import remote.datatypes.PIDParams;
 import remote.datatypes.RemoteData;
@@ -46,6 +47,9 @@ public class Car {
     // Calculated data
     public RemoteData<Double> distanceToMiddle;
 
+    // Map
+    public RemoteData<Map> map;
+
     private Car() {
         lateBinders = new ArrayList<>();
 
@@ -86,6 +90,8 @@ public class Car {
 
         targetSpeed = new RemoteData<>(targetControl);
         targetTurn = new RemoteData<>(targetControl);
+
+        map = new RemoteData<>(null);
     }
 
     public static Car getInstance() {

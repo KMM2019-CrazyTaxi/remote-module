@@ -3,12 +3,20 @@ package remote;
 import enums.ControlMode;
 import enums.PIDControllerType;
 import enums.PacketCommand;
+
+import helpers.DataConversionHelper;
+
+import map.Map;
+import map.Node;
+
 import remote.datatypes.CommunicationPacket;
 import remote.datatypes.PIDParams;
 import remote.datatypes.PacketList;
+import remote.listeners.ResponsListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Server request handler class.
@@ -103,7 +111,48 @@ public class RequestBuilder {
         return addRequest(PacketCommand.SEND_PARAMETERS, data);
     }
 
+    public int addSendMapRequest(Map map) {
+        int id = addRequest(PacketCommand.SEND_MAP, map.toBytes());
+
+        ResponsListener mapAckListener = new ResponsListener() {
+            public void call(CommunicationPacket type) {
+                if (id == type.getId()) {
+                    Car.getInstance().map.update(map);
+                    Server.getInstance().invokeAfterResponsListener(() -> {
+                        Server.getInstance().removeResponsListener(this);
+                    });
+                }
+            }
+        };
+
+        Server.getInstance().addResponsListener(mapAckListener);
+
+        return id;
+    }
+
+    public int addSendRouteRequest(List<Node> route) {
+        byte[] bytes = new byte[2 + 2 * route.size()];
+
+        byte[] sizeBytes = DataConversionHelper.intToByteArray(route.size(), 2);
+        bytes[0] = sizeBytes[0];
+        bytes[1] = sizeBytes[1];
+
+        Map map = Car.getInstance().map.get();
+        int offset = 2;
+
+        for (Node n : route) {
+            byte[] indexBytes = DataConversionHelper.intToByteArray(n.getIndex(map), 2);
+            bytes[offset] = indexBytes[0];
+            bytes[offset + 1] = indexBytes[1];
+
+            offset += 2;
+        }
+
+        return addRequest(PacketCommand.SEND_NEW_ROUTE, bytes);
+    }
+
     public PacketList getPackets() {
         return packets;
     }
+
 }

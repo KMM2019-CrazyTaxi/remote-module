@@ -3,6 +3,6 @@
 
 <Tab text="Route" fx:id="RouteTab" xmlns:fx="http://javafx.com/fxml/1">
     <FlowPane>
-
+        <fx:include source="../modules/MapRouteModule.fxml" />
     </FlowPane>
 </Tab>

@@ -310,3 +310,36 @@ Mode indicator
 #wasdButton:selected {
     -fx-background-color: -cc-accent-color;
 }
+
+/*
+Map view feature
+*/
+
+#mapViewFeature {
+    -fx-pref-height: 500px;
+    -fx-pref-width: 700px;
+    -fx-min-height: -fx-pref-height;
+    -fx-min-width: -fx-pref-width;
+    -fx-max-height: -fx-pref-height;
+    -fx-max-width: -fx-pref-width;
+
+    -fx-background-color: -cc-dark-color;
+}
+
+.mapNodeDot {
+    -fx-fill: -cc-light-color;
+    -fx-stroke: -cc-darker-color;
+    -fx-stroke-width: 2px;
+}
+
+.mapPathLine {
+    -fx-fill: none;
+    -fx-stroke: -cc-light-color;
+    -fx-stroke-width: 20px;
+    -fx-stroke-line-cap: round;
+}
+
+#newRouteButton:selected {
+    -fx-background-color: -cc-accent-color;
+}
+
