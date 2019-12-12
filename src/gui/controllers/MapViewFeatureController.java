@@ -45,6 +45,10 @@ public class MapViewFeatureController implements DataListener<Map> {
      * @param map Map data
      */
     private void redraw(Map map) {
+        mapViewTopLayer.getChildren().clear();
+        mapViewMiddleLayer.getChildren().clear();
+        mapViewBottomLayer.getChildren().clear();
+
         double width = mapViewFeature.getWidth();
         double height = mapViewFeature.getHeight();
 
