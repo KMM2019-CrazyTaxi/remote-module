@@ -1,13 +1,15 @@
 package remote;
 
 import enums.ControlMode;
+import exceptions.ConnectionClosedException;
 import exceptions.MissingIDException;
 import helpers.DataConversionHelper;
 import remote.datatypes.CommunicationPacket;
 import remote.datatypes.PIDParams;
 import remote.datatypes.PacketList;
-import remote.listeners.ResponsListener;
 import remote.listeners.ExceptionListener;
+import remote.listeners.ResponsListener;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,27 +47,34 @@ public class Server {
 
         laterResponsListeners = new ArrayList<>();
 
+        // Add an exception listener for updating the "is alive" datapoint of Car
+        addExceptionListener(o -> {
+            if (o instanceof ConnectionClosedException)
+                Car.getInstance().aliveStatus.update(false);
+        });
+
         builderLocked = false;
     }
 
     /**
-     * Connect to remote
-     * @throws IOException If the connection could not be made
-     * @throws java.net.UnknownHostException If the default host could not be reached
+     * Connect to remote using default server ip and port
      */
-    synchronized public void connect() throws IOException, java.net.UnknownHostException {
-        serverConnection.connect(SERVER_IP, SERVER_PORT);
+    synchronized public void connect() {
+        connect(SERVER_IP, SERVER_PORT);
     }
 
     /**
      * Connect to remote
      * @param ip IP-adress to connect to
      * @param port Port number to connect to
-     * @throws IOException If the connection could not be made
-     * @throws java.net.UnknownHostException If the given host could not be reached
      */
-    synchronized public void connect(String ip, int port) throws IOException, java.net.UnknownHostException {
-        serverConnection.connect(ip, port);
+    synchronized public void connect(String ip, int port) {
+        try {
+            serverConnection.connect(ip, port);
+            Car.getInstance().aliveStatus.update(true);
+        } catch (IOException e) {
+            notifyExceptionListeners(e);
+        }
     }
 
     synchronized public void addResponsListener(ResponsListener o) {
