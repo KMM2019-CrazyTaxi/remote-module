@@ -4,9 +4,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import remote.Car;
+import remote.FixedTimePoller;
 import remote.Server;
 
 public class CCPanel extends Application {
+    private static final int FAST_POLL_TIME = 250;
+    private static final int MEDIUM_POLL_TIME = 750;
+    private static final int SLOW_POLL_TIME = 1500;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -22,6 +28,34 @@ public class CCPanel extends Application {
 
     private void initialize() {
         addAlerts();
+        addPollers();
+    }
+
+    private void addPollers() {
+        FixedTimePoller fastPoller = new FixedTimePoller(FAST_POLL_TIME);
+        FixedTimePoller mediumPoller = new FixedTimePoller(MEDIUM_POLL_TIME);
+        FixedTimePoller slowPoller = new FixedTimePoller(SLOW_POLL_TIME);
+
+        // Heartbeat
+        fastPoller.add(Car.getInstance().aliveStatus);
+
+        // Sensor data
+        fastPoller.add(Car.getInstance().accelerationX);
+        fastPoller.add(Car.getInstance().accelerationY);
+        fastPoller.add(Car.getInstance().accelerationZ);
+        fastPoller.add(Car.getInstance().distance);
+        fastPoller.add(Car.getInstance().speed);
+
+        // IR data
+        fastPoller.add(Car.getInstance().distanceToLeft);
+        fastPoller.add(Car.getInstance().distanceToRight);
+        fastPoller.add(Car.getInstance().distanceToStop);
+
+        // Midline data
+        mediumPoller.add(Car.getInstance().distanceToMiddle);
+
+        // Car telemetrics
+        slowPoller.add(Car.getInstance().temperature);
     }
 
     private void addAlerts() {
