@@ -65,6 +65,7 @@ public class RemoteData<T> implements DataListener<T> {
      */
     synchronized public T fetch() {
         Server.getInstance().getRequestBuilder().addRequest(request);
+        Server.getInstance().releaseBuilder();
 
         oldData = true;
         while(oldData) {
@@ -84,6 +85,7 @@ public class RemoteData<T> implements DataListener<T> {
      */
     synchronized public void poll() {
         Server.getInstance().getRequestBuilder().addRequest(request);
+        Server.getInstance().releaseBuilder();
     }
 
     /**

@@ -113,6 +113,7 @@ public class ControlParameterFeatureController implements DataListener<PIDParams
             editing.set(false);
 
             Server.getInstance().getRequestBuilder().addSendControlParametersRequest(subSystem, newParams);
+            Server.getInstance().releaseBuilder();
             Server.getInstance().pull();
         }
         else {

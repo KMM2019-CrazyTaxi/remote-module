@@ -16,6 +16,8 @@ public class FixedTimePoller implements Runnable, DataListener<Boolean> {
     public FixedTimePoller(int sleepDuration) {
         this.sleepDuration = sleepDuration;
         this.dataPollers = new ArrayList<>();
+
+        Car.getInstance().aliveStatus.subscribe(this);
     }
 
     synchronized public void add(RemoteData o) {
