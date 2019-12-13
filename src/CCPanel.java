@@ -1,3 +1,4 @@
+import enums.PacketCommand;
 import enums.PacketType;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -30,8 +31,18 @@ public class CCPanel extends Application {
     private void initialize() {
         addAlerts();
         addPollers();
+        addListeners();
 
         Car.getInstance().aliveStatus.subscribe(CCPanel::initialPull);
+    }
+
+    private void addListeners() {
+        // Set alive status to false when getting a disconnect acknowledgement
+        Server.getInstance().addResponsListener(o -> {
+            if (o.getCommand() == PacketCommand.DISCONNECT_ACKNOWLEDGEMENT) {
+                Car.getInstance().aliveStatus.update(false);
+            }
+        });
     }
 
     private static void initialPull(boolean alive) {
