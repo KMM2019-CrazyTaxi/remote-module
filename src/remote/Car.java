@@ -15,6 +15,8 @@ public class Car {
     private static Car instance = new Car();
     private List<LateBind> lateBinders;
 
+    public RemoteData<Boolean> aliveStatus;
+
     // Sensor data
     // TODO Change to float
     public RemoteData<Integer> accelerationX;
@@ -52,6 +54,8 @@ public class Car {
 
     private Car() {
         lateBinders = new ArrayList<>();
+
+        aliveStatus = new RemoteData<>(new CommunicationPacket(PacketCommand.REQUEST_HEARTBEAT));
 
         CommunicationPacket sensorData = new CommunicationPacket(PacketCommand.REQUEST_SENSOR_DATA);
         accelerationX = new RemoteData<>(sensorData);

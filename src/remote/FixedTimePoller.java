@@ -1,19 +1,19 @@
 package remote;
 
 import remote.datatypes.RemoteData;
+import remote.listeners.DataListener;
+import remote.Server;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FixedTimePoller implements Runnable {
+public class FixedTimePoller implements Runnable, DataListener<Boolean> {
 
-    private final Server server;
     private volatile boolean running = false;
     private int sleepDuration;
     private List<RemoteData> dataPollers;
 
-    public FixedTimePoller(Server server, int sleepDuration) {
-        this.server = server;
+    public FixedTimePoller(int sleepDuration) {
         this.sleepDuration = sleepDuration;
         this.dataPollers = new ArrayList<>();
     }
@@ -56,15 +56,29 @@ public class FixedTimePoller implements Runnable {
             }
 
             // Pull
-            this.server.pull();
+            Server.getInstance().pull();
 
             // Sleep
             // TODO add more robust threading behavoiur
             try {
                 Thread.sleep(sleepDuration);
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                running = false;
             }
+        }
+    }
+
+    @Override
+    public void update(Boolean data) {
+        // Connection alive
+        if (data.booleanValue()) {
+            if (!running) {
+                running = true;
+                (new Thread(this)).start();
+            }
+        }
+        else {
+            running = false;
         }
     }
 }
