@@ -260,6 +260,7 @@ public class ManualControlModuleController {
         if (mouseEvent.getButton() != MouseButton.PRIMARY)
             return;
         Server.getInstance().getRequestBuilder().addSetModeRequest(ControlMode.FULL_AUTO);
+        Car.getInstance().controlMode.poll();
         Server.getInstance().pull();
     }
 
@@ -271,6 +272,7 @@ public class ManualControlModuleController {
         if (mouseEvent.getButton() != MouseButton.PRIMARY)
             return;
         Server.getInstance().getRequestBuilder().addSetModeRequest(ControlMode.MANUAL);
+        Car.getInstance().controlMode.poll();
         Server.getInstance().pull();
     }
 
