@@ -99,4 +99,28 @@ public class CCPanel extends Application {
             }
         });
     }
+
+    @Override
+    public void stop() throws Exception {
+        int id = Server.getInstance().getRequestBuilder().addDisconnectRequest();
+        Server.getInstance().addResponsListener(o -> {
+            if (o.getId() == id) {
+                Car.getInstance().aliveStatus.update(false);
+            }
+        });
+
+        Server.getInstance().releaseBuilder();
+        Server.getInstance().pull();
+
+        // If connection is still alive
+        if (Car.getInstance().aliveStatus.get()) {
+
+            // Kill all pollers by setting alive status to false
+            System.out.println("FORCE QUITTING");
+            Car.getInstance().aliveStatus.update(false);
+
+        }
+
+        super.stop();
+    }
 }
