@@ -105,10 +105,25 @@ public class Server {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();}
         }
+
+        builderLocked = true;
+
         return requestBuilder;
     }
 
+    synchronized public void releaseBuilder() {
+        builderLocked = false;
+    }
+
     synchronized public void pull() {
+        while(builderLocked) {
+            // TODO Add more robust threading behavoiour
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();}
+        }
+
         // Lock builder and copy it, letting new commands be added to the new builder
         builderLocked = true;
 

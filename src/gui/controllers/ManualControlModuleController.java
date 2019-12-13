@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 
 import enums.ControlMode;
 import remote.Car;
+import remote.RequestBuilder;
 import remote.Server;
 import remote.listeners.DataListener;
 
@@ -101,6 +102,7 @@ public class ManualControlModuleController {
      */
     public void handleEmergencyStopButtonClick(MouseEvent mouseEvent) {
         Server.getInstance().getRequestBuilder().addEmergencyStopRequest();
+        Server.getInstance().releaseBuilder();
         Server.getInstance().pull();
     }
 
@@ -119,6 +121,7 @@ public class ManualControlModuleController {
             speed = MAX_SPEED - 1;
 
         Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(speed);
+        Server.getInstance().releaseBuilder();
         Server.getInstance().pull();
     }
 
@@ -137,6 +140,7 @@ public class ManualControlModuleController {
             turn = -MAX_TURN + 1;
 
         Server.getInstance().getRequestBuilder().addTurnRequest(turn);
+        Server.getInstance().releaseBuilder();
         Server.getInstance().pull();
     }
 
@@ -155,6 +159,7 @@ public class ManualControlModuleController {
             turn = MAX_TURN - 1;
 
         Server.getInstance().getRequestBuilder().addTurnRequest(turn);
+        Server.getInstance().releaseBuilder();
         Server.getInstance().pull();
     }
 
@@ -173,6 +178,7 @@ public class ManualControlModuleController {
             speed = -MAX_SPEED + 1;
 
         Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(speed);
+        Server.getInstance().releaseBuilder();
         Server.getInstance().pull();
     }
 
@@ -261,8 +267,12 @@ public class ManualControlModuleController {
     public void handleFullModeButtonClick(MouseEvent mouseEvent) {
         if (mouseEvent.getButton() != MouseButton.PRIMARY)
             return;
+
         Server.getInstance().getRequestBuilder().addSetModeRequest(ControlMode.FULL_AUTO);
+        Server.getInstance().releaseBuilder();
+
         Car.getInstance().controlMode.poll();
+
         Server.getInstance().pull();
     }
 
@@ -273,8 +283,12 @@ public class ManualControlModuleController {
     public void handleManualModeButtonClick(MouseEvent mouseEvent) {
         if (mouseEvent.getButton() != MouseButton.PRIMARY)
             return;
+
         Server.getInstance().getRequestBuilder().addSetModeRequest(ControlMode.MANUAL);
+        Server.getInstance().releaseBuilder();
+
         Car.getInstance().controlMode.poll();
+
         Server.getInstance().pull();
     }
 
@@ -309,6 +323,7 @@ public class ManualControlModuleController {
                 turn = 0;
                 speed = 0;
                 Server.getInstance().getRequestBuilder().addEmergencyStopRequest();
+                Server.getInstance().releaseBuilder();
             }
 
             if (speed > MAX_SPEED)
@@ -327,8 +342,10 @@ public class ManualControlModuleController {
             System.out.println("Speed: " + speed);
             System.out.println("Turn:  " + turn);
 
-            Server.getInstance().getRequestBuilder().addSetMaxSpeedRequest(speed);
-            Server.getInstance().getRequestBuilder().addTurnRequest(turn);
+            RequestBuilder builder = Server.getInstance().getRequestBuilder();
+            builder.addSetMaxSpeedRequest(speed);
+            builder.addTurnRequest(turn);
+            Server.getInstance().releaseBuilder();
             Server.getInstance().pull();
 
             try {
