@@ -75,6 +75,8 @@ public class ManualControlModuleController {
         };
 
         DataListener<ControlMode> modeListener = (ControlMode mode) -> {
+            wasdState.set(false);
+
             fullAutoIndicator.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
             manualIndicator.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
 
