@@ -1,5 +1,6 @@
 import enums.PacketType;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
@@ -77,17 +78,24 @@ public class CCPanel extends Application {
     }
 
     private void addAlerts() {
+
         // Show Error alert on server exception
         Server.getInstance().addExceptionListener(o -> {
-            Alert a = new Alert(Alert.AlertType.ERROR, "Server exception:\n" + o.getMessage());
-            a.show();
+            Platform.runLater( () -> {
+                Alert a = new Alert(Alert.AlertType.ERROR, "Server exception:\n" + o.getMessage());
+                a.show();
+                }
+            );
         });
 
         // Show warning alert on server error
         Server.getInstance().addResponsListener(o -> {
             if (o.getCommand().getType() == PacketType.ERROR){
-                Alert a = new Alert(Alert.AlertType.WARNING, "Server error:\n" + o.getCommand());
-                a.show();
+                Platform.runLater( () -> {
+                    Alert a = new Alert(Alert.AlertType.WARNING, "Server error:\n" + o.getCommand());
+                    a.show();
+                    }
+                );
             }
         });
     }
