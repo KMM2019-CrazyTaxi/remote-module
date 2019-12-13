@@ -43,7 +43,6 @@
                 <HBox styleClass="indicatorGroup">
                     <Region HBox.hgrow="ALWAYS"/>
                     <HBox fx:id="fullAutoIndicator" onMouseClicked="#handleFullModeButtonClick" styleClass="modeIndicator" ><Text styleClass="darkText">Full</Text></HBox>
-                    <HBox fx:id="halfAutoIndicator" onMouseClicked="#handlHalfModeButtonClick" styleClass="modeIndicator"><Text styleClass="darkText">Half</Text></HBox>
                     <HBox fx:id="manualIndicator" onMouseClicked="#handleManualModeButtonClick" styleClass="modeIndicator"><Text styleClass="darkText">Manual</Text></HBox>
                 </HBox>
 

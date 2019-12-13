@@ -1,9 +1,8 @@
 package enums;
 
 public enum ControlMode {
-    MANUAL,
-    SEMI_AUTO,
-    FULL_AUTO;
+    FULL_AUTO,
+    MANUAL;
 
     public byte code() {
         return (byte) this.ordinal();

@@ -45,7 +45,6 @@ public class ManualControlModuleController {
     @FXML private Text manualControlModuleSpeed;
 
     @FXML private HBox fullAutoIndicator;
-    @FXML private HBox halfAutoIndicator;
     @FXML private HBox manualIndicator;
 
     @FXML private Button wasdButton;
@@ -77,15 +76,11 @@ public class ManualControlModuleController {
 
         DataListener<ControlMode> modeListener = (ControlMode mode) -> {
             fullAutoIndicator.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
-            halfAutoIndicator.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
             manualIndicator.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
 
             switch (mode) {
                 case MANUAL:
                     manualIndicator.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
-                    break;
-                case SEMI_AUTO:
-                    halfAutoIndicator.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
                     break;
                 case FULL_AUTO:
                     fullAutoIndicator.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
@@ -265,17 +260,6 @@ public class ManualControlModuleController {
         if (mouseEvent.getButton() != MouseButton.PRIMARY)
             return;
         Server.getInstance().getRequestBuilder().addSetModeRequest(ControlMode.FULL_AUTO);
-        Server.getInstance().pull();
-    }
-
-    /**
-     * Handle click in the Half Auto Mode-button. Add Half Mode request and pulls the server.
-     * @param mouseEvent Triggering event
-     */
-    public void handlHalfModeButtonClick(MouseEvent mouseEvent) {
-        if (mouseEvent.getButton() != MouseButton.PRIMARY)
-            return;
-        Server.getInstance().getRequestBuilder().addSetModeRequest(ControlMode.SEMI_AUTO);
         Server.getInstance().pull();
     }
 
