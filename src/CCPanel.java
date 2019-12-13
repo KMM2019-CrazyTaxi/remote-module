@@ -29,6 +29,24 @@ public class CCPanel extends Application {
     private void initialize() {
         addAlerts();
         addPollers();
+
+        Car.getInstance().aliveStatus.subscribe(CCPanel::initialPull);
+    }
+
+    private static void initialPull(boolean alive) {
+        if (alive) {
+            // Control params
+            Car.getInstance().turningParams.poll();
+            Car.getInstance().parkingParams.poll();
+            Car.getInstance().stoppingParams.poll();
+            Car.getInstance().lineSpeedParams.poll();
+            Car.getInstance().lineAngleParams.poll();
+
+            // Control mode
+            Car.getInstance().controlMode.poll();
+
+            Server.getInstance().pull();
+        }
     }
 
     private void addPollers() {
