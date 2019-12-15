@@ -123,7 +123,7 @@ public class MapRouteModuleController implements DataListener<Map> {
      */
     @Override
     public void update(Map data) {
-        for (javafx.scene.Node fxNode : ((Group) mapRouteModule.lookup("#mapViewTopLayer")).getChildren()) {
+        for (javafx.scene.Node fxNode : ((Group) mapRouteModule.lookup("#mapViewNodeLayer")).getChildren()) {
             fxNode.addEventHandler(MouseEvent.MOUSE_CLICKED, this::handleNodeClick);
         }
     }
