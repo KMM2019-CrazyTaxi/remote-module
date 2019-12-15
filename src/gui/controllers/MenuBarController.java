@@ -3,10 +3,7 @@ package gui.controllers;
 import exceptions.IllegalMapException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
-
 import javafx.stage.FileChooser;
 import map.Map;
 import remote.Car;
