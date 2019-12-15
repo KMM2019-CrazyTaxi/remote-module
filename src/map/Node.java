@@ -62,4 +62,13 @@ public class Node {
 
         return bytes;
     }
+
+    public Connection getConnection(Node node2) {
+        for (Connection c : neighbors) {
+            if (c.getConnectingNode() == node2) {
+                return c;
+            }
+        }
+        return null;
+    }
 }
