@@ -343,3 +343,12 @@ Map view feature
     -fx-background-color: -cc-accent-color;
 }
 
+#confirmMarkButton {
+    -fx-background-color: -cc-accent-color;
+    -fx-padding: 15px;
+    -fx-background-radius: 15px;
+}
+
+.marked {
+    -fx-effect: innershadow(gaussian, -cc-accent-color, 15, 0, 0, 0);
+}

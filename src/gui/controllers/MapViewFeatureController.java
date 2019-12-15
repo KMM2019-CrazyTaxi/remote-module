@@ -2,6 +2,8 @@ package gui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.QuadCurve;
@@ -19,6 +21,8 @@ import remote.listeners.DataListener;
  */
 public class MapViewFeatureController implements DataListener<Map> {
     private static final double NODE_DOT_SIZE = 10;
+
+    @FXML private Button confirmMarkButton;
 
     @FXML private Pane mapViewFeature;
     @FXML private Group mapViewNodeLayer;
@@ -69,6 +73,10 @@ public class MapViewFeatureController implements DataListener<Map> {
                 QuadCurve fxPathLine = new QuadCurve(startPos.x, startPos.y, midPos.x, midPos.y, endPos.x, endPos.y);
                 fxPathLine.getStyleClass().add("mapPathLine");
                 fxPathLine.idProperty().setValue("mapPathLine-" + n.getIndex(map) + "-" + c.getConnectingNode().getIndex(map));
+
+                if (!c.isStopable())
+                    fxPathLine.setDisable(true);
+
                 mapViewPathLayer.getChildren().add(fxPathLine);
             }
         }
@@ -199,5 +207,9 @@ public class MapViewFeatureController implements DataListener<Map> {
         offset.divide(numberOfPositions);
 
         return offset;
+    }
+
+    public void handleConfirmMarkClick(MouseEvent mouseEvent) {
+
     }
 }
