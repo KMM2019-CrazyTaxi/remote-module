@@ -102,7 +102,7 @@ public class MapRouteModuleController implements DataListener<Map> {
             mouseEvent.consume();
 
             Circle fxNode = (Circle) mouseEvent.getSource();
-            int id = Integer.parseInt(fxNode.getId().split(":")[1]);
+            int id = Integer.parseInt(fxNode.getId().split("-")[1]);
             Node node = Car.getInstance().map.get().getNode(id);
 
             // Check so that new node is not the same as the last node

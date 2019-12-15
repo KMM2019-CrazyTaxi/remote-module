@@ -65,10 +65,15 @@ public class MenuBarController {
         try {
             byte[] readBytes = Files.readAllBytes(file.toPath());
 
-            Car.getInstance().map.update(new Map(readBytes));
-//            Server.getInstance().getRequestBuilder().addSendMapRequest(new Map(readBytes));
-//            Server.getInstance().releaseBuilder();
-//            Server.getInstance().pull();
+            if (Car.getInstance().aliveStatus.get()) {
+                Server.getInstance().getRequestBuilder().addSendMapRequest(new Map(readBytes));
+                Server.getInstance().releaseBuilder();
+                Server.getInstance().pull();
+            }
+            else {
+                Car.getInstance().map.update(new Map(readBytes));
+            }
+
         } catch (IOException | IllegalMapException e) {
             e.printStackTrace();
         }

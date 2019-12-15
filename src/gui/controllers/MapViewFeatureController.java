@@ -61,7 +61,7 @@ public class MapViewFeatureController implements DataListener<Map> {
 
             Circle fxNodeDot = new Circle(startPos.x, startPos.y, NODE_DOT_SIZE);
             fxNodeDot.getStyleClass().add("mapNodeDot");
-            fxNodeDot.idProperty().setValue("mapNodeDot" + n.getIndex(map));
+            fxNodeDot.idProperty().setValue("mapNodeDot-" + n.getIndex(map));
             mapViewTopLayer.getChildren().add(fxNodeDot);
 
             for (Connection c : n.getNeighbors()) {
@@ -70,7 +70,7 @@ public class MapViewFeatureController implements DataListener<Map> {
 
                 QuadCurve fxPathLine = new QuadCurve(startPos.x, startPos.y, midPos.x, midPos.y, endPos.x, endPos.y);
                 fxPathLine.getStyleClass().add("mapPathLine");
-                fxPathLine.idProperty().setValue("mapPathLine" + n.getIndex(map) + ":" + c.getConnectingNode().getIndex(map));
+                fxPathLine.idProperty().setValue("mapPathLine-" + n.getIndex(map) + "-" + c.getConnectingNode().getIndex(map));
                 mapViewBottomLayer.getChildren().add(fxPathLine);
             }
         }
