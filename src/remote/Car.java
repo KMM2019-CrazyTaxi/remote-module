@@ -55,7 +55,7 @@ public class Car {
     private Car() {
         lateBinders = new ArrayList<>();
 
-        aliveStatus = new RemoteData<>(new CommunicationPacket(PacketCommand.REQUEST_HEARTBEAT));
+        aliveStatus = new RemoteData<>(false, new CommunicationPacket(PacketCommand.REQUEST_HEARTBEAT));
 
         CommunicationPacket sensorData = new CommunicationPacket(PacketCommand.REQUEST_SENSOR_DATA);
         accelerationX = new RemoteData<>(sensorData);

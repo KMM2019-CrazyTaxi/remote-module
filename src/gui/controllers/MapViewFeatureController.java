@@ -2,6 +2,8 @@ package gui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.QuadCurve;
@@ -20,10 +22,11 @@ import remote.listeners.DataListener;
 public class MapViewFeatureController implements DataListener<Map> {
     private static final double NODE_DOT_SIZE = 10;
 
+    @FXML private Button confirmMarkButton;
+
     @FXML private Pane mapViewFeature;
-    @FXML private Group mapViewTopLayer;
-    @FXML private Group mapViewMiddleLayer;
-    @FXML private Group mapViewBottomLayer;
+    @FXML private Group mapViewNodeLayer;
+    @FXML private Group mapViewPathLayer;
 
     /**
      * Map View Feature Controller constructor.
@@ -45,9 +48,8 @@ public class MapViewFeatureController implements DataListener<Map> {
      * @param map Map data
      */
     private void redraw(Map map) {
-        mapViewTopLayer.getChildren().clear();
-        mapViewMiddleLayer.getChildren().clear();
-        mapViewBottomLayer.getChildren().clear();
+        mapViewNodeLayer.getChildren().clear();
+        mapViewPathLayer.getChildren().clear();
 
         double width = mapViewFeature.getWidth();
         double height = mapViewFeature.getHeight();
@@ -61,8 +63,8 @@ public class MapViewFeatureController implements DataListener<Map> {
 
             Circle fxNodeDot = new Circle(startPos.x, startPos.y, NODE_DOT_SIZE);
             fxNodeDot.getStyleClass().add("mapNodeDot");
-            fxNodeDot.idProperty().setValue("mapNodeDot" + n.getIndex(map));
-            mapViewTopLayer.getChildren().add(fxNodeDot);
+            fxNodeDot.idProperty().setValue("mapNodeDot-" + n.getIndex(map));
+            mapViewNodeLayer.getChildren().add(fxNodeDot);
 
             for (Connection c : n.getNeighbors()) {
                 Position midPos = repositionPoint(c.getMidPoint(), width, height, mapCenterMass, scaleFactor);
@@ -70,8 +72,12 @@ public class MapViewFeatureController implements DataListener<Map> {
 
                 QuadCurve fxPathLine = new QuadCurve(startPos.x, startPos.y, midPos.x, midPos.y, endPos.x, endPos.y);
                 fxPathLine.getStyleClass().add("mapPathLine");
-                fxPathLine.idProperty().setValue("mapPathLine" + n.getIndex(map) + ":" + c.getConnectingNode().getIndex(map));
-                mapViewBottomLayer.getChildren().add(fxPathLine);
+                fxPathLine.idProperty().setValue("mapPathLine-" + n.getIndex(map) + "-" + c.getConnectingNode().getIndex(map));
+
+                if (!c.isStopable())
+                    fxPathLine.setDisable(true);
+
+                mapViewPathLayer.getChildren().add(fxPathLine);
             }
         }
     }
@@ -201,5 +207,9 @@ public class MapViewFeatureController implements DataListener<Map> {
         offset.divide(numberOfPositions);
 
         return offset;
+    }
+
+    public void handleConfirmMarkClick(MouseEvent mouseEvent) {
+
     }
 }
