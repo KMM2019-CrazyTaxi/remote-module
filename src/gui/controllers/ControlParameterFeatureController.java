@@ -98,6 +98,8 @@ public class ControlParameterFeatureController implements DataListener<PIDParams
         controlParameterSpeed.setTextFormatter(speedFormatter);
         controlParameterMin.setTextFormatter(minFormatter);
         controlParameterSlope.setTextFormatter(slopeFormatter);
+
+        Car.getInstance().addLateBind(this::subscribe);
     }
 
     /**

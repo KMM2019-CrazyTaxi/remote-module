@@ -29,6 +29,8 @@ public class CCPanel extends Application {
     }
 
     private void initialize() {
+        Car.getInstance().lateBindSubscribers();
+
         addAlerts();
         addPollers();
         addListeners();
