@@ -6,14 +6,20 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import logging.DataLogger;
 import remote.Car;
 import remote.FixedTimePoller;
 import remote.Server;
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 public class CCPanel extends Application {
     private static final int FAST_POLL_TIME = 250;
     private static final int MEDIUM_POLL_TIME = 750;
     private static final int SLOW_POLL_TIME = 1500;
+
+    private DataLogger<Float> tempratureLog;
 
     public static void main(String[] args) {
         launch(args);
@@ -34,8 +40,14 @@ public class CCPanel extends Application {
         addAlerts();
         addPollers();
         addListeners();
+        addLoggers();
 
         Car.getInstance().aliveStatus.subscribe(CCPanel::initialPull);
+    }
+
+    private void addLoggers() {
+        tempratureLog = new DataLogger<>();
+        Car.getInstance().temperature.subscribe(tempratureLog);
     }
 
     private void addListeners() {
@@ -134,6 +146,14 @@ public class CCPanel extends Application {
 
         }
 
+        writeLog("tempLog.txt", tempratureLog);
+
         super.stop();
+    }
+
+    private void writeLog(String filePath, DataLogger log) throws FileNotFoundException {
+        PrintWriter out = new PrintWriter(filePath);
+        out.write(log.toString());
+        out.close();
     }
 }
