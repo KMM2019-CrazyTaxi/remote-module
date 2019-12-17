@@ -42,7 +42,7 @@ public class SensorDataFeatureController {
         Car.getInstance().accelerationX.subscribe(accXListener);
         Car.getInstance().accelerationY.subscribe(accYListener);
         Car.getInstance().accelerationZ.subscribe(accZListener);
-        Car.getInstance().distance.subscribe(speedListener);
-        Car.getInstance().speed.subscribe(distanceListener);
+        Car.getInstance().distance.subscribe(distanceListener);
+        Car.getInstance().speed.subscribe(speedListener);
     }
 }
