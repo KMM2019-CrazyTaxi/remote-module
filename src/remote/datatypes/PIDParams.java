@@ -54,4 +54,19 @@ public class PIDParams {
 
         return bytes;
     }
+
+    @Override
+    public String toString() {
+        return "PIDParams{" +
+                "kp=" + kp +
+                ", ki=" + ki +
+                ", kd=" + kd +
+                ", alpha=" + alpha +
+                ", beta=" + beta +
+                ", angleThreshold=" + angleThreshold +
+                ", speedThreshold=" + speedThreshold +
+                ", minValue=" + minValue +
+                ", slope=" + slope +
+                '}';
+    }
 }
