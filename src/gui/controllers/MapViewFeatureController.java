@@ -74,9 +74,6 @@ public class MapViewFeatureController implements DataListener<Map> {
                 fxPathLine.getStyleClass().add("mapPathLine");
                 fxPathLine.idProperty().setValue("mapPathLine-" + n.getIndex(map) + "-" + c.getConnectingNode().getIndex(map));
 
-                if (!c.isStopable())
-                    fxPathLine.setDisable(true);
-
                 mapViewPathLayer.getChildren().add(fxPathLine);
             }
         }
