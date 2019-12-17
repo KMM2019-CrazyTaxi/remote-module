@@ -95,9 +95,6 @@ public class CCPanel extends Application {
         fastPoller.add(Car.getInstance().distanceToRight);
         fastPoller.add(Car.getInstance().distanceToStop);
 
-        // Midline data
-        mediumPoller.add(Car.getInstance().distanceToMiddle);
-
         // Car telemetrics
         slowPoller.add(Car.getInstance().temperature);
     }
