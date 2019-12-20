@@ -1,0 +1,8 @@
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.layout.FlowPane?>
+
+<Tab text="Trimming" fx:id="TrimmingTab" xmlns:fx="http://javafx.com/fxml/1">
+    <FlowPane>
+        <fx:include source="../modules/ControlParameterModule.fxml" />
+    </FlowPane>
+</Tab>

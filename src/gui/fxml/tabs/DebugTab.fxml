@@ -1,0 +1,20 @@
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<Tab text="Debug" fx:id="debugTab" xmlns:fx="http://javafx.com/fxml/1">
+    <VBox>
+        <VBox>
+            <Text styleClass="largeText">Image recognition:</Text>
+            <fx:include source="../features/IRDataGridFeature.fxml" />
+        </VBox>
+
+        <Separator />
+
+        <VBox>
+            <Text styleClass="largeText">Sensor data:</Text>
+            <fx:include source="../features/SensorDataGridFeature.fxml" />
+        </VBox>
+    </VBox>
+</Tab>

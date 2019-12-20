@@ -1,0 +1,9 @@
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.text.Text?>
+
+<Tab text="Overview" fx:id="OverviewTab" xmlns:fx="http://javafx.com/fxml/1">
+    <FlowPane>
+        <Text>Hi</Text>
+    </FlowPane>
+</Tab>

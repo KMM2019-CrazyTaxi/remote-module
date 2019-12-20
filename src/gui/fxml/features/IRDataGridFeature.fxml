@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+
+<?import javafx.scene.control.TextInputDialog?>
+<GridPane fx:id="irDataGridFeature" onContextMenuRequested="#showContextMenu" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.IRDataGridFeatureController">
+    <fx:define>
+        <ContextMenu  fx:id="contextMenu">
+            <items>
+                <MenuItem text="Set decimal accuracy" onAction="#handleSetDecimalsEvent"/>
+            </items>
+        </ContextMenu>
+    </fx:define>
+
+    <fx:define>
+        <TextInputDialog title="Enter number of decimal places" fx:id="decimalPlacesDialog"/>
+    </fx:define>
+
+    <HBox GridPane.columnIndex="0" GridPane.rowIndex="0">
+        <Text styleClass="mediumText">Left:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+    </HBox>
+    <HBox GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <Text styleClass="mediumText" fx:id="irDataLeft"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox GridPane.columnIndex="0" GridPane.rowIndex="1">
+        <Text styleClass="mediumText">Right:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+    </HBox>
+    <HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <Text styleClass="mediumText" fx:id="irDataRight"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox GridPane.columnIndex="0" GridPane.rowIndex="2">
+        <Text styleClass="mediumText">Stop:</Text>
+        <Region style="-fx-pref-width: 5px" HBox.hgrow="NEVER"/>
+    </HBox>
+    <HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <Text styleClass="mediumText" fx:id="irDataStop"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+</GridPane>
